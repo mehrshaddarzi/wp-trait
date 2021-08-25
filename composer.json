@@ -1,0 +1,20 @@
+{
+  "name": "mehrshaddarzi/wp-trait",
+  "description": "WordPress trait developer package",
+  "type": "package",
+  "require": {
+    "php": ">=7.2"
+  },
+  "authors": [
+    {
+      "name": "Mehrshad Darzi",
+      "email": "mehrshad198@gmail.com",
+      "homepage": "https://github.com/mehrshaddarzi"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WPTrait\\": "src/"
+    }
+  }
+}
