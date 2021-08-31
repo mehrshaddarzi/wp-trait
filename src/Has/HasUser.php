@@ -10,6 +10,7 @@ if (!trait_exists('HasUser')) {
 
     trait HasUser
     {
+
         public function get_users($arg = array())
         {
             $default = array(

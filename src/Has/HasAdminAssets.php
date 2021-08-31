@@ -18,7 +18,6 @@ if (!trait_exists('HasAdminAssets')) {
 
         public function admin_enqueue_scripts($hook_suffix)
         {
-
         }
 
         public function add_script($handle, $src, $deps = array(), $ver = false, $in_footer = false, $enqueue = true, $localize = array(), $inline_script = '')

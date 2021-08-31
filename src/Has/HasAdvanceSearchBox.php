@@ -12,6 +12,8 @@ if (!trait_exists('HasAdvanceSearchBox')) {
     {
         use HasAdminFooter, HasPreGetQuery;
 
+        public static $SearchTypeField = 'search-type';
+
         public function register_search_box($type)
         {
             $this->register_pre_get_query($type);
@@ -34,11 +36,6 @@ if (!trait_exists('HasAdvanceSearchBox')) {
         {
             global $post_type, $pagenow;
 
-            // Post Type
-            if (!empty($post_type)) {
-                return 'post-search-input';
-            }
-
             // Users Page
             if ($pagenow == "users.php") {
                 return 'user-search-input';
@@ -47,6 +44,11 @@ if (!trait_exists('HasAdvanceSearchBox')) {
             // Taxonomy Page
             if ($pagenow == "edit-tags.php" and isset($_GET['taxonomy']) and !empty($_GET['taxonomy'])) {
                 return 'tag-search-input';
+            }
+
+            // Post Type
+            if (!empty($post_type)) {
+                return 'post-search-input';
             }
 
             return null;
@@ -66,6 +68,21 @@ if (!trait_exists('HasAdvanceSearchBox')) {
                 )
             );*/
             return array();
+        }
+
+        public function is_admin_search_request()
+        {
+            return isset($_REQUEST[self::$SearchTypeField]) and !empty($_REQUEST[self::$SearchTypeField]) and isset($_REQUEST['s']) and !empty($_REQUEST['s']);
+        }
+
+        public function get_search_type()
+        {
+            return sanitize_text_field($_REQUEST[self::$SearchTypeField]);
+        }
+
+        public function get_search_input()
+        {
+            return sanitize_text_field($_REQUEST['s']);
         }
     }
 

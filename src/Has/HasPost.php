@@ -42,9 +42,9 @@ if (!trait_exists('HasPost')) {
             return new \WP_Query($args);
         }
 
-        public function get_post($post_id)
+        public function get_post($post_id, $output = ARRAY_A)
         {
-            return get_post($post_id);
+            return get_post($post_id, $output);
         }
 
         public function delete_post($post_id, $force = false)
@@ -57,10 +57,12 @@ if (!trait_exists('HasPost')) {
         {
             $default = array(
                 'post_title' => '',
+                'post_date' => current_time('mysql'),
+                'post_excerpt' => '',
                 'post_type' => $this->slug,
                 'post_status' => 'publish',
                 'post_content' => '',
-                'post_author' => '',
+                'post_author' => get_current_user_id(),
             );
             $args = wp_parse_args($arg, $default);
 
@@ -73,8 +75,7 @@ if (!trait_exists('HasPost')) {
         public function update_post($post_id, $arg = array())
         {
             $default = array(
-                'ID' => $post_id,
-                'post_status' => 'publish'
+                'ID' => $post_id
             );
             $args = wp_parse_args($arg, $default);
 
@@ -82,7 +83,7 @@ if (!trait_exists('HasPost')) {
             return wp_update_post($args);
         }
 
-        public function get_post_meta($post_id, $meta_key, $single = true)
+        public function get_post_meta($post_id, $meta_key = '', $single = true)
         {
             if (!$single) {
                 return array_map(function ($a) {
@@ -111,6 +112,11 @@ if (!trait_exists('HasPost')) {
         public function post_exists($post_id)
         {
             return is_string(get_post_status($post_id));
+        }
+
+        public function get_post_types($args = array(), $output = 'objects', $operator = 'and')
+        {
+            return get_post_types($args, $output, $operator);
         }
     }
 

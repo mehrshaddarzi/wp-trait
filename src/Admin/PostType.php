@@ -6,7 +6,9 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
+use WPTrait\Has\HasAdminFooter;
 use WPTrait\Has\HasAdminInit;
+use WPTrait\Has\HasAdvanceSearchBox;
 use WPTrait\Has\HasBulkActions;
 use WPTrait\Has\HasNotice;
 use WPTrait\Has\HasPost;
@@ -19,7 +21,7 @@ if (!class_exists('PostType')) {
 
     class PostType extends Page
     {
-        use HasPost, HasNotice, HasBulkActions, HasRowActions, HasAdminInit, HasPostTypeColumns, HasSortableColumns, HasSubSub;
+        use HasPost, HasNotice, HasBulkActions, HasRowActions, HasAdminInit, HasAdminFooter, HasPostTypeColumns, HasSortableColumns, HasSubSub;
 
         public $slug, $name, $args = array();
 
@@ -43,6 +45,9 @@ if (!class_exists('PostType')) {
 
             // Register Admin Init
             $this->register_admin_init();
+
+            // Register Admin Footer
+            $this->register_admin_footer();
 
             // Register Admin Notice
             $this->register_notice();
@@ -78,7 +83,7 @@ if (!class_exists('PostType')) {
                 'show_in_menu' => true,
                 'query_var' => true,
                 'has_archive' => false,
-                'hierarchical' => true,
+                'hierarchical' => false, #action_rows not work when is true
                 'capability_type' => 'post',
                 'map_meta_cap' => true,
                 'rewrite' => array(
@@ -107,8 +112,19 @@ if (!class_exists('PostType')) {
             return ($pagenow == "edit.php" and isset($_GET['post_type']) and $_GET['post_type'] == $this->slug);
         }
 
-        public function admin_url($args = array())
+        public function admin_url($args = array(), $paged = false, $search = false)
         {
+            if ($paged) {
+                $args = array_merge($args, array('paged' => (get_query_var('paged')) ? get_query_var('paged') : 1));
+            }
+            if ($search) {
+                if (isset($_REQUEST['s'])) {
+                    $args = array_merge($args, array('s' => trim($_REQUEST['s'])));
+                }
+                if (isset($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])) {
+                    $args = array_merge($args, array(HasAdvanceSearchBox::$SearchTypeField => trim($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])));
+                }
+            }
             return add_query_arg(array_merge(array('post_type' => $this->slug), $args), 'edit.php');
         }
     }

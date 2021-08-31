@@ -35,7 +35,8 @@ if (!trait_exists('HasTerm')) {
             );
             $args = wp_parse_args($arg, $default);
 
-            // Return { $query->terms }
+            // Check Empty { is_array($query->terms) and count($get_terms->terms) > 0 && !is_wp_error($get_terms) }
+            // Return { $query->terms (is Null When Empty) }
             return new \WP_Term_Query($args);
         }
 
@@ -83,6 +84,9 @@ if (!trait_exists('HasTerm')) {
 
         public function delete_term($term_id, $taxonomy = null)
         {
+            # Delete all terms From taxonomy in WP-CLI
+            # $ wp term list post_tag --field=term_id | xargs wp term delete post_tag
+
             if (is_null($taxonomy)) {
                 $taxonomy = $this->slug;
             }
@@ -121,6 +125,20 @@ if (!trait_exists('HasTerm')) {
                 $taxonomy = $this->slug;
             }
             return term_exists($term, $taxonomy, $parent);
+        }
+
+        public function get_taxonomy($taxonomy = null)
+        {
+            if (is_null($taxonomy)) {
+                $taxonomy = $this->slug;
+            }
+
+            return get_taxonomy($taxonomy);
+        }
+
+        public function get_taxonomies($args = array(), $output = 'objects', $operator = 'and')
+        {
+            return get_taxonomies($args, $output, $operator);
         }
     }
 

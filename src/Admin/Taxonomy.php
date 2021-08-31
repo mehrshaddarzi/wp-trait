@@ -6,7 +6,9 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
+use WPTrait\Has\HasAdminFooter;
 use WPTrait\Has\HasAdminInit;
+use WPTrait\Has\HasAdvanceSearchBox;
 use WPTrait\Has\HasBulkActions;
 use WPTrait\Has\HasNotice;
 use WPTrait\Has\HasRowActions;
@@ -18,7 +20,7 @@ if (!class_exists('Taxonomy')) {
 
     class Taxonomy extends Page
     {
-        use HasTerm, HasNotice, HasBulkActions, HasRowActions, HasAdminInit, HasTaxonomyColumns, HasSortableColumns;
+        use HasTerm, HasNotice, HasBulkActions, HasRowActions, HasAdminInit, HasAdminFooter, HasTaxonomyColumns, HasSortableColumns;
 
         public $slug, $name, $post_types = array(), $args = array();
 
@@ -42,6 +44,9 @@ if (!class_exists('Taxonomy')) {
 
             // Register Admin Init
             $this->register_admin_init();
+
+            // Register Admin Footer
+            $this->register_admin_footer();
 
             // Register Admin Notice
             $this->register_notice();
@@ -98,8 +103,19 @@ if (!class_exists('Taxonomy')) {
             return ($pagenow == "edit-tags.php" and isset($_GET['taxonomy']) and $_GET['taxonomy'] == $this->slug);
         }
 
-        public function admin_url($args = array())
+        public function admin_url($args = array(), $paged = false, $search = false)
         {
+            if ($paged) {
+                $args = array_merge($args, array('paged' => (get_query_var('paged')) ? get_query_var('paged') : 1));
+            }
+            if ($search) {
+                if (isset($_REQUEST['s'])) {
+                    $args = array_merge($args, array('s' => trim($_REQUEST['s'])));
+                }
+                if (isset($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])) {
+                    $args = array_merge($args, array(HasAdvanceSearchBox::$SearchTypeField => trim($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])));
+                }
+            }
             return add_query_arg(array_merge(array('taxonomy' => $this->slug), $args), 'edit-tags.php');
         }
     }

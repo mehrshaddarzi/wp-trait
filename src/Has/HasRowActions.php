@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('HasBulkActions')) {
+if (!trait_exists('HasRowActions')) {
 
     trait HasRowActions
     {
@@ -20,7 +20,7 @@ if (!trait_exists('HasBulkActions')) {
             $this->add_filter($row_action . '_row_actions', 'row_actions', 10, 2);
         }
 
-        public function row_actions($actions, $term)
+        public function row_actions($actions, $object)
         {
             return $actions;
         }

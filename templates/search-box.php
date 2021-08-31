@@ -57,7 +57,7 @@
                         if (current_value.length > 0 && key == current_value) {
                             selected = ' selected';
                         }
-                        opt_list += `<option value="${key}" ${selected}>${val}</option>`;
+                        opt_list += `<option value="${key}"${selected}>${val}</option>`;
                     });
                     opt_list += `</select>`;
                     post_search_input.replaceWith(opt_list);

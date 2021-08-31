@@ -11,7 +11,7 @@ if (!trait_exists('HasAdminFooter')) {
     trait HasAdminFooter
     {
 
-        public function register_admin_init()
+        public function register_admin_footer()
         {
             $this->add_action('admin_footer', 'admin_footer');
         }
