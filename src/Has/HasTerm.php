@@ -93,7 +93,7 @@ if (!trait_exists('HasTerm')) {
             return wp_delete_term($term_id, $taxonomy); //{ true or WP_Error }
         }
 
-        public function get_term_meta($term_id, $meta_key, $single = true)
+        public function get_term_meta($term_id, $meta_key, $single = false)
         {
             if (!$single) {
                 return array_map(function ($a) {

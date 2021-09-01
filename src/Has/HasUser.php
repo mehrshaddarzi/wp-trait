@@ -32,7 +32,8 @@ if (!trait_exists('HasUser')) {
             );
             $args = wp_parse_args($arg, $default);
 
-            // Return { $query->get_results() }
+            // Return { (array) $query->get_results() }
+            // Get User Ids { $user_ids[0]->id }
             return new \WP_User_Query($args);
         }
 
@@ -92,7 +93,7 @@ if (!trait_exists('HasUser')) {
             return wp_update_user($args);
         }
 
-        public function get_user_meta($user_id, $meta_key, $single = true)
+        public function get_user_meta($user_id, $meta_key, $single = false)
         {
             if (!$single) {
                 return array_map(function ($a) {

@@ -11,7 +11,7 @@ if (!trait_exists('HasNotice')) {
     trait HasNotice
     {
 
-        public function register_notice()
+        public function register_admin_notices()
         {
             // Admin Page Notice
             $this->add_action('admin_notices', 'admin_notices');
@@ -22,7 +22,7 @@ if (!trait_exists('HasNotice')) {
 
         }
 
-        public function add_alert($text, $model = "success", $close_button = true, $echo = true, $style_extra = 'padding: 12px;')
+        public function add_alert($text, $model = "success", $close_button = true, $echo = false, $style_extra = 'padding: 12px;')
         {
             $content = '<div class="notice notice-' . $model . '' . ($close_button === true ? " is-dismissible" : "") . '">';
             $content .= '<div style="' . $style_extra . '">' . $text . '</div>';
@@ -41,7 +41,9 @@ if (!trait_exists('HasNotice')) {
 
         public function inline_admin_notice($alert, $page_url_args = array(), $priority = 10)
         {
-            $this->remove_query_arg_url($page_url_args);
+            if (!empty($page_url_args)) {
+                $this->remove_query_arg_url($page_url_args);
+            }
             add_action('admin_notices', function () use ($alert) {
                 echo $alert;
             }, $priority);

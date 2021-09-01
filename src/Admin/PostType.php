@@ -50,7 +50,7 @@ if (!class_exists('PostType')) {
             $this->register_admin_footer();
 
             // Register Admin Notice
-            $this->register_notice();
+            $this->register_admin_notices();
 
             // Register Bulk Action
             $this->register_bulk_actions();

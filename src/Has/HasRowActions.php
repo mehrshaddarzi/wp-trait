@@ -16,6 +16,7 @@ if (!trait_exists('HasRowActions')) {
             /**
              * post: post_row_actions
              * taxonomy: {$taxonomy}_row_actions
+             * user: user_row_actions
              */
             $this->add_filter($row_action . '_row_actions', 'row_actions', 10, 2);
         }

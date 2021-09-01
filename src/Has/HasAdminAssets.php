@@ -18,6 +18,7 @@ if (!trait_exists('HasAdminAssets')) {
 
         public function admin_enqueue_scripts($hook_suffix)
         {
+            // $hook_suffix == global $pagenow;
         }
 
         public function add_script($handle, $src, $deps = array(), $ver = false, $in_footer = false, $enqueue = true, $localize = array(), $inline_script = '')

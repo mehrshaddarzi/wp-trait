@@ -83,7 +83,7 @@ if (!trait_exists('HasPost')) {
             return wp_update_post($args);
         }
 
-        public function get_post_meta($post_id, $meta_key = '', $single = true)
+        public function get_post_meta($post_id, $meta_key = '', $single = false)
         {
             if (!$single) {
                 return array_map(function ($a) {
