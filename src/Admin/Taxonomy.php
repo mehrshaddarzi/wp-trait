@@ -62,6 +62,11 @@ if (!class_exists('Taxonomy')) {
             $this->register_sortable_columns();
         }
 
+        public function __get($name)
+        {
+            return $this->$name;
+        }
+
         public function register_taxonomy()
         {
             $labels = array(

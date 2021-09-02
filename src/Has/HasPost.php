@@ -118,6 +118,19 @@ if (!trait_exists('HasPost')) {
         {
             return get_post_types($args, $output, $operator);
         }
+
+        public function in_edit_page($new_edit = null)
+        {
+            # global $typenow; (is_edit_page('new') and $typenow =="POST_TYPE")
+            global $pagenow;
+            if (!is_admin()) return false;
+            if ($new_edit == "edit")
+                return in_array($pagenow, array('post.php',));
+            elseif ($new_edit == "new")
+                return in_array($pagenow, array('post-new.php'));
+            else
+                return in_array($pagenow, array('post.php', 'post-new.php'));
+        }
     }
 
 }

@@ -66,6 +66,11 @@ if (!class_exists('PostType')) {
             $this->register_views_sub();
         }
 
+        public function __get($name)
+        {
+            return $this->$name;
+        }
+
         public function register_post_type()
         {
             $labels = array(
