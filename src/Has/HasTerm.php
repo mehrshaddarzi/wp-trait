@@ -19,7 +19,7 @@ if (!trait_exists('HasTerm')) {
                 'suppress_filter' => true,
                 'orderby' => 'term_id',
                 'order' => 'ASC',
-                'parent' => 0,
+                'parent' => '',
                 'fields' => 'ids',
                 'hide_empty' => false,
                 /**
@@ -139,6 +139,19 @@ if (!trait_exists('HasTerm')) {
         public function get_taxonomies($args = array(), $output = 'objects', $operator = 'and')
         {
             return get_taxonomies($args, $output, $operator);
+        }
+
+        public function sort_terms_hierarchically(array $terms, $parentId = 0)
+        {
+            $into = array();
+            foreach ($terms as $i => $term) {
+                if ($term->parent == $parentId) {
+                    $term->children = $this->sort_terms_hierarchically($terms, $term->term_id);
+                    $into[$term->term_id] = $term;
+                }
+            }
+
+            return $into;
         }
     }
 

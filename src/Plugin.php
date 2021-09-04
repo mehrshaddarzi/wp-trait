@@ -23,11 +23,21 @@ if (!class_exists('Plugin')) {
         public $text_domain;
         public $plugin_data = array();
 
-        public function __construct($slug, $main_file = __FILE__)
+        public function __construct($slug, $args = array())
         {
             // Set Plugin Slug
             $this->slug = $slug;
-            $this->main_file = $main_file;
+
+            // Check Custom argument
+            $default = array(
+                'main_file' => __FILE__,
+                'global' => $this->sanitize_plugin_slug($this->slug),
+                'do_action_loaded' => $this->sanitize_plugin_slug($this->slug)
+            );
+            $arg = wp_parse_args($args, $default);
+
+            // Set Main File
+            $this->main_file = $arg['main_file'];
 
             // Define Variable
             $this->define_constants();
@@ -48,8 +58,20 @@ if (!class_exists('Plugin')) {
             // init Wordpress hook
             $this->init_hooks();
 
+            // Instantiate Object Class
+            $this->instantiate();
+
+            // Set Global Variable
+            if (!empty($arg['global'])) {
+                $GLOBALS[$arg['global']] = $this;
+
+                // Create global function for backwards compatibility.
+                $function = 'function ' . $arg['global'] . '() { return $GLOBALS[\'' . $arg['global'] . '\']; }';
+                eval($function);
+            }
+
             // Plugin Loaded Action
-            do_action($this->slug . '_loaded');
+            do_action($arg['do_action_loaded'] . '_loaded');
         }
 
         public function __get($name)
@@ -70,6 +92,10 @@ if (!class_exists('Plugin')) {
         }
 
         protected function includes()
+        {
+        }
+
+        protected function instantiate()
         {
         }
 
@@ -116,6 +142,11 @@ if (!class_exists('Plugin')) {
             $error = __('Your installed PHP Version is: ', $this->text_domain) . PHP_VERSION . '. ';
             $error .= __('The <strong>' . $this->plugin_data['Title'] . '</strong> plugin requires PHP version <strong>', $this->text_domain) . $this->plugin_data['RequiresPHP'] . __('</strong> or greater.', $this->text_domain);
             $this->add_alert($error, 'error', true, true);
+        }
+
+        protected function sanitize_plugin_slug($slug)
+        {
+            return str_replace("-", "_", trim($slug));
         }
     }
 
