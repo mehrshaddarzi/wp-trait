@@ -15,36 +15,34 @@ if (!class_exists('Plugin')) {
     {
         use HasHooks, HasNotice;
 
-        public $slug;
-        public $main_file;
-        public $url;
-        public $path;
-        public $version;
-        public $text_domain;
-        public $plugin_data = array();
+        public $plugin;
 
         public function __construct($slug, $args = array())
         {
             // Set Plugin Slug
-            $this->slug = $slug;
+            $this->plugin = new \stdClass();
+            $this->plugin->slug = $slug;
 
             // Check Custom argument
             $default = array(
                 'main_file' => __FILE__,
-                'global' => $this->sanitize_plugin_slug($this->slug),
-                'do_action_loaded' => $this->sanitize_plugin_slug($this->slug)
+                'global' => $this->sanitize_plugin_slug($slug),
+                'prefix' => $this->sanitize_plugin_slug($slug)
             );
             $arg = wp_parse_args($args, $default);
 
             // Set Main File
-            $this->main_file = $arg['main_file'];
+            $this->plugin->main_file = $arg['main_file'];
+
+            // Set Prefix
+            $this->plugin->prefix = $arg['prefix'];
 
             // Define Variable
             $this->define_constants();
 
             // PHP Notice Version
-            if (isset($this->plugin_data['RequiresPHP']) and !empty($this->plugin_data['RequiresPHP'])) {
-                if (version_compare(PHP_VERSION, $this->plugin_data['RequiresPHP'], '<=')) {
+            if (isset($this->plugin->RequiresPHP) and !empty($this->plugin->RequiresPHP)) {
+                if (version_compare(PHP_VERSION, $this->plugin->RequiresPHP, '<=')) {
                     $this->register_admin_notices();
                     return;
                 }
@@ -61,8 +59,8 @@ if (!class_exists('Plugin')) {
             // Instantiate Object Class
             $this->instantiate();
 
-            // Set Global Variable
-            if (!empty($arg['global'])) {
+            // Set Global Function
+            if (!empty($arg['global']) and !is_null($arg['global'])) {
                 $GLOBALS[$arg['global']] = $this;
 
                 // Create global function for backwards compatibility.
@@ -71,7 +69,7 @@ if (!class_exists('Plugin')) {
             }
 
             // Plugin Loaded Action
-            do_action($arg['do_action_loaded'] . '_loaded');
+            do_action($this->plugin->prefix . '_loaded');
         }
 
         public function __get($name)
@@ -85,10 +83,9 @@ if (!class_exists('Plugin')) {
                 require_once(ABSPATH . 'wp-admin/includes/plugin.php');
             }
 
-            $this->url = plugins_url('', $this->main_file);
-            $this->path = plugin_dir_path($this->main_file);
-            $this->plugin_data = get_plugin_data($this->main_file);
-            $this->version = $this->plugin_data['Version'];
+            $this->plugin = (object)array_merge((array)$this->plugin, (array)get_plugin_data($this->plugin->main_file));
+            $this->plugin->url = plugins_url('', $this->plugin->main_file);
+            $this->plugin->path = plugin_dir_path($this->plugin->main_file);
         }
 
         protected function includes()
@@ -102,23 +99,23 @@ if (!class_exists('Plugin')) {
         protected function init_hooks()
         {
             // Load Text Domain
-            if (isset($this->plugin_data['TextDomain']) and !empty($this->plugin_data['TextDomain'])) {
-                load_plugin_textdomain($this->plugin_data['TextDomain'], false, wp_normalize_path($this->path . '/languages'));
+            if (isset($this->plugin->TextDomain) and !empty($this->plugin->TextDomain)) {
+                load_plugin_textdomain($this->plugin->TextDomain, false, wp_normalize_path($this->plugin->path . '/languages'));
             }
 
             // register_activation_hook
             if (method_exists($this, 'register_activation_hook')) {
-                register_activation_hook($this->main_file, array($this, 'register_activation_hook'));
+                register_activation_hook($this->plugin->main_file, array($this, 'register_activation_hook'));
             }
 
             // register_deactivation_hook
             if (method_exists($this, 'register_deactivation_hook')) {
-                register_deactivation_hook($this->main_file, array($this, 'register_deactivation_hook'));
+                register_deactivation_hook($this->plugin->main_file, array($this, 'register_deactivation_hook'));
             }
 
             // register_uninstall_hook
             if (method_exists($this, 'register_uninstall_hook')) {
-                register_uninstall_hook($this->main_file, array($this, 'register_uninstall_hook'));
+                register_uninstall_hook($this->plugin->main_file, array($this, 'register_uninstall_hook'));
             }
         }
 
@@ -139,8 +136,8 @@ if (!class_exists('Plugin')) {
             if (!current_user_can('manage_options')) {
                 return;
             }
-            $error = __('Your installed PHP Version is: ', $this->text_domain) . PHP_VERSION . '. ';
-            $error .= __('The <strong>' . $this->plugin_data['Title'] . '</strong> plugin requires PHP version <strong>', $this->text_domain) . $this->plugin_data['RequiresPHP'] . __('</strong> or greater.', $this->text_domain);
+            $error = __('Your installed PHP Version is: ', $this->plugin->TextDomain) . PHP_VERSION . '. ';
+            $error .= __('The <strong>' . $$this->plugin->Title . '</strong> plugin requires PHP version <strong>', $this->plugin->TextDomain) . $this->plugin->RequiresPHP . __('</strong> or greater.', $this->plugin->TextDomain);
             $this->add_alert($error, 'error', true, true);
         }
 
