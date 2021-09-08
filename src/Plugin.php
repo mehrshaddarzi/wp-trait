@@ -115,7 +115,7 @@ if (!class_exists('Plugin')) {
 
             // register_uninstall_hook
             if (method_exists($this, 'register_uninstall_hook')) {
-                register_uninstall_hook($this->plugin->main_file, array($this, 'register_uninstall_hook'));
+                register_uninstall_hook($this->plugin->main_file, array(__CLASS__, 'register_uninstall_hook'));
             }
         }
 
@@ -127,7 +127,7 @@ if (!class_exists('Plugin')) {
         {
         }
 
-        protected function register_uninstall_hook()
+        protected static function register_uninstall_hook()
         {
         }
 
