@@ -42,9 +42,47 @@ if (!trait_exists('HasPost')) {
             return new \WP_Query($args);
         }
 
-        public function get_post($post_id, $output = ARRAY_A)
+        public function get_post($post_id, $output = OBJECT)
         {
             return get_post($post_id, $output);
+        }
+
+        public function get_post_collection($post_id, $meta = array(), $taxonomy = array())
+        {
+            $post_object = $this->get_post($post_id, OBJECT);
+            if (is_null($post_object)) {
+                return null;
+            }
+
+            // Check Meta
+            if ($meta == "all") {
+                $post_object->meta = (object)$this->get_post_meta($post_id);
+            } elseif (is_array($meta) and !empty($meta)) {
+                foreach ($meta as $meta_key) {
+                    $post_object->meta->{$meta_key} = $this->get_post_meta($post_id, $meta_key, true);
+                }
+            }
+
+            // Check Taxonomy
+            if (!empty($taxonomy)) {
+                foreach ($taxonomy as $tax) {
+                    if (taxonomy_exists($tax)) {
+                        $post_object->{$tax} = $this->get_post_terms($post_id, $tax);
+                    }
+                }
+            }
+
+            return $post_object;
+        }
+
+        public function get_post_permalink($post_id, $leave_name = false)
+        {
+            return get_the_permalink($post_id, $leave_name);
+        }
+
+        public function get_post_thumbnail_id($post_id)
+        {
+            return get_post_thumbnail_id($post_id);
         }
 
         public function delete_post($post_id, $force = false)
@@ -107,6 +145,11 @@ if (!trait_exists('HasPost')) {
         public function delete_post_meta($post_id, $meta_key)
         {
             return delete_post_meta($post_id, $meta_key);
+        }
+
+        public function get_post_terms($post_id, $taxonomy = 'post_tag', $args = array('fields' => 'all'))
+        {
+            return wp_get_post_terms($post_id, $taxonomy, $args);
         }
 
         public function post_exists($post_id)
