@@ -174,6 +174,10 @@ if (!trait_exists('HasPost')) {
             else
                 return in_array($pagenow, array('post.php', 'post-new.php'));
         }
+
+        public function get_edit_post_link($post_id, $context = 'display') {
+            return get_edit_post_link($post_id, $context);
+        }
     }
 
 }
