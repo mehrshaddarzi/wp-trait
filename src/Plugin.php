@@ -25,7 +25,7 @@ if (!class_exists('Plugin')) {
 
             // Check Custom argument
             $default = array(
-                'main_file' => __FILE__,
+                'main_file' => WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php',
                 'global' => $this->sanitize_plugin_slug($slug),
                 'prefix' => $this->sanitize_plugin_slug($slug)
             );
