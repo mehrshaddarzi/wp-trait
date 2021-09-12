@@ -11,9 +11,9 @@ if (!trait_exists('HasAdminMenu')) {
     trait HasAdminMenu
     {
 
-        public function register_admin_menu()
+        public function register_admin_menu($priority = 10, $method = 'admin_menu')
         {
-            $this->add_action('admin_menu', 'admin_menu');
+            $this->add_action('admin_menu', $method, $priority);
         }
 
         public function admin_menu()

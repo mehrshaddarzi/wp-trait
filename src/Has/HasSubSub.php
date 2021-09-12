@@ -12,9 +12,9 @@ if (!trait_exists('HasSubSub')) {
     {
         public $slug;
 
-        public function register_views_sub()
+        public function register_views_sub($priority = 10, $method = 'views_edit_sub')
         {
-            $this->add_filter('views_edit-' . $this->slug, 'views_edit_sub');
+            $this->add_filter('views_edit-' . $this->slug, $method, $priority);
         }
 
         public function views_edit_sub($views)

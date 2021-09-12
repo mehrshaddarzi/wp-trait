@@ -11,12 +11,12 @@ if (!trait_exists('HasUserProfileFields')) {
     trait HasUserProfileFields
     {
 
-        public function register_user_profile_fields()
+        public function register_user_profile_fields($priority = 10)
         {
-            $this->add_action('show_user_profile', 'admin_user_profile_fields');
-            $this->add_action('edit_user_profile', 'admin_user_profile_fields');
-            $this->add_action('personal_options_update', 'save_admin_user_profile_fields');
-            $this->add_action('edit_user_profile_update', 'save_admin_user_profile_fields');
+            $this->add_action('show_user_profile', 'admin_user_profile_fields', $priority);
+            $this->add_action('edit_user_profile', 'admin_user_profile_fields', $priority);
+            $this->add_action('personal_options_update', 'save_admin_user_profile_fields', $priority);
+            $this->add_action('edit_user_profile_update', 'save_admin_user_profile_fields', $priority);
         }
 
         public function admin_user_profile_fields($user)

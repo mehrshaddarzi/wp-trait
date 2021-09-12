@@ -12,11 +12,11 @@ if (!trait_exists('HasPostTypeColumns')) {
     {
         public $slug;
 
-        public function register_post_type_columns($slug = null)
+        public function register_post_type_columns($slug = null, $priority = 10)
         {
             $slug = (is_null($slug) ? $this->slug : $slug);
-            $this->add_filter('manage_' . $slug . '_posts_columns', 'columns');
-            $this->add_action('manage_' . $slug . '_posts_custom_column', 'content_columns', 10, 2);
+            $this->add_filter('manage_' . $slug . '_posts_columns', 'columns', $priority);
+            $this->add_action('manage_' . $slug . '_posts_custom_column', 'content_columns', $priority, 2);
         }
 
         public function columns($columns)

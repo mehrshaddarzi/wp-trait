@@ -12,10 +12,10 @@ if (!trait_exists('HasUserColumns')) {
     {
         public $slug;
 
-        public function register_user_columns()
+        public function register_user_columns($priority = 10)
         {
-            $this->add_filter('manage_users_columns', 'columns');
-            $this->add_action('manage_users_custom_column', 'content_columns', 10, 3);
+            $this->add_filter('manage_users_columns', 'columns', $priority);
+            $this->add_action('manage_users_custom_column', 'content_columns', $priority, 3);
         }
 
         public function columns($columns)

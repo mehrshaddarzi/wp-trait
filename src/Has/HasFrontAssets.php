@@ -12,9 +12,9 @@ if (!trait_exists('HasFrontAssets')) {
     {
         use Assets;
 
-        public function register_front_assets()
+        public function register_front_assets($priority = 10, $method = 'wp_enqueue_scripts')
         {
-            $this->add_action('wp_enqueue_scripts', 'wp_enqueue_scripts');
+            $this->add_action('wp_enqueue_scripts', $method, $priority);
         }
 
         public function wp_enqueue_scripts($hook_suffix)

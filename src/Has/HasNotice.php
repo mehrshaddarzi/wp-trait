@@ -11,10 +11,10 @@ if (!trait_exists('HasNotice')) {
     trait HasNotice
     {
 
-        public function register_admin_notices()
+        public function register_admin_notices($priority = 10, $method = 'admin_notices')
         {
             // Admin Page Notice
-            $this->add_action('admin_notices', 'admin_notices');
+            $this->add_action('admin_notices', $method, $priority);
         }
 
         public function admin_notices()

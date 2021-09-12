@@ -11,12 +11,12 @@ if (!trait_exists('HasAjax')) {
     trait HasAjax
     {
 
-        public function register_admin_ajax($actions = array())
+        public function register_admin_ajax($actions = array(), $priority = 10)
         {
             if (is_array($actions)) {
                 foreach ($actions as $method) {
-                    $this->add_action('wp_ajax_' . $method, 'admin_ajax_' . $method);
-                    $this->add_action('wp_ajax_nopriv_' . $method, 'admin_ajax_' . $method);
+                    $this->add_action('wp_ajax_' . $method, 'admin_ajax_' . $method, $priority);
+                    $this->add_action('wp_ajax_nopriv_' . $method, 'admin_ajax_' . $method, $priority);
                 }
             }
         }

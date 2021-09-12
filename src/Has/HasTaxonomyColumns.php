@@ -12,10 +12,10 @@ if (!trait_exists('HasTaxonomyColumns')) {
     {
         public $slug;
 
-        public function register_taxonomy_columns()
+        public function register_taxonomy_columns($priority = 10)
         {
-            $this->add_filter('manage_edit-' . $this->slug . '_columns', 'columns', 10, 1);
-            $this->add_filter('manage_' . $this->slug . '_custom_column', 'content_columns', 10, 3);
+            $this->add_filter('manage_edit-' . $this->slug . '_columns', 'columns', $priority);
+            $this->add_filter('manage_' . $this->slug . '_custom_column', 'content_columns', $priority, 3);
         }
 
         public function columns($columns)

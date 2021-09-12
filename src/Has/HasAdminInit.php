@@ -11,9 +11,9 @@ if (!trait_exists('HasAdminInit')) {
     trait HasAdminInit
     {
 
-        public function register_admin_init()
+        public function register_admin_init($priority = 10, $method = 'admin_init')
         {
-            $this->add_action('admin_init', 'admin_init');
+            $this->add_action('admin_init', $method, $priority);
         }
 
         public function admin_init()
