@@ -56,9 +56,6 @@ if (!class_exists('Plugin')) {
             // init Wordpress hook
             $this->init_hooks();
 
-            // Instantiate Object Class
-            $this->instantiate();
-
             // Set Global Function
             if (!empty($arg['global']) and !is_null($arg['global'])) {
                 $GLOBALS[$arg['global']] = $this;
@@ -67,6 +64,9 @@ if (!class_exists('Plugin')) {
                 $function = 'function ' . $arg['global'] . '() { return $GLOBALS[\'' . $arg['global'] . '\']; }';
                 eval($function);
             }
+
+            // Instantiate Object Class
+            $this->instantiate();
 
             // Plugin Loaded Action
             do_action($this->plugin->prefix . '_loaded');
