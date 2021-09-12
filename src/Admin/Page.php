@@ -2,7 +2,7 @@
 
 namespace WPTrait\Admin;
 
-use WPTrait\Has\HasHooks;
+use WPTrait\Model;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -10,11 +10,17 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('Page')) {
 
-    abstract class Page
+    abstract class Page extends Model
     {
-        use HasHooks;
+        public $pagenow;
+
+        public function __construct()
+        {
+            $this->pagenow = $GLOBALS['pagenow'];
+        }
 
         abstract protected function in_page();
+
         abstract protected function admin_url();
     }
 
