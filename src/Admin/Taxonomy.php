@@ -6,27 +6,31 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Has\HasAdminFooter;
-use WPTrait\Has\HasAdminInit;
-use WPTrait\Has\HasAdvanceSearchBox;
-use WPTrait\Has\HasBulkActions;
-use WPTrait\Has\HasNotice;
-use WPTrait\Has\HasRowActions;
-use WPTrait\Has\HasSortableColumns;
-use WPTrait\Has\HasTaxonomyColumns;
-use WPTrait\Has\HasTerm;
+use WPTrait\Hook\AdminFooter;
+use WPTrait\Hook\AdminInit;
+use WPTrait\Hook\AdvanceSearchBox;
+use WPTrait\Hook\BulkActions;
+use WPTrait\Hook\Notice;
+use WPTrait\Hook\SortableColumns;
+use WPTrait\Hook\TaxonomyColumns;
+use WPTrait\Collection\Term;
 
 if (!class_exists('Taxonomy')) {
 
     class Taxonomy extends Page
     {
-        use HasTerm, HasNotice, HasBulkActions, HasRowActions, HasAdminInit, HasAdminFooter, HasTaxonomyColumns, HasSortableColumns;
+        use Term, Notice, BulkActions, AdminInit, AdminFooter, TaxonomyColumns, SortableColumns;
 
-        public $slug, $name, $post_types = array(), $args = array();
+        public $slug, $name;
+        public $post_types, $args = array();
 
-        public function __construct($slug, $name, $post_types = array(), $args = array())
+        public function __construct($slug, $name, $post_types = array(), $args = array(), $plugin = array())
         {
+            // Parent
+            parent::__construct($plugin);
+
             // Define Taxonomy in WordPress
+            $this->plugin = $plugin;
             $this->slug = $slug;
             $this->name = $name;
             $this->post_types = $post_types;
@@ -41,25 +45,6 @@ if (!class_exists('Taxonomy')) {
 
             // Taxonomy Update Message
             $this->add_filter('term_updated_messages', 'term_updated_messages', 10, 1);
-
-            // Register Admin Init
-            $this->register_admin_init();
-
-            // Register Admin Footer
-            $this->register_admin_footer();
-
-            // Register Admin Notice
-            $this->register_admin_notices();
-
-            // Register Bulk Action
-            $this->register_bulk_actions();
-
-            // Register Row Action
-            $this->register_row_actions($this->slug);
-
-            // Register Taxonomy Columns
-            $this->register_taxonomy_columns();
-            $this->register_sortable_columns();
         }
 
         public function __get($name)

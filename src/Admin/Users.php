@@ -6,50 +6,29 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Has\HasAdminAssets;
-use WPTrait\Has\HasAdminFooter;
-use WPTrait\Has\HasAdminInit;
-use WPTrait\Has\HasAdvanceSearchBox;
-use WPTrait\Has\HasBulkActions;
-use WPTrait\Has\HasNotice;
-use WPTrait\Has\HasRowActions;
-use WPTrait\Has\HasSortableColumns;
-use WPTrait\Has\HasUser;
-use WPTrait\Has\HasUserColumns;
-use WPTrait\Has\HasUserProfileFields;
+use WPTrait\Hook\AdminAssets;
+use WPTrait\Hook\AdminFooter;
+use WPTrait\Hook\AdminInit;
+use WPTrait\Hook\AdvanceSearchBox;
+use WPTrait\Hook\BulkActions;
+use WPTrait\Hook\Notice;
+use WPTrait\Hook\RowActions;
+use WPTrait\Hook\SortableColumns;
+use WPTrait\Collection\User;
+use WPTrait\Hook\UserColumns;
+use WPTrait\Hook\UserProfileFields;
 
 if (!class_exists('Users')) {
 
     class Users extends Page
     {
-        use HasUser, HasNotice, HasAdminAssets, HasBulkActions, HasRowActions, HasAdminInit, HasAdminFooter, HasSortableColumns, HasUserProfileFields, HasUserColumns;
+        use User, Notice, AdminAssets, BulkActions, RowActions, AdminInit, AdminFooter, SortableColumns, UserProfileFields, UserColumns;
 
-        public function __construct()
+        public $RowActions = array('type' => 'user');
+
+        public function __construct($plugin = array())
         {
-
-            // Register Admin Init
-            $this->register_admin_init();
-
-            // Register Admin Footer
-            $this->register_admin_footer();
-
-            // Register Admin Notice
-            $this->register_admin_notices();
-
-            // Register Bulk Action
-            $this->register_bulk_actions();
-
-            // Register Row Action
-            $this->register_row_actions('user');
-
-            // Register User Profile Field
-            $this->register_user_profile_fields();
-
-            // Register Admin Asset
-            $this->register_admin_assets();
-
-            // Register User columns
-            $this->register_user_columns();
+            parent::__construct($plugin);
         }
 
         public function in_page()

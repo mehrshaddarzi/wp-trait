@@ -6,28 +6,32 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Has\HasAdminFooter;
-use WPTrait\Has\HasAdminInit;
-use WPTrait\Has\HasAdvanceSearchBox;
-use WPTrait\Has\HasBulkActions;
-use WPTrait\Has\HasNotice;
-use WPTrait\Has\HasPost;
-use WPTrait\Has\HasPostTypeColumns;
-use WPTrait\Has\HasRowActions;
-use WPTrait\Has\HasSortableColumns;
-use WPTrait\Has\HasSubSub;
+use WPTrait\Hook\AdminFooter;
+use WPTrait\Hook\AdminInit;
+use WPTrait\Hook\AdminSearchBox;
+use WPTrait\Hook\BulkActions;
+use WPTrait\Hook\Notice;
+use WPTrait\Collection\Post;
+use WPTrait\Hook\PostTypeColumns;
+use WPTrait\Hook\RowActions;
+use WPTrait\Hook\SortableColumns;
+use WPTrait\Hook\ViewsSub;
 
 if (!class_exists('PostType')) {
 
     class PostType extends Page
     {
-        use HasPost, HasNotice, HasBulkActions, HasRowActions, HasAdminInit, HasAdminFooter, HasPostTypeColumns, HasSortableColumns, HasSubSub;
+        use Post, Notice, BulkActions, RowActions, AdminInit, AdminFooter, PostTypeColumns, SortableColumns, ViewsSub;
 
         public $slug, $name, $args = array();
 
-        public function __construct($slug, $name, $args = array())
+        public function __construct($slug, $name, $args = array(), $plugin = array())
         {
+            // Parent
+            parent::__construct($plugin);
+
             // Define Post Type in WordPress
+            $this->plugin = $plugin;
             $this->slug = $slug;
             $this->name = $name;
             $this->args = $args;
@@ -42,28 +46,6 @@ if (!class_exists('PostType')) {
             // Post Type Update Message
             // @see https://developer.wordpress.org/reference/hooks/post_updated_messages/
             $this->add_filter('post_updated_messages', 'post_updated_messages', 10, 1);
-
-            // Register Admin Init
-            $this->register_admin_init();
-
-            // Register Admin Footer
-            $this->register_admin_footer();
-
-            // Register Admin Notice
-            $this->register_admin_notices();
-
-            // Register Bulk Action
-            $this->register_bulk_actions();
-
-            // Register Row Action
-            $this->register_row_actions('post');
-
-            // Register Post Type Columns
-            $this->register_post_type_columns();
-            $this->register_sortable_columns();
-
-            // Register Views Sub Sub
-            $this->register_views_sub();
         }
 
         public function __get($name)

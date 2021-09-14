@@ -12,11 +12,10 @@ if (!class_exists('Page')) {
 
     abstract class Page extends Model
     {
-        public $pagenow;
 
-        public function __construct()
+        public function __construct($plugin = array())
         {
-            $this->pagenow = $GLOBALS['pagenow'];
+            parent::__construct($plugin);
         }
 
         abstract protected function in_page();

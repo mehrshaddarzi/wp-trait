@@ -2,8 +2,7 @@
 
 namespace WPTrait;
 
-use WPTrait\Has\HasHooks;
-use WPTrait\Has\HasNotice;
+use WPTrait\Collection\Hooks;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -13,7 +12,7 @@ if (!class_exists('Plugin')) {
 
     abstract class Plugin
     {
-        use HasHooks, HasNotice;
+        use Hooks;
 
         public $plugin;
 
@@ -39,14 +38,6 @@ if (!class_exists('Plugin')) {
 
             // Define Variable
             $this->define_constants();
-
-            // PHP Notice Version
-            if (isset($this->plugin->RequiresPHP) and !empty($this->plugin->RequiresPHP)) {
-                if (version_compare(PHP_VERSION, $this->plugin->RequiresPHP, '<=')) {
-                    $this->register_admin_notices();
-                    return;
-                }
-            }
 
             // include PHP files
             if (method_exists($this, 'includes')) {
@@ -83,7 +74,7 @@ if (!class_exists('Plugin')) {
                 require_once(ABSPATH . 'wp-admin/includes/plugin.php');
             }
 
-            $this->plugin = (object)array_merge((array)$this->plugin, (array)get_plugin_data($this->plugin->main_file));
+            $this->plugin = (object)array_merge((array)$this->plugin, (array)array_change_key_case(get_plugin_data($this->plugin->main_file), CASE_LOWER));
             $this->plugin->url = plugins_url('', $this->plugin->main_file);
             $this->plugin->path = plugin_dir_path($this->plugin->main_file);
         }
@@ -99,8 +90,8 @@ if (!class_exists('Plugin')) {
         protected function init_hooks()
         {
             // Load Text Domain
-            if (isset($this->plugin->TextDomain) and !empty($this->plugin->TextDomain)) {
-                load_plugin_textdomain($this->plugin->TextDomain, false, wp_normalize_path($this->plugin->path . '/languages'));
+            if (isset($this->plugin->textdomain) and !empty($this->plugin->textdomain)) {
+                load_plugin_textdomain($this->plugin->textdomain, false, wp_normalize_path($this->plugin->path . '/languages'));
             }
 
             // register_activation_hook
@@ -129,16 +120,6 @@ if (!class_exists('Plugin')) {
 
         protected static function register_uninstall_hook()
         {
-        }
-
-        protected function admin_notices_php_version_notice()
-        {
-            if (!current_user_can('manage_options')) {
-                return;
-            }
-            $error = __('Your installed PHP Version is: ', $this->plugin->TextDomain) . PHP_VERSION . '. ';
-            $error .= __('The <strong>' . $$this->plugin->Title . '</strong> plugin requires PHP version <strong>', $this->plugin->TextDomain) . $this->plugin->RequiresPHP . __('</strong> or greater.', $this->plugin->TextDomain);
-            $this->add_alert($error, 'error', true, true);
         }
 
         protected function sanitize_plugin_slug($slug)

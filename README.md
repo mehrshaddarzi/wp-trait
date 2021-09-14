@@ -8,7 +8,7 @@
 
 1) First Create a new directory in your WordPress plugins dir e.g. `wp-content/plugins/wp-user-mobile`.
 
-3) Run This Command in yout directory:
+3) Run This Command in your directory:
 
 ```console
 composer require mehrshaddarzi/wp-trait
@@ -48,7 +48,7 @@ new WP_User_Mobile('wp-user-mobile');
     "require": {
         "mehrshaddarzi/wp-trait": "^1.0"
     },
-	"autoload": {
+    "autoload": {
         "psr-4": {
             "WP_User_Mobile\\": "src/"
         }
@@ -63,30 +63,21 @@ new WP_User_Mobile('wp-user-mobile');
 ```php
 namespace WP_User_Mobile;
 
-use WPTrait\Has\HasNotice;
+use WPTrait\Hook\Notice;
 use WPTrait\Model;
 
 class Admin extends Model
 {
-    use HasNotice;
+    use Notice;
 
-    public $textDomain;
-
-    public function __construct()
+    public function __construct($plugin)
     {
-        # Parent construct
-        parent::__construct();
-
-        # Register Admin Notice
-        $this->register_admin_notices();
-
-        # Get Plugin Text Domain
-        $this->textDomain = wp_user_mobile()->plugin->TextDomain;
+        parent::__construct($plugin);
     }
 
     public function admin_notices()
     {
-        $text = __('This Notice is a example from your plugin', $this->textDomain);
+        $text = __('This Notice is a example from your plugin', $this->plugin->textdomain);
         echo $this->add_alert($text, 'info');
     }
     
@@ -127,7 +118,7 @@ trait Lists are available under [/Has](https://github.com/mehrshaddarzi/wp-trait
 1) first add trait in your class.
 
 ```php
-use HasInit;
+use Init;
 ```
 
 2) every method in your class that have `init` prefix in method name call in this action:

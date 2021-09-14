@@ -32,7 +32,8 @@ class PLUGIN_SLUG extends Plugin
 
     public function instantiate()
     {
-        $this->Admin = new \PLUGIN_SLUG\Admin();
+        $this->Admin = new \PLUGIN_SLUG\Admin($this->plugin);
+        $this->Country = new \PLUGIN_SLUG\Country('country', __('Country', $this->plugin->textdomain), array('post'), array(), $this->plugin);
     }
 
     public function register_activation_hook()
