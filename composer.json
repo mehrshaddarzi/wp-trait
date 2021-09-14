@@ -1,6 +1,6 @@
 {
   "name": "mehrshaddarzi/wp-trait",
-  "description": "WordPress trait developer package",
+  "description": "Easy framework for fast and standard development of WordPress plugins",
   "type": "package",
   "require": {
     "php": ">=7.2"
