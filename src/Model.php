@@ -40,7 +40,8 @@ if (!class_exists('Model')) {
                 $args = array();
                 if (method_exists($this, $method) && !in_array($method, $booted)) {
                     $booted[] = $method;
-                    $this->{$method}((isset($this->{$basename}) ? $this->{$basename} : $args));
+                    $variable = lcfirst($basename);
+                    $this->{$method}((isset($this->{$variable}) ? $this->{$variable} : $args));
                 }
             }
         }
