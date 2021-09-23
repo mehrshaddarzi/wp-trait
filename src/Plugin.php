@@ -26,7 +26,8 @@ if (!class_exists('Plugin')) {
             $default = array(
                 'main_file' => WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php',
                 'global' => $this->sanitize_plugin_slug($slug),
-                'prefix' => $this->sanitize_plugin_slug($slug)
+                'prefix' => $this->sanitize_plugin_slug($slug),
+                'when_load' => array('action' => 'plugins_loaded', 'priority' => 10)
             );
             $arg = wp_parse_args($args, $default);
 
@@ -57,7 +58,7 @@ if (!class_exists('Plugin')) {
             }
 
             // Instantiate Object Class
-            $this->instantiate();
+            add_action($arg['when_load']['action'], array($this, 'instantiate'), $arg['when_load']['priority']);
 
             // Plugin Loaded Action
             do_action($this->plugin->prefix . '_loaded');
