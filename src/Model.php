@@ -45,6 +45,22 @@ if (!class_exists('Model')) {
                 }
             }
         }
+
+        private function getFile($path = '', $type = 'url')
+        {
+            return rtrim($this->plugin->{$type}, '/') . '/' . ltrim($path, '/');
+        }
+
+        public function getFileUrl($path = '')
+        {
+            return $this->getFile($path, 'url');
+        }
+
+        public function getFilePath($path = '')
+        {
+            return $this->getFile($path, 'path');
+        }
+
     }
 
 }
