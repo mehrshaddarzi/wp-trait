@@ -21,7 +21,7 @@ if (!trait_exists('Post')) {
                 'order' => 'DESC',
                 'fields' => 'ids',
                 'cache_results' => false,
-                'no_found_rows' => true, //@see https://10up.github.io/Engineering-Best-Practices/php/#performance
+                'no_found_rows' => true, # @see https://10up.github.io/Engineering-Best-Practices/php/#performance
                 'update_post_meta_cache' => false,
                 'update_post_term_cache' => false,
                 'suppress_filters' => true
@@ -38,7 +38,8 @@ if (!trait_exists('Post')) {
             );
             $args = wp_parse_args($arg, $default);
 
-            // Return { $query->posts }
+            # Return { $query->posts }
+            # Check Exists { $query->have_posts() }
             return new \WP_Query($args);
         }
 
@@ -175,7 +176,8 @@ if (!trait_exists('Post')) {
                 return in_array($pagenow, array('post.php', 'post-new.php'));
         }
 
-        public function get_edit_post_link($post_id, $context = 'display') {
+        public function get_edit_post_link($post_id, $context = 'display')
+        {
             return get_edit_post_link($post_id, $context);
         }
     }
