@@ -1,4 +1,4 @@
-# Fast and standard development of WordPress plugins
+# WP Trit
 
 ![Packagist](https://img.shields.io/github/license/mehrshaddarzi/wp-trait)
 ![Packagist Version](https://img.shields.io/github/v/release/mehrshaddarzi/wp-trait)
