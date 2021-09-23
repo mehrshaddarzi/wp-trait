@@ -109,7 +109,7 @@ class Admin extends Model
 ```php
 public function instantiate()
 {
-    $this->Admin = new \WP_User_Mobile\Admin();
+    $this->Admin = new \WP_User_Mobile\Admin($this->plugin);
 }
 ```
 
