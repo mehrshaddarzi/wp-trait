@@ -69,7 +69,7 @@ if (!class_exists('Plugin')) {
             return $this->$name;
         }
 
-        protected function define_constants()
+        public function define_constants()
         {
             if (!function_exists('get_plugin_data')) {
                 require_once(ABSPATH . 'wp-admin/includes/plugin.php');
@@ -80,15 +80,15 @@ if (!class_exists('Plugin')) {
             $this->plugin->path = plugin_dir_path($this->plugin->main_file);
         }
 
-        protected function includes()
+        public function includes()
         {
         }
 
-        protected function instantiate()
+        public function instantiate()
         {
         }
 
-        protected function init_hooks()
+        public function init_hooks()
         {
             // Load Text Domain
             if (isset($this->plugin->textdomain) and !empty($this->plugin->textdomain)) {
@@ -111,19 +111,19 @@ if (!class_exists('Plugin')) {
             }
         }
 
-        protected function register_activation_hook()
+        public function register_activation_hook()
         {
         }
 
-        protected function register_deactivation_hook()
+        public function register_deactivation_hook()
         {
         }
 
-        protected static function register_uninstall_hook()
+        public static function register_uninstall_hook()
         {
         }
 
-        protected function sanitize_plugin_slug($slug)
+        public function sanitize_plugin_slug($slug)
         {
             return str_replace("-", "_", trim($slug));
         }
