@@ -127,7 +127,7 @@ this function show `Code is Poetry`.
 ## Trait For Helper Developers
 
 This package has list of php trait for WordPress Hooks, that you can uses.
-trait Lists are available under [/Has](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Has).
+trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
 
 #### how To Work Trait Hooks?
 
