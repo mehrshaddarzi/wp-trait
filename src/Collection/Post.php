@@ -86,6 +86,11 @@ if (!trait_exists('Post')) {
             return get_post_thumbnail_id($post_id);
         }
 
+        public function has_post_thumbnail($post = null)
+        {
+            return has_post_thumbnail($post);
+        }
+
         public function delete_post($post_id, $force = false)
         {
             //(WP_Post|false|null) Post data on success, false or null on failure.
