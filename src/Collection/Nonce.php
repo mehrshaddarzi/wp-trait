@@ -6,25 +6,33 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('Nonce')) {
+if (!class_exists('Nonce')) {
 
-    trait Nonce
+    class Nonce
     {
 
-        public function create_nonce($action = -1)
+        public $action;
+
+        public function __construct($action = -1)
         {
-            return wp_create_nonce($action);
+            $this->action = $action;
         }
 
-        public function verify_nonce($value, $action = -1)
+        public function create($action = -1)
+        {
+            return wp_create_nonce((is_null($action) ? $this->action : $action));
+        }
+
+        public function verify($input = '', $action = -1)
         {
             # (int|false)
-            return wp_verify_nonce($value, $action);
+            $request = new Request();
+            return wp_verify_nonce($request->input($input), (is_null($action) ? $this->action : $action));
         }
 
-        public function create_nonce_input($action = -1, $name = '_wpnonce', $referer = true, $echo = true)
+        public function input($name = '_wpnonce', $action = -1, $referer = true, $echo = true)
         {
-            return wp_nonce_field($action, $name, $referer, $echo);
+            return wp_nonce_field((is_null($action) ? $this->action : $action), $name, $referer, $echo);
         }
     }
 
