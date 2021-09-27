@@ -97,6 +97,18 @@ if (!class_exists('Request')) {
             return (isset($files->{$name}) and !empty($files->{$name}["name"]));
         }
 
+        public function new($url, $method = 'GET', $args = array())
+        {
+            # alias
+            if (isset($args['ssl'])) {
+                $args['sslverify'] = $args['ssl'];
+                unset($args['sslverify']);
+            }
+
+            # https://developer.wordpress.org/reference/classes/WP_Http/request/
+            return wp_remote_request($url, array_merge(array('method' => strtoupper($method)), $args));
+        }
+
         private function getGlobalVariable($name = 'REQUEST')
         {
             switch (strtolower($name)) {

@@ -15,7 +15,7 @@ if (!class_exists('Option')) {
 
         public function __construct($name = null)
         {
-            $this->name = $name;;
+            $this->name = $name;
         }
 
         public function get($default = false, $name = null)

@@ -3,12 +3,16 @@
 namespace WPTrait;
 
 use WPTrait\Collection\Attachment;
+use WPTrait\Collection\Cache;
 use WPTrait\Collection\Comment;
+use WPTrait\Collection\Event;
 use WPTrait\Collection\Hooks;
+use WPTrait\Collection\Nonce;
 use WPTrait\Collection\Option;
 use WPTrait\Collection\Post;
 use WPTrait\Collection\Request;
 use WPTrait\Collection\Term;
+use WPTrait\Collection\Transient;
 use WPTrait\Collection\User;
 use WPTrait\Hook\Constant;
 
@@ -22,7 +26,7 @@ if (!class_exists('Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event;
 
         public function __construct($plugin = array())
         {
@@ -42,6 +46,10 @@ if (!class_exists('Model')) {
             $this->option = new Option();
             $this->request = new Request();
             $this->comment = new Comment();
+            $this->nonce = new Nonce();
+            $this->transient = new Transient();
+            $this->cache = new Cache();
+            $this->event = new Event();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -106,6 +114,16 @@ if (!class_exists('Model')) {
         public function option($name)
         {
             return new Option($name);
+        }
+
+        public function nonce($action)
+        {
+            return new Nonce($action);
+        }
+
+        public function transient($name)
+        {
+            return new Transient($name);
         }
     }
 
