@@ -163,17 +163,16 @@ This package has list of wordpress helper class, that you can uses.
 ```php
 
 // Get Post
-$post = $this->post(1);
-var_dump($post->get());
+$this->post(1)->get();
 
 // Get Post Meta
-$post->meta->all();
+$this->post(1)->meta->all();
 
 // Get Custom Meta
-$post->meta('key');
+$this->post(1)->meta('key');
 
 // Save Post Meta
-$post->meta->save('key', 'value');
+$this->post(1)->meta->save('key', 'value');
 
 // Delete Post
 $this->post(1)->delete();
@@ -182,7 +181,7 @@ $this->post(1)->delete();
 $this->post->list(['type' => 'post', 'status' => 'publish', 'cache' => false]);
 
 // Get Post Thumbnail
-$post->thumbnail()->url
+$this->post(1)->thumbnail()->url
 
 // Add Post
 $this->post->add(['title' => '', 'content' => '']);
@@ -191,7 +190,7 @@ $this->post->add(['title' => '', 'content' => '']);
 $this->post(38)->update(['title' => '']);
 
 // Permalink
-$post->permalink();
+$this->post(1)->permalink();
 
 // Check Exist
 $this->post(53)->exists();
@@ -248,6 +247,53 @@ if($this->attachment(1)->is() == "image") { }
 $this->attachment(1)->size();
 ```
 
+### User
+
+```php
+
+// Get User
+$user = $this->user(1)->get();
+// ['data' => '', 'ID' => '', 'roles' => '', 'allcaps' => '']
+
+// Get Meta
+$this->user(1)->meta->all();
+
+// Save Meta
+$this->user(1)->meta->update('phone', '09xxxxxxxx');
+
+// Delete User
+$this->user(1)->delete();
+
+// Update User
+$this->user(1)->update(['name' => 'Mehrshad Darzi', 'password' => '12345']);
+
+// Add User
+$this->user->add(['email' => 'info@site.com', 'username' => 'mehrshad']);
+
+// Get Current User
+$this->user->current();
+
+// Check User is Login
+$this->user->auth();
+
+// Get current User id
+$this->user->id();
+
+// Check User Has Role
+$this->user->has_role('administrator');
+
+// Check Exist User Id
+$this->user->exists(12);
+
+// Set Role and Capability for user
+$user = $this->user(1)->get();
+$user->set_role('author');
+$user->add_cap('cap_name');
+$user->remove_cap('cap_name');
+$user->add_role('role_name');
+$user->remove_role('role_name');
+$user->remove_all_caps();
+```
 
 
 ## Starter Plugin
