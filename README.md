@@ -406,7 +406,28 @@ $this->request->cookie('name');
 
 // Get $_SERVER params
 $this->request->server('REQUEST_URI');
+
+// New Request
+$this->request->new('https://jsonplaceholder.typicode.com/todos/1', 'GET', ['timeout' => 30, 'ssl' => false]);
 ```
+
+### Event
+```php
+// Define single Event
+$this->event->single($this->constant('hour'), 'action_name');
+
+// Define recurring Event
+$this->event->add(time(), 'hourly', 'action_name', array());
+
+// Delete Event
+$this->event->delete('action_name');
+
+// Check Equal fields
+$this->request->equal('first_name', 'mehrshad');
+```
+
+Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
+
 
 ## Starter Plugin
 
