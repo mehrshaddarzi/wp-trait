@@ -204,6 +204,51 @@ $this->post(1)->collection(['meta_1', 'meta_2'], ['category', 'post_tag']);
 
 ```
 
+### Attachment
+
+```php
+
+// Get Attachment
+$attachment = $this->attachment(1)->get();
+
+// Get Meta
+$this->attachment(1)->meta->all();
+
+// Delete Attachment
+$this->attachment(1)->delete();
+
+// Get Url
+$this->attachment(1)->url();
+
+// Get Image Src in Custom image size
+$this->attachment(1)->src('thumbnail');
+
+// Get Attachment File Path
+$this->attachment(1)->path();
+
+// Get Attachment Meta Data
+$this->attachment(1)->metadata();
+
+// Auto Upload File in WordPress Library
+$attachment_id = $this->attachment->upload('image'); // <input type="file" name="image" />
+
+// Regenerate Attachment image Size
+$this->attachment(1)->generate_thumbnail();
+
+// Get List Of WordPres Image Sizes
+$this->attachment->get_wordpress_image_sizes();
+
+// Get Uploads Dir
+$this->attachment->upload_dir();
+
+// Check Attachment type File (image or video or audio)
+if($this->attachment(1)->is() == "image") { }
+
+// Get Size Of Attachment
+$this->attachment(1)->size();
+```
+
+
 
 ## Starter Plugin
 
