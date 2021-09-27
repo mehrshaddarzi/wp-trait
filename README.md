@@ -124,7 +124,7 @@ echo wp_user_mobile()->Admin->method_name();
 this function show `Code is Poetry`.
 
 
-## Trait For Helper Developers
+## Trait For WordPress Hooks
 
 This package has list of php trait for WordPress Hooks, that you can uses.
 trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
@@ -152,6 +152,58 @@ public function init_save_form_data() {
   // Code Here
 }
 ```
+
+## Collection Class
+
+This package has list of wordpress helper class, that you can uses.
+
+
+### Post
+
+```php
+
+// Get Post
+$post = $this->post(1);
+var_dump($post->get());
+
+// Get Post Meta
+$post->meta->all();
+
+// Get Custom Meta
+$post->meta('key');
+
+// Save Post Meta
+$post->meta->save('key', 'value');
+
+// Delete Post
+$this->post(1)->delete();
+
+// Get List Of post
+$this->post->list(['type' => 'post', 'status' => 'publish', 'cache' => false]);
+
+// Get Post Thumbnail
+$post->thumbnail()->url
+
+// Add Post
+$this->post->add(['title' => '', 'content' => '']);
+
+// Edit Post
+$this->post(38)->update(['title' => '']);
+
+// Permalink
+$post->permalink();
+
+// Check Exist
+$this->post(53)->exists();
+
+// Post Terms
+$this->post(1)->terms('category');
+
+// Collection { Post + Meta + Terms }
+$this->post(1)->collection(['meta_1', 'meta_2'], ['category', 'post_tag']);
+
+```
+
 
 ## Starter Plugin
 
