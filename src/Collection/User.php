@@ -6,38 +6,30 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('User')) {
+if (!class_exists('User')) {
 
-    trait User
+    class User
     {
 
-        public function get_users($arg = array())
-        {
-            $default = array(
-                'role__in' => array(),
-                'fields' => array('id'),
-                'orderby' => 'id',
-                'order' => 'ASC',
-                'count_total' => false
-                /**
-                 * @see https://developer.wordpress.org/reference/classes/wp_meta_query/#accepted-arguments
-                 * 'meta_query' => array(
-                 * array(
-                 * 'key' => '',
-                 * 'value' => '',
-                 * 'compare' => '='
-                 * )
-                 * ),
-                 */
-            );
-            $args = wp_parse_args($arg, $default);
+        /**
+         * User ID
+         *
+         * @var int
+         */
+        public $user_id;
 
-            // Return { (array) $query->get_results() }
-            // Get User Ids { $user_ids[0]->id }
-            return new \WP_User_Query($args);
+        /**
+         * Meta Class
+         */
+        public $meta;
+
+        public function __construct($user_id = null)
+        {
+            $this->user_id = $user_id;
+            $this->meta = new Meta('user', $this->user_id);
         }
 
-        public function get_user($user_id)
+        public function get($user_id = null)
         {
             /**
              * @see https://core.trac.wordpress.org/browser/tags/5.8/src/wp-includes/class-wp-user.php
@@ -54,96 +46,128 @@ if (!trait_exists('User')) {
              *
              * @return object { 'data' => '', 'ID' => '', 'roles' => '', 'allcaps' => ''}
              */
-            return new \WP_User($user_id);
+            return new \WP_User((is_null($user_id) ? $this->user_id : $user_id));
         }
 
-        public function delete_user($user_id, $reassign = null)
+        public function delete($reassign = null, $user_id = null)
         {
-            return wp_delete_user($user_id, $reassign);
+            return wp_delete_user((is_null($user_id) ? $this->user_id : $user_id), $reassign);
         }
 
-        public function add_user($arg = array())
+        public function add($arg = array())
         {
             $default = array(
-                'user_login' => '',
-                'user_email' => '',
+                'username' => '',
+                'email' => '',
                 'first_name' => '',
                 'last_name' => '',
-                'display_name' => '',
-                'user_pass' => ''
+                'fullname' => '',
+                'password' => ''
             );
             $args = wp_parse_args($arg, $default);
 
-            // (int|WP_Error) The newly created user's ID or a WP_Error object if the user could not be created.
-            return wp_insert_user(
-                $args
-            );
+            # (int|WP_Error) The newly created user's ID or a WP_Error object if the user could not be created.
+            return wp_insert_user($this->convertAliasArg($args));
         }
 
-        public function update_user($user_id, $arg = array())
+        public function update($arg = array())
         {
             $default = array(
-                'ID' => $user_id,
-                'first_name' => '',
-                'last_name' => '',
+                'id' => $this->user_id
             );
             $args = wp_parse_args($arg, $default);
 
-            // (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
-            return wp_update_user($args);
+            # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
+            return wp_update_user($this->convertAliasArg($args));
         }
 
-        public function get_user_meta($user_id, $meta_key, $single = false)
+        public function exists($user_id = null)
         {
-            if (!$single) {
-                return array_map(function ($a) {
-                    return $a[0];
-                }, get_user_meta($user_id));
-            }
-
-            return get_user_meta($user_id, $meta_key, $single);
-        }
-
-        public function update_user_meta($post_id, $meta_key, $new_value)
-        {
-            update_user_meta($post_id, $meta_key, $new_value);
-        }
-
-        public function add_user_meta($user_id, $meta_key, $new_value)
-        {
-            add_user_meta($user_id, $meta_key, $new_value);
-        }
-
-        public function delete_user_meta($user_id, $meta_key)
-        {
-            return delete_user_meta($user_id, $meta_key);
-        }
-
-        public function user_exists($user_id)
-        {
-            $user = $this->get_user($user_id);
+            $user = $this->get((is_null($user_id) ? $this->user_id : $user_id));
             return $user->exists();
         }
 
-        public function is_login()
+        public function list($arg = array())
+        {
+            # alias
+            $alias = array(
+                'return' => 'fields',
+                'meta' => 'meta_query',
+                'date' => 'date_query',
+            );
+            $arg = $this->convertAliasArg($arg, $alias);
+
+            # Default
+            $default = array(
+                'role__in' => array(),
+                'orderby' => 'id',
+                'order' => 'ASC',
+                'count_total' => false
+            );
+            $args = wp_parse_args($arg, $default);
+
+            # Query
+            $user_search = new \WP_User_Query($args);
+            return (array)$user_search->get_results();
+        }
+
+        public function auth()
         {
             return is_user_logged_in();
         }
 
-        public function current_user_id()
+        public function current()
+        {
+            return wp_get_current_user();
+        }
+
+        public function id()
         {
             return get_current_user_id();
         }
 
-        public function has_role($user_id, $role)
+        public function has_role($role, $user_id = null)
         {
-            $user = $this->get_user($user_id);
+            $user = $this->get((is_null($user_id) ? $this->user_id : $user_id));
             return in_array($role, (array)$user->roles);
         }
 
-        public function user_can($user_id, $cap)
+        public function user_can($cap, $user_id = null)
         {
-            return user_can($user_id, $cap);
+            return user_can((is_null($user_id) ? $this->user_id : $user_id), $cap);
+        }
+
+        private function aliasArgument()
+        {
+            return array(
+                'id' => 'ID',
+                'pass' => 'user_pass',
+                'password' => 'user_pass',
+                'login' => 'user_login',
+                'username' => 'user_login',
+                'nicename' => 'user_nicename',
+                'url' => 'user_url',
+                'site' => 'user_url',
+                'email' => 'user_email',
+                'name' => 'display_name',
+                'fullname' => 'display_name',
+                'color' => 'admin_color',
+                'date' => 'user_registered',
+                'created_at' => 'user_registered',
+                'admin_bar' => 'show_admin_bar_front',
+                'ssl' => 'use_ssl'
+            );
+        }
+
+        private function convertAliasArg($array = array(), $alias = null)
+        {
+            $_array = array();
+            $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
+            foreach ($array as $key => $value) {
+                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
+            }
+
+            return $_array;
         }
     }
 }

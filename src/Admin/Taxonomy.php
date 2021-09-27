@@ -19,7 +19,7 @@ if (!class_exists('Taxonomy')) {
 
     class Taxonomy extends Page
     {
-        use Term, Notice, BulkActions, AdminInit, AdminFooter, TaxonomyColumns, SortableColumns;
+        use Notice, BulkActions, AdminInit, AdminFooter, TaxonomyColumns, SortableColumns;
 
         public $slug, $name;
         public $post_types, $args = array();

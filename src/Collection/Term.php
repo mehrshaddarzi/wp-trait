@@ -6,51 +6,58 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('Term')) {
+if (!class_exists('Term')) {
 
-    trait Term
+    class Term
     {
+        /**
+         * Taxonomy
+         *
+         * @var string
+         */
         public $slug;
 
-        public function get_terms($arg = array())
-        {
-            $default = array(
-                'taxonomy' => $this->slug,
-                'suppress_filter' => true,
-                'orderby' => 'term_id',
-                'order' => 'ASC',
-                'parent' => '',
-                'fields' => 'ids',
-                'hide_empty' => false,
-                /**
-                 * @see https://developer.wordpress.org/reference/classes/wp_meta_query/#accepted-arguments
-                 * 'meta_query' => array(
-                 * array(
-                 * 'key' => '',
-                 * 'value' => '',
-                 * 'compare' => '='
-                 * )
-                 * ),
-                 */
-            );
-            $args = wp_parse_args($arg, $default);
+        /**
+         * Term ID
+         *
+         * @var int
+         */
+        public $term_id;
 
-            // Check Empty { is_array($query->terms) and count($get_terms->terms) > 0 && !is_wp_error($get_terms) }
-            // Return { $query->terms (is Null When Empty) }
-            return new \WP_Term_Query($args);
+        /**
+         * Meta Class
+         */
+        public $meta;
+
+        public function __construct($term_id = null, $slug = 'post_tag')
+        {
+            $this->term_id = $term_id;
+            $this->slug = $slug;
+            $this->meta = new Meta('term', $this->term_id);
         }
 
-        public function get_term($term_id)
+        public function get($term_id = null)
         {
-            return get_term($term_id);
+            return get_term((is_null($term_id) ? $this->term_id : $term_id));
         }
 
-        public function add_term($name, $arg = array(), $taxonomy = null)
+        public function delete($term_id = null, $taxonomy = null)
         {
-            if (is_null($taxonomy)) {
-                $taxonomy = $this->slug;
-            }
+            # Delete all terms From taxonomy in WP-CLI
+            # $ wp term list post_tag --field=term_id | xargs wp term delete post_tag
 
+            # True or WP_Error
+            $term_id = (is_null($term_id) ? $this->term_id : $term_id);
+            return wp_delete_term($term_id, (is_null($taxonomy) ? $this->get($term_id)->taxonomy : $taxonomy));
+        }
+
+        public function exists($term_id = null, $taxonomy = '', $parent = null)
+        {
+            return term_exists((is_null($term_id) ? $this->term_id : $term_id), $taxonomy, $parent);
+        }
+
+        public function add($name, $arg = array(), $taxonomy = null)
+        {
             $default = array(
                 'description' => '',
                 'slug' => '',
@@ -58,73 +65,52 @@ if (!trait_exists('Term')) {
             );
             $args = wp_parse_args($arg, $default);
 
-            // (array('term_id'=>'','term_taxonomy_id'=>'') | WP_Error)
+            # (array('term_id'=>'','term_taxonomy_id'=>'') | WP_Error)
             return wp_insert_term(
                 $name,
-                $taxonomy,
+                (is_null($taxonomy) ? $this->slug : $taxonomy),
                 $args
             );
         }
 
-        public function update_term($term_id, $arg = array(), $taxonomy = null)
+        public function update($arg = array(), $taxonomy = null, $term_id = null)
         {
-            if (is_null($taxonomy)) {
-                $taxonomy = $this->slug;
-            }
-
-            // @see https://developer.wordpress.org/reference/functions/wp_update_term/#more-information
+            # @see https://developer.wordpress.org/reference/functions/wp_update_term
             $default = array(
                 'name' => ''
             );
             $args = wp_parse_args($arg, $default);
 
-            // (array('term_id'=>'','term_taxonomy_id'=>'') | WP_Error)
-            return wp_update_term($term_id, $taxonomy, $args);
+            # (array('term_id'=>'','term_taxonomy_id'=>'') | WP_Error)
+            return wp_update_term((is_null($term_id) ? $this->term_id : $term_id), (is_null($taxonomy) ? $this->get($term_id)->taxonomy : $taxonomy), $args);
         }
 
-        public function delete_term($term_id, $taxonomy = null)
+        public function list($arg = array())
         {
-            # Delete all terms From taxonomy in WP-CLI
-            # $ wp term list post_tag --field=term_id | xargs wp term delete post_tag
-
-            if (is_null($taxonomy)) {
-                $taxonomy = $this->slug;
-            }
-            return wp_delete_term($term_id, $taxonomy); //{ true or WP_Error }
-        }
-
-        public function get_term_meta($term_id, $meta_key, $single = false)
-        {
-            if (!$single) {
-                return array_map(function ($a) {
-                    return $a[0];
-                }, get_term_meta($term_id));
+            # Cache
+            if (isset($arg['cache']) and $arg['cache'] === false) {
+                $arg['update_term_meta_cache'] = false;
+                unset($arg['cache']);
             }
 
-            return get_term_meta($term_id, $meta_key, true);
-        }
+            # alias
+            $alias = array(
+                'return' => 'fields',
+                'meta' => 'meta_query'
+            );
+            $arg = $this->convertAliasArg($arg, $alias);
 
-        public function update_term_meta($term_id, $meta_key, $new_value)
-        {
-            update_term_meta($term_id, $meta_key, $new_value);
-        }
-
-        public function add_term_meta($term_id, $meta_key, $new_value)
-        {
-            add_term_meta($term_id, $meta_key, $new_value);
-        }
-
-        public function delete_term_meta($term_id, $meta_key)
-        {
-            return delete_term_meta($term_id, $meta_key);
-        }
-
-        public function term_exists($term, $taxonomy = '', $parent = null)
-        {
-            if (empty($taxonomy)) {
-                $taxonomy = $this->slug;
-            }
-            return term_exists($term, $taxonomy, $parent);
+            # Default Params
+            $default = array(
+                'taxonomy' => $this->slug,
+                'orderby' => 'term_id',
+                'order' => 'ASC',
+                'parent' => '',
+                'hide_empty' => false
+            );
+            $args = wp_parse_args($arg, $default);
+            $term_query = new \WP_Term_Query;
+            return $term_query->query($args);
         }
 
         public function get_taxonomy($taxonomy = null)
@@ -152,6 +138,17 @@ if (!trait_exists('Term')) {
             }
 
             return $into;
+        }
+
+        private function convertAliasArg($array = array(), $alias = null)
+        {
+            $_array = array();
+            $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
+            foreach ($array as $key => $value) {
+                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
+            }
+
+            return $_array;
         }
     }
 

@@ -6,79 +6,96 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('Attachment')) {
+if (!class_exists('Attachment')) {
 
-    trait Attachment
+    class Attachment
     {
+        /**
+         * Attachment ID
+         *
+         * @var int
+         */
+        public $attachment_id;
 
+        /**
+         * Meta Class
+         */
+        public $meta;
+
+        /**
+         * Image Extensions
+         *
+         * @var string[]
+         */
         public static $ImageExtensions = array('jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg', 'bmp');
 
-        public function get_upload_dir()
+        public function __construct($attachment_id = null)
+        {
+            $this->attachment_id = $attachment_id;
+            $this->meta = new Meta('attachment', $this->attachment_id);
+        }
+
+        public function upload_dir()
         {
             # https://developer.wordpress.org/reference/functions/wp_upload_dir/
-            return wp_get_upload_dir();
+            return (object)wp_get_upload_dir();
         }
 
-        public function get_attachment_url($attachment_id)
+        public function url($attachment_id = null)
         {
-            return wp_get_attachment_url($attachment_id);
+            return wp_get_attachment_url((is_null($attachment_id) ? $this->attachment_id : $attachment_id));
         }
 
-        public function get_attachment_image_src($attachment_id, $size = 'thumbnail', $return = 'all')
+        public function src($size = 'thumbnail', $return = 'all', $attachment_id = null)
         {
-            $attachment = wp_get_attachment_image_src($attachment_id, $size);
+            $attachment = wp_get_attachment_image_src((is_null($attachment_id) ? $this->attachment_id : $attachment_id), $size);
             if (!$attachment) {
                 return false;
             }
 
-            return ($return == "src" ? $attachment[0] : $attachment);
+            return ($return == "src" ? $attachment[0] : (object)$attachment);
         }
 
-        public function get_attachment_file_path($attachment_id, $unfiltered = true)
+        public function path($attachment_id = null, $unfiltered = true)
         {
-            return get_attached_file($attachment_id, $unfiltered);
+            return get_attached_file((is_null($attachment_id) ? $this->attachment_id : $attachment_id), $unfiltered);
         }
 
-        public function get_attachment_metadata($attachment_id, $unfiltered = true)
+        public function metadata($attachment_id = null, $unfiltered = true)
         {
-            return wp_get_attachment_metadata($attachment_id, $unfiltered);
+            return wp_get_attachment_metadata((is_null($attachment_id) ? $this->attachment_id : $attachment_id), $unfiltered);
         }
 
-        public function get_prepare_attachment_for_js($attachment_id)
+        public function delete($force_delete = true, $attachment_id = null)
         {
-            return wp_prepare_attachment_for_js($attachment_id);
+            return wp_delete_attachment((is_null($attachment_id) ? $this->attachment_id : $attachment_id), $force_delete);
         }
 
-        public function wp_delete_attachment($attachment_id, $force_delete = true)
-        {
-            return wp_delete_attachment($attachment_id, $force_delete);
-        }
-
-        public function get_attachment_cover_id($attachment_id)
+        public function cover($attachment_id = null)
         {
             # Usage for video Or Audio
             # Thumbnail Attachment has a post meta with name of "_cover_hash"
-            return get_post_meta($attachment_id, '_thumbnail_id', true);
+            return get_post_meta((is_null($attachment_id) ? $this->attachment_id : $attachment_id), '_thumbnail_id', true);
         }
 
-        public function get_attachment_file_size($attachment_id)
+        public function size($attachment_id = null)
         {
-            return filesize($this->get_attachment_file_path($attachment_id));
+            return filesize($this->path((is_null($attachment_id) ? $this->attachment_id : $attachment_id)));
         }
 
-        public function get_size_format($bytes, $decimals = 0)
+        public function sizeFormat($bytes, $decimals = 0)
         {
             return size_format($bytes, $decimals);
         }
 
-        public function get_attachment_post_mime_type($attachment_id)
+        public function mime_type($attachment_id = null)
         {
-            return get_post_mime_type($attachment_id);
+            return get_post_mime_type((is_null($attachment_id) ? $this->attachment_id : $attachment_id));
         }
 
-        public function get_attachment_is($attachment_id, $file_path = false)
+        public function is($attachment_id = null, $file_path = false)
         {
-            $path = ($file_path === false ? $this->get_attachment_file_path($attachment_id) : $file_path);
+            $path = ($file_path === false ? $this->path((is_null($attachment_id) ? $this->attachment_id : $attachment_id)) : $file_path);
             $ext = pathinfo($path, PATHINFO_EXTENSION);
 
             # @see https://developer.wordpress.org/reference/functions/wp_attachment_is/
@@ -95,6 +112,31 @@ if (!trait_exists('Attachment')) {
             }
 
             return 'other';
+        }
+
+        public function upload($file_id, $post_id = 0, $post_data = array(), $overrides = array('test_form' => false))
+        {
+            # These files need to be included as dependencies when on the front end.
+            $this->requirePHPImage();
+
+            # (attachment_id || WP_Error)
+            return media_handle_upload($file_id, $post_id, $post_data, $overrides);
+        }
+
+        public function generate_thumbnail($attachment_id)
+        {
+            $this->requirePHPImage();
+            $attachment_id = (is_null($attachment_id) ? $this->attachment_id : $attachment_id);
+            $file_path = $this->path($attachment_id);
+            $attach_data = wp_generate_attachment_metadata($attachment_id, $file_path);
+            wp_update_attachment_metadata($attachment_id, $attach_data);
+        }
+
+        public function requirePHPImage()
+        {
+            require_once(ABSPATH . 'wp-admin/includes/image.php');
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
+            require_once(ABSPATH . 'wp-admin/includes/media.php');
         }
 
         public function get_wordpress_image_sizes($size = '')

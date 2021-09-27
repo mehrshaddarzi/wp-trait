@@ -2,7 +2,14 @@
 
 namespace WPTrait;
 
+use WPTrait\Collection\Attachment;
+use WPTrait\Collection\Comment;
 use WPTrait\Collection\Hooks;
+use WPTrait\Collection\Option;
+use WPTrait\Collection\Post;
+use WPTrait\Collection\Request;
+use WPTrait\Collection\Term;
+use WPTrait\Collection\User;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -14,19 +21,28 @@ if (!class_exists('Model')) {
     {
         use Hooks;
 
-        public $db, $wp, $plugin, $pagenow;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment;
 
         public function __construct($plugin = array())
         {
-            //@see https://codex.wordpress.org/Global_Variables
+            # @see https://codex.wordpress.org/Global_Variables
             $this->db = $GLOBALS['wpdb'];
             $this->wp = $GLOBALS['wp'];
             $this->pagenow = $GLOBALS['pagenow'];
 
-            // Set Plugin information
+            # Set Plugin information
             $this->plugin = $plugin;
 
-            // Boot WordPress Hooks
+            # Setup Collection
+            $this->post = new Post();
+            $this->term = new Term();
+            $this->attachment = new Attachment();
+            $this->user = new User();
+            $this->option = new Option();
+            $this->request = new Request();
+            $this->comment = new Comment();
+
+            # Boot WordPress Hooks
             $this->bootHooks();
         }
 
@@ -46,7 +62,7 @@ if (!class_exists('Model')) {
             }
         }
 
-        private function getFile($path = '', $type = 'url')
+        public function getFile($path = '', $type = 'url')
         {
             return rtrim($this->plugin->{$type}, '/') . '/' . ltrim($path, '/');
         }
@@ -61,6 +77,35 @@ if (!class_exists('Model')) {
             return $this->getFile($path, 'path');
         }
 
+        public function post($post_id)
+        {
+            return new Post($post_id);
+        }
+
+        public function comment($comment_id)
+        {
+            return new Comment($comment_id);
+        }
+
+        public function term($term_id)
+        {
+            return new Term($term_id);
+        }
+
+        public function attachment($attachment_id)
+        {
+            return new Attachment($attachment_id);
+        }
+
+        public function user($user_id)
+        {
+            return new User($user_id);
+        }
+
+        public function option($name)
+        {
+            return new Option($name);
+        }
     }
 
 }

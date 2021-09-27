@@ -21,7 +21,7 @@ if (!class_exists('PostType')) {
 
     class PostType extends Page
     {
-        use Post, Notice, BulkActions, RowActions, AdminInit, AdminFooter, PostTypeColumns, SortableColumns, ViewsSub;
+        use Notice, BulkActions, RowActions, AdminInit, AdminFooter, PostTypeColumns, SortableColumns, ViewsSub;
 
         public $slug, $name, $args = array();
 

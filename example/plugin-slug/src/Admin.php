@@ -2,14 +2,13 @@
 
 namespace PLUGIN_SLUG;
 
-use WPTrait\Collection\Post;
 use WPTrait\Hook\Notice;
 use WPTrait\Hook\RowActions;
 use WPTrait\Model;
 
 class Admin extends Model
 {
-    use Notice, RowActions, Post;
+    use Notice, RowActions;
 
     public function __construct($plugin)
     {
@@ -34,7 +33,7 @@ class Admin extends Model
 
     public function row_actions($actions, $object)
     {
-        $actions['post-action'] = '<a href="' . $this->get_edit_post_link($object->ID) . '">Action Button</a>';
+        $actions['post-action'] = '<a href="' . $this->post->edit_post_link($object->ID) . '">Action Button</a>';
 
         return $actions;
     }

@@ -22,9 +22,9 @@ if (!class_exists('Users')) {
 
     class Users extends Page
     {
-        use User, Notice, AdminAssets, BulkActions, RowActions, AdminInit, AdminFooter, SortableColumns, UserProfileFields, UserColumns;
+        use Notice, AdminAssets, BulkActions, RowActions, AdminInit, AdminFooter, SortableColumns, UserProfileFields, UserColumns;
 
-        public $RowActions = array('type' => 'user');
+        public $rowActions = array('type' => 'user');
 
         public function __construct($plugin = array())
         {
