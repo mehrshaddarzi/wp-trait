@@ -198,6 +198,9 @@ $this->post(53)->exists();
 // Post Terms
 $this->post(1)->terms('category');
 
+// Post Comments
+$this->post(1)->comments();
+
 // Collection { Post + Meta + Terms }
 $this->post(1)->collection(['meta_1', 'meta_2'], ['category', 'post_tag']);
 
@@ -253,7 +256,7 @@ $this->attachment(1)->size();
 
 // Get User
 $user = $this->user(1)->get();
-// ['data' => '', 'ID' => '', 'roles' => '', 'allcaps' => '']
+# ['data' => '', 'ID' => '', 'roles' => '', 'allcaps' => '']
 
 // Get Meta
 $this->user(1)->meta->all();
@@ -295,6 +298,115 @@ $user->remove_role('role_name');
 $user->remove_all_caps();
 ```
 
+### Term
+
+```php
+// Get Term
+$this->term(1)->get();
+
+// Get Meta
+$this->term(1)->meta->all();
+
+// Save Meta
+$this->term(1)->meta->update('key', 'value');
+
+// Delete Term
+$this->term(1)->delete();
+
+// Update Term
+$this->term(1)->update(['name' => 'New name']);
+
+// Add Term
+$this->term->add('term name', ['parent' => 4, 'description' => ''], 'post_tag');
+
+// Get List Terms
+$this->term->list(['taxonomy' => 'product_cat', 'return' => 'id']);
+
+// Get All Taxonomies in WordPress
+$this->terms->get_taxonomies();
+```
+
+### Option
+
+```php
+// Get Option
+$this->option('name')->get();
+
+// Save Option
+$this->option('name')->update('value');
+
+// Delete Options
+$this->option('name')->delete();
+
+// Add Option
+$this->option->add('name', 'value', 'no');
+```
+
+### Comment
+
+```php
+// Get Comment
+$this->comment(1)->get();
+
+// Get Meta
+$this->comment(1)->meta->all();
+
+// Save Meta
+$this->comment(1)->meta->update('key', 'value');
+
+// Delete Meta
+$this->comment(1)->meta->delete('key');
+
+// Delete Comment
+$this->comment(1)->delete();
+
+// Update Comment
+$this->comment(1)->update(['name' => 'Ali', 'approved' => true]);
+
+// Add Comment
+$this->comment->add(['post_id' => 1, 'name' => 'Mehrshad Darzi', 'content' => '']);
+
+// Get List Comments
+$this->comment->list(['post_id' => 1, 'nested' => true]);
+```
+
+### Request
+
+```php
+// Get Request (GET or POST) field
+// ?first_name=mehrshad&last_name=darzi&email=info@site.com
+$this->request->input('first_name');
+
+// Get Only `GET` fields
+$this->request->query('email');
+
+// Check Has input
+$this->request->has('first_name');
+
+// Check Equal fields
+$this->request->equal('first_name', 'mehrshad');
+
+// Check Exist and Not Empty fields
+$this->request->filled('first_name');
+
+// Get Custom Fields From Request
+$this->request->only(['email', 'last_name']);
+
+// Redirect in WordPress
+$this->request->redirect('https://google.com', 302);
+
+// Get $_FILES by id
+$this->request->file('image'); //<input type="file" name="image" />
+
+// Check Exists File
+$this->request->hasFile('image');
+
+// Get Cookie
+$this->request->cookie('name');
+
+// Get $_SERVER params
+$this->request->server('REQUEST_URI');
+```
 
 ## Starter Plugin
 
