@@ -10,6 +10,7 @@ use WPTrait\Collection\Post;
 use WPTrait\Collection\Request;
 use WPTrait\Collection\Term;
 use WPTrait\Collection\User;
+use WPTrait\Hook\Constant;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -19,7 +20,7 @@ if (!class_exists('Model')) {
 
     class Model
     {
-        use Hooks;
+        use Hooks, Constant;
 
         public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment;
 

@@ -3,6 +3,7 @@
 namespace WPTrait;
 
 use WPTrait\Collection\Hooks;
+use WPTrait\Hook\Constant;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -12,7 +13,7 @@ if (!class_exists('Plugin')) {
 
     abstract class Plugin
     {
-        use Hooks;
+        use Hooks, Constant;
 
         public $plugin;
 
@@ -24,7 +25,7 @@ if (!class_exists('Plugin')) {
 
             // Check Custom argument
             $default = array(
-                'main_file' => WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php',
+                'main_file' => $this->constant('plugin_dir') . '/' . $slug . '/' . $slug . '.php',
                 'global' => $this->sanitize_plugin_slug($slug),
                 'prefix' => $this->sanitize_plugin_slug($slug),
                 'when_load' => array('action' => 'plugins_loaded', 'priority' => 10)
