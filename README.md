@@ -425,7 +425,7 @@ $request = $this->request->new(
                         ]
                     ]
             );
-if(!$this->error->has()) {
+if(!$this->error->has($request)) {
     $request['headers'];
     $request['body'];
     $request['response'];
