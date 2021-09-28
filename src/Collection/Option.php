@@ -33,6 +33,11 @@ if (!class_exists('Option')) {
             return update_option((is_null($name) ? $this->name : $name), $value, $autoload);
         }
 
+        public function save(...$args)
+        {
+            return $this->update(...$args);
+        }
+
         public function add($name, $value = '', $autoload = 'yes')
         {
             return add_option($name, $value, $deprecated = '', $autoload);
