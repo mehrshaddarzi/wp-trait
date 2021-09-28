@@ -187,7 +187,10 @@ $this->post->list(['type' => 'post', 'status' => 'publish', 'cache' => false]);
 $this->post(1)->thumbnail()->url
 
 // Add Post
-$this->post->add(['title' => '', 'content' => '']);
+$insert_post = $this->post->add(['title' => '', 'content' => '']);
+if($this->error->has($insert_post)){
+    echo $this->error->message($insert_post);
+}
 
 // Edit Post
 $this->post(38)->update(['title' => '']);
@@ -412,6 +415,26 @@ $this->request->server('REQUEST_URI');
 
 // New Request
 $this->request->new('https://jsonplaceholder.typicode.com/todos/1', 'GET', ['timeout' => 30, 'ssl' => false]);
+```
+
+### Handle Error
+```php
+# Define Error System in your Custom Method
+
+$input_email = $this->request->input('email');
+if(empty($input_email)) {
+    $error = $this->error->new('empty_email', __('Please Fill Your Email', 'my-plugin'));
+}
+
+if(!is_email($input_email)){
+    $error->add('valid_email', __('Please Fill valid Email', 'my-plugin'));
+}
+
+if($this->error->has($error)){
+    return $error; // Or use $error->get_error_messages();
+} else {
+    return true;
+}
 ```
 
 ### Event
