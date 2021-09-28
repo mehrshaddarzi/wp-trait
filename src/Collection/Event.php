@@ -36,5 +36,10 @@ if (!class_exists('WPTrait\Collection\Event')) {
             return wp_next_scheduled($hook);
         }
 
+        public function list()
+        {
+            return get_option('cron');
+        }
+
     }
 }
