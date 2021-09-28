@@ -96,7 +96,8 @@ if (!class_exists('Term')) {
             # Alias
             $alias = array(
                 'return' => 'fields',
-                'meta' => 'meta_query'
+                'meta' => 'meta_query',
+                'tax' => 'taxonomy'
             );
             $arg = $this->convertAliasArg($arg, $alias);
 
@@ -104,7 +105,7 @@ if (!class_exists('Term')) {
             if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
                 $arg['fields'] = 'ids';
             }
-            
+
             # Default Params
             $default = array(
                 'taxonomy' => $this->slug,
