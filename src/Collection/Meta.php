@@ -50,6 +50,14 @@ if (!class_exists('Meta')) {
             }, $func($arg->object_id));
         }
 
+        public function only($meta_keys = array(), $object_id = null, $type = null)
+        {
+            foreach ((array)$meta_keys as $meta) {
+                $_array[$meta] = $this->get($meta, $object_id, $type);
+            }
+            return $_array;
+        }
+
         public function save($meta, $value, $object_id = null, $type = null)
         {
             $arg = $this->sanitizeArg($object_id, $type);
