@@ -414,7 +414,24 @@ $this->request->cookie('name');
 $this->request->server('REQUEST_URI');
 
 // New Request
-$this->request->new('https://jsonplaceholder.typicode.com/todos/1', 'GET', ['timeout' => 30, 'ssl' => false]);
+$request = $this->request->new(
+                    'https://jsonplaceholder.typicode.com/todos/1',
+                    'GET',
+                    [
+                        'timeout' => 30,
+                        'ssl' => false,
+                        'headers' => [
+                            'Content-Type' => 'application/json',
+                        ]
+                    ]
+            );
+if(!$this->error->has()) {
+    $request['headers'];
+    $request['body'];
+    $request['response'];
+    $request['cookies'];
+    $request['http_response'];
+}
 ```
 
 ### Handle Error
