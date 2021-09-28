@@ -115,13 +115,21 @@ public function instantiate()
 
 ## Global function
 
-You can access to all classes method with global template function by your plugin slug. for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
+You can access to all classes method with global template function by your plugin slug. 
+for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
 
 ```php
 echo wp_user_mobile()->Admin->method_name();
 ```
 
-this function show `Code is Poetry`.
+or use global variables:
+
+```php
+gloabl $wp_user_mobile;
+echo $wp_user_mobile->Admin->method_name();
+```
+
+This function show `Code is Poetry`.
 
 
 ## Trait For WordPress Hooks
