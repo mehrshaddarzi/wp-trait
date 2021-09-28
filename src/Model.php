@@ -58,7 +58,7 @@ if (!class_exists('Model')) {
         public function bootHooks()
         {
             $booted = array();
-            $Trait = (array)array_keys(class_uses($this));
+            $Trait = (array)array_keys($this->getUsedTraits($this));
             foreach ($Trait as $trait) {
                 $basename = basename(str_replace('\\', '/', $trait));
                 $method = 'boot' . $basename;
@@ -69,6 +69,18 @@ if (!class_exists('Model')) {
                     $this->{$method}((isset($this->{$variable}) ? $this->{$variable} : $args));
                 }
             }
+        }
+
+        private function getUsedTraits($classInstance)
+        {
+            $parentClasses = class_parents($classInstance);
+            $traits = class_uses($classInstance);
+
+            foreach ($parentClasses as $parentClass) {
+                $traits = array_merge($traits, class_uses($parentClass));
+            }
+
+            return $traits;
         }
 
         public function getFile($path = '', $type = 'url')
