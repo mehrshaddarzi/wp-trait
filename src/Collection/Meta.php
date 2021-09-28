@@ -57,6 +57,11 @@ if (!class_exists('Meta')) {
             return $func($arg->object_id, $meta, $value); #return meta id
         }
 
+        public function update(...$args)
+        {
+            return $this->save(...$args);
+        }
+
         public function add($meta, $value, $unique = false, $object_id = null, $type = null)
         {
             $arg = $this->sanitizeArg($object_id, $type);
