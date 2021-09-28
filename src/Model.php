@@ -5,6 +5,7 @@ namespace WPTrait;
 use WPTrait\Collection\Attachment;
 use WPTrait\Collection\Cache;
 use WPTrait\Collection\Comment;
+use WPTrait\Collection\Error;
 use WPTrait\Collection\Event;
 use WPTrait\Collection\Hooks;
 use WPTrait\Collection\Nonce;
@@ -26,7 +27,7 @@ if (!class_exists('Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error;
 
         public function __construct($plugin = array())
         {
@@ -50,6 +51,7 @@ if (!class_exists('Model')) {
             $this->transient = new Transient();
             $this->cache = new Cache();
             $this->event = new Event();
+            $this->error = new Error();
 
             # Boot WordPress Hooks
             $this->bootHooks();
