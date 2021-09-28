@@ -93,13 +93,18 @@ if (!class_exists('Term')) {
                 unset($arg['cache']);
             }
 
-            # alias
+            # Alias
             $alias = array(
                 'return' => 'fields',
                 'meta' => 'meta_query'
             );
             $arg = $this->convertAliasArg($arg, $alias);
 
+            # Check Return only ids
+            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+                $arg['fields'] = 'ids';
+            }
+            
             # Default Params
             $default = array(
                 'taxonomy' => $this->slug,
