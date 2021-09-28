@@ -26,15 +26,15 @@ if (!class_exists('Taxonomy')) {
 
         public function __construct($slug, $name, $post_types = array(), $args = array(), $plugin = array())
         {
-            // Parent
-            parent::__construct($plugin);
-
             // Define Taxonomy in WordPress
             $this->plugin = $plugin;
             $this->slug = $slug;
             $this->name = $name;
             $this->post_types = $post_types;
             $this->args = $args;
+
+            // Parent
+            parent::__construct($plugin);
 
             // Register Taxonomy
             // @see https://developer.wordpress.org/reference/functions/register_taxonomy/
