@@ -6,16 +6,18 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Hook\AdminFooter;
-use WPTrait\Hook\AdminInit;
-use WPTrait\Hook\AdminSearchBox;
-use WPTrait\Hook\BulkActions;
-use WPTrait\Hook\Notice;
-use WPTrait\Collection\Post;
-use WPTrait\Hook\PostTypeColumns;
-use WPTrait\Hook\RowActions;
-use WPTrait\Hook\SortableColumns;
-use WPTrait\Hook\ViewsSub;
+use WPTrait\Hook\
+{
+    AdminFooter,
+    AdminInit,
+    AdminSearchBox,
+    BulkActions,
+    Notice,
+    PostTypeColumns,
+    RowActions,
+    SortableColumns,
+    ViewsSub
+};
 
 if (!class_exists('PostType')) {
 

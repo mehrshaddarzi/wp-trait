@@ -6,14 +6,16 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Hook\AdminFooter;
-use WPTrait\Hook\AdminInit;
-use WPTrait\Hook\AdminSearchBox;
-use WPTrait\Hook\BulkActions;
-use WPTrait\Hook\Notice;
-use WPTrait\Hook\SortableColumns;
-use WPTrait\Hook\TaxonomyColumns;
-use WPTrait\Collection\Term;
+use WPTrait\Hook\
+{
+    AdminFooter,
+    AdminInit,
+    AdminSearchBox,
+    BulkActions,
+    Notice,
+    SortableColumns,
+    TaxonomyColumns
+};
 
 if (!class_exists('Taxonomy')) {
 

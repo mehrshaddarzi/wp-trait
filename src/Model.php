@@ -2,19 +2,22 @@
 
 namespace WPTrait;
 
-use WPTrait\Collection\Attachment;
-use WPTrait\Collection\Cache;
-use WPTrait\Collection\Comment;
-use WPTrait\Collection\Error;
-use WPTrait\Collection\Event;
-use WPTrait\Collection\Hooks;
-use WPTrait\Collection\Nonce;
-use WPTrait\Collection\Option;
-use WPTrait\Collection\Post;
-use WPTrait\Collection\Request;
-use WPTrait\Collection\Term;
-use WPTrait\Collection\Transient;
-use WPTrait\Collection\User;
+use WPTrait\Collection\
+{
+    Attachment,
+    Cache,
+    Comment,
+    Error,
+    Event,
+    Hooks,
+    Nonce,
+    Option,
+    Post,
+    Request,
+    Term,
+    Transient,
+    User
+};
 use WPTrait\Hook\Constant;
 
 if (!defined('ABSPATH')) {

@@ -6,17 +6,18 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Hook\AdminAssets;
-use WPTrait\Hook\AdminFooter;
-use WPTrait\Hook\AdminInit;
-use WPTrait\Hook\AdvanceSearchBox;
-use WPTrait\Hook\BulkActions;
-use WPTrait\Hook\Notice;
-use WPTrait\Hook\RowActions;
-use WPTrait\Hook\SortableColumns;
-use WPTrait\Collection\User;
-use WPTrait\Hook\UserColumns;
-use WPTrait\Hook\UserProfileFields;
+use WPTrait\Hook\{
+    AdminAssets,
+    AdminFooter,
+    AdminInit,
+    BulkActions,
+    Notice,
+    RowActions,
+    SortableColumns,
+    UserColumns,
+    UserProfileFields,
+    AdminSearchBox
+};
 
 if (!class_exists('Users')) {
 
