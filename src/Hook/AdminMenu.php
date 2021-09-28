@@ -11,7 +11,7 @@ if (!trait_exists('AdminMenu')) {
     trait AdminMenu
     {
 
-        public function bootAdminInit($arg = array())
+        public function bootAdminMenu($arg = array())
         {
             $defaults = array(
                 'method' => 'admin_menu',
