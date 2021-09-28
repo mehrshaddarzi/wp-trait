@@ -42,9 +42,7 @@ if (!class_exists('WPTrait\Plugin')) {
             $this->define_constants();
 
             // include PHP files
-            if (method_exists($this, 'includes')) {
-                $this->includes();
-            }
+            $this->includes();
 
             // init Wordpress hook
             $this->init_hooks();
