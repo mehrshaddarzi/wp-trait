@@ -169,7 +169,10 @@ $this->post(1)->get();
 $this->post(1)->meta->all();
 
 // Get Custom Meta
-$this->post(1)->meta('key');
+$this->post(1)->meta->get('key');
+
+// Get Multiple Customer Meta Keys
+$this-post(1)->meta->only(['key_1', 'key_2']);
 
 // Save Post Meta
 $this->post(1)->meta->save('key', 'value');
