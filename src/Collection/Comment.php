@@ -89,6 +89,11 @@ if (!class_exists('Comment')) {
                 unset($arg['nested']);
             }
 
+            # Check Return only ids
+            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+                $arg['fields'] = 'ids';
+            }
+
             # Default Params
             $default = array(
                 'count' => false,
