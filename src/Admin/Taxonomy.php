@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 
 use WPTrait\Hook\AdminFooter;
 use WPTrait\Hook\AdminInit;
-use WPTrait\Hook\AdvanceSearchBox;
+use WPTrait\Hook\AdminSearchBox;
 use WPTrait\Hook\BulkActions;
 use WPTrait\Hook\Notice;
 use WPTrait\Hook\SortableColumns;
@@ -102,8 +102,8 @@ if (!class_exists('Taxonomy')) {
                 if (isset($_REQUEST['s'])) {
                     $args = array_merge($args, array('s' => trim($_REQUEST['s'])));
                 }
-                if (isset($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])) {
-                    $args = array_merge($args, array(HasAdvanceSearchBox::$SearchTypeField => trim($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])));
+                if (isset($_REQUEST[AdminSearchBox::$SearchTypeField])) {
+                    $args = array_merge($args, array(AdminSearchBox::$SearchTypeField => trim($_REQUEST[AdminSearchBox::$SearchTypeField])));
                 }
             }
             return add_query_arg(array_merge(array('taxonomy' => $this->slug), $args), 'edit-tags.php');
