@@ -97,6 +97,11 @@ if (!class_exists('User')) {
             );
             $arg = $this->convertAliasArg($arg, $alias);
 
+            # Check Return only ids
+            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+                $arg['fields'] = array('ID');
+            }
+
             # Default
             $default = array(
                 'role__in' => array(),
