@@ -63,7 +63,7 @@ if (!class_exists('Model')) {
                 $basename = basename(str_replace('\\', '/', $trait));
                 $method = 'boot' . $basename;
                 $args = array();
-                if (method_exists($this, $method) && !in_array($method, $booted)) {
+                if (method_exists($trait, $method) && !in_array($method, $booted)) {
                     $booted[] = $method;
                     $variable = lcfirst($basename);
                     $this->{$method}((isset($this->{$variable}) ? $this->{$variable} : $args));
