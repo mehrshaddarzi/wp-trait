@@ -419,11 +419,11 @@ $this->request->new('https://jsonplaceholder.typicode.com/todos/1', 'GET', ['tim
 
 ### Handle Error
 ```php
-# Define Error System in your Custom Method
-
 $input_email = $this->request->input('email');
+$error = $this->error->new(); # Define new error Handle system
+
 if(empty($input_email)) {
-    $error = $this->error->new('empty_email', __('Please Fill Your Email', 'my-plugin'));
+    $error->add('empty_email', __('Please Fill Your Email', 'my-plugin'));
 }
 
 if(!is_email($input_email)){
@@ -431,7 +431,7 @@ if(!is_email($input_email)){
 }
 
 if($this->error->has($error)){
-    return $error; // Or use $error->get_error_messages();
+    return $error; # Or use $error->get_error_messages();
 } else {
     return true;
 }
