@@ -27,14 +27,14 @@ if (!class_exists('PostType')) {
 
         public function __construct($slug, $name, $args = array(), $plugin = array())
         {
-            // Parent
-            parent::__construct($plugin);
-
             // Define Post Type in WordPress
             $this->plugin = $plugin;
             $this->slug = $slug;
             $this->name = $name;
             $this->args = $args;
+
+            // Parent
+            parent::__construct($plugin);
 
             // Register Post Type
             // @see https://developer.wordpress.org/reference/functions/register_post_type/
