@@ -158,16 +158,9 @@ if (!class_exists('Post')) {
             );
             $arg = $this->convertAliasArg($arg, $alias);
 
-            # Optimize
-            if (isset($arg['optimize'])) {
-                $arg = array_merge(
-                    $arg,
-                    array(
-                        'cache' => false,
-                        'fields' => 'ids'
-                    )
-                );
-                unset($arg['optimize']);
+            # Check Return only ids
+            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+                $arg['fields'] = 'ids';
             }
 
             # Cache Result
