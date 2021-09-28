@@ -473,8 +473,11 @@ $this->event->add(time(), 'hourly', 'action_name', array());
 // Delete Event
 $this->event->delete('action_name');
 
-// Check Equal fields
-$this->request->equal('first_name', 'mehrshad');
+// Retrieve supported event recurrence schedules
+$this->event->schedules();
+
+// Get List Current CrobJobs
+$this->event->list();
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
