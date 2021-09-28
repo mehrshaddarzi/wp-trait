@@ -108,8 +108,8 @@ if (!class_exists('PostType')) {
                 if (isset($_REQUEST['s'])) {
                     $args = array_merge($args, array('s' => trim($_REQUEST['s'])));
                 }
-                if (isset($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])) {
-                    $args = array_merge($args, array(HasAdvanceSearchBox::$SearchTypeField => trim($_REQUEST[HasAdvanceSearchBox::$SearchTypeField])));
+                if (isset($_REQUEST[AdminSearchBox::$SearchTypeField])) {
+                    $args = array_merge($args, array(AdminSearchBox::$SearchTypeField => trim($_REQUEST[AdminSearchBox::$SearchTypeField])));
                 }
             }
             return add_query_arg(array_merge(array('post_type' => $this->slug), $args), 'edit.php');
