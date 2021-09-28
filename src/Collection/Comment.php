@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Comment')) {
+if (!class_exists('WPTrait\Collection\Comment')) {
 
     class Comment
     {

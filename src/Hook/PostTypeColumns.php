@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('PostTypeColumns')) {
+if (!trait_exists('WPTrait\Hook\PostTypeColumns')) {
 
     trait PostTypeColumns
     {

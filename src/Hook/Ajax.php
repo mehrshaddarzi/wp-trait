@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('Ajax')) {
+if (!trait_exists('WPTrait\Hook\Ajax')) {
 
     trait Ajax
     {

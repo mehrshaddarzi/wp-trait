@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('Constant')) {
+if (!trait_exists('WPTrait\Hook\Constant')) {
 
     trait Constant
     {

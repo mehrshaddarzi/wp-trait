@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Event')) {
+if (!class_exists('WPTrait\Collection\Event')) {
 
     class Event
     {

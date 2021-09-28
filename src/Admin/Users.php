@@ -6,7 +6,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-use WPTrait\Hook\{
+use WPTrait\Hook\
+{
     AdminAssets,
     AdminFooter,
     AdminInit,
@@ -19,7 +20,7 @@ use WPTrait\Hook\{
     AdminSearchBox
 };
 
-if (!class_exists('Users')) {
+if (!class_exists('WPTrait\Admin\Users')) {
 
     class Users extends Page
     {

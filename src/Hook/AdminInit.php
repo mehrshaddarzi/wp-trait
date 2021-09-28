@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('AdminInit')) {
+if (!trait_exists('WPTrait\Hook\AdminInit')) {
 
     trait AdminInit
     {

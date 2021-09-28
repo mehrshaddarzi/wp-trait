@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('Hooks')) {
+if (!trait_exists('WPTrait\Collection\Hooks')) {
 
     trait Hooks
     {

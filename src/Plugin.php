@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Plugin')) {
+if (!class_exists('WPTrait\Plugin')) {
 
     abstract class Plugin
     {

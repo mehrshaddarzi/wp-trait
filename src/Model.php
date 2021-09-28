@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Model')) {
+if (!class_exists('WPTrait\Model')) {
 
     class Model
     {

@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('AdminAssets')) {
+if (!trait_exists('WPTrait\Hook\AdminAssets')) {
 
     trait AdminAssets
     {

@@ -17,7 +17,7 @@ use WPTrait\Hook\
     TaxonomyColumns
 };
 
-if (!class_exists('Taxonomy')) {
+if (!class_exists('WPTrait\Admin\Taxonomy')) {
 
     class Taxonomy extends Page
     {

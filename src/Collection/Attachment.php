@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Attachment')) {
+if (!class_exists('WPTrait\Collection\Attachment')) {
 
     class Attachment
     {

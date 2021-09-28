@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Request')) {
+if (!class_exists('WPTrait\Collection\Request')) {
 
     class Request
     {

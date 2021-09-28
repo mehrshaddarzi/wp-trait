@@ -19,7 +19,7 @@ use WPTrait\Hook\
     ViewsSub
 };
 
-if (!class_exists('PostType')) {
+if (!class_exists('WPTrait\Admin\PostType')) {
 
     class PostType extends Page
     {

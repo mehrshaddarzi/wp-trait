@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Page')) {
+if (!class_exists('WPTrait\Admin\Page')) {
 
     abstract class Page extends Model
     {

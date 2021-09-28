@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('PreGetQuery')) {
+if (!trait_exists('WPTrait\Hook\PreGetQuery')) {
 
     trait PreGetQuery
     {

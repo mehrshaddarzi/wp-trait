@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Nonce')) {
+if (!class_exists('WPTrait\Collection\Nonce')) {
 
     class Nonce
     {

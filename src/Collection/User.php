@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('User')) {
+if (!class_exists('WPTrait\Collection\User')) {
 
     class User
     {

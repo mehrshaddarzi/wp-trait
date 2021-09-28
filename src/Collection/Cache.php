@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('Cache')) {
+if (!class_exists('WPTrait\Collection\Cache')) {
 
     class Cache
     {
