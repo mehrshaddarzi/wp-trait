@@ -64,7 +64,7 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             return wp_update_comment($this->convertAliasArg($args));
         }
 
-        public function list($arg = array())
+        public function query($arg = array())
         {
             # Cache
             if (isset($arg['cache']) and $arg['cache'] === false) {
@@ -105,8 +105,17 @@ if (!class_exists('WPTrait\Collection\Comment')) {
                 'hierarchical' => false
             );
             $args = wp_parse_args($arg, $default);
-            $query = new \WP_Comment_Query;
-            return $query->query($args);
+            return new \WP_Comment_Query($args);
+        }
+
+        public function list($arg = array())
+        {
+            return $this->query($arg)->query();
+        }
+
+        public function toSql($arg = array())
+        {
+            return $this->query($arg)->request;
         }
 
         private function aliasArgument()

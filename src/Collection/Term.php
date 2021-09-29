@@ -85,7 +85,7 @@ if (!class_exists('WPTrait\Collection\Term')) {
             return wp_update_term((is_null($term_id) ? $this->term_id : $term_id), (is_null($taxonomy) ? $this->get($term_id)->taxonomy : $taxonomy), $args);
         }
 
-        public function list($arg = array())
+        public function query($arg = array())
         {
             # Cache
             if (isset($arg['cache']) and $arg['cache'] === false) {
@@ -120,8 +120,17 @@ if (!class_exists('WPTrait\Collection\Term')) {
                 'hide_empty' => false
             );
             $args = wp_parse_args($arg, $default);
-            $term_query = new \WP_Term_Query;
-            return $term_query->query($args);
+            return new \WP_Term_Query($args);
+        }
+
+        public function list($arg = array())
+        {
+            return $this->query($arg)->query();
+        }
+
+        public function toSql($arg = array())
+        {
+            return $this->query($arg)->request;
         }
 
         public function get_taxonomy($taxonomy = null)

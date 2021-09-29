@@ -205,14 +205,12 @@ if (!class_exists('WPTrait\Collection\Post')) {
 
         public function list($arg = array())
         {
-            $query = $this->query($arg);
-            return $query->posts;
+            return $this->query($arg)->posts;
         }
 
         public function toSql($arg = array())
         {
-            $query = $this->query($arg);
-            return $query->posts;
+            return $this->query($arg)->request;
         }
 
         public function global()

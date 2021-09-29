@@ -128,8 +128,7 @@ if (!class_exists('WPTrait\Collection\User')) {
 
         public function toSql($arg = array())
         {
-            $query = $this->query($arg);
-            return $query->request;
+            return $this->query($arg)->request;
         }
 
         public function auth()
