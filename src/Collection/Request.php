@@ -58,6 +58,12 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return (isset($inputs->{$name}) and !empty(trim($inputs->{$name})));
         }
 
+        public function numeric($name)
+        {
+            $inputs = $this->all();
+            return ($this->filled($name) and is_numeric(trim($inputs->{$name})));
+        }
+
         public function equal($name, $value)
         {
             return ($this->input($name) == $value);
