@@ -125,7 +125,7 @@ if (!class_exists('WPTrait\Collection\Term')) {
 
         public function list($arg = array())
         {
-            return $this->query($arg)->query();
+            return $this->query($arg)->get_terms();
         }
 
         public function toSql($arg = array())
