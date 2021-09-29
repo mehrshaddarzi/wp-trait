@@ -138,7 +138,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return get_edit_post_link((is_null($post_id) ? $this->post_id : $post_id), 'display');
         }
 
-        public function list($arg = array())
+        public function query($arg = array())
         {
             # alias
             $alias = array(
@@ -198,8 +198,21 @@ if (!class_exists('WPTrait\Collection\Post')) {
             $args = wp_parse_args($arg, $default);
 
             # Return { $query->posts }
+            # Get SQL { $query->request }
             # Check Exists { $query->have_posts() }
             return new \WP_Query($args);
+        }
+
+        public function list($arg = array())
+        {
+            $query = $this->query($arg);
+            return $query->posts;
+        }
+
+        public function toSql($arg = array())
+        {
+            $query = $this->query($arg);
+            return $query->posts;
         }
 
         public function global()
