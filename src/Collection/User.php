@@ -87,7 +87,7 @@ if (!class_exists('WPTrait\Collection\User')) {
             return $user->exists();
         }
 
-        public function list($arg = array())
+        public function query($arg = array())
         {
             # alias
             $alias = array(
@@ -117,8 +117,19 @@ if (!class_exists('WPTrait\Collection\User')) {
             $args = wp_parse_args($arg, $default);
 
             # Query
-            $user_search = new \WP_User_Query($args);
-            return (array)$user_search->get_results();
+            return new \WP_User_Query($args);
+        }
+
+        public function list($arg = array())
+        {
+            $query = $this->query($arg);
+            return (array)$query->get_results();
+        }
+
+        public function toSql($arg = array())
+        {
+            $query = $this->query($arg);
+            return $query->request;
         }
 
         public function auth()
