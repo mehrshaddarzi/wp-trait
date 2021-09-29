@@ -183,6 +183,11 @@ if (!class_exists('WPTrait\Collection\Post')) {
                 unset($arg['filter']);
             }
 
+            # Sanitize Meta Query
+            if (isset($arg['meta_query']) and !isset($arg['meta_query'][0])) {
+                $arg['meta_query'] = [$arg['meta_query']];
+            }
+
             # Default Params
             $default = array(
                 'post_type' => $this->slug,

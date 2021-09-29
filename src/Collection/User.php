@@ -102,6 +102,11 @@ if (!class_exists('WPTrait\Collection\User')) {
                 $arg['fields'] = array('ID');
             }
 
+            # Sanitize Meta Query
+            if (isset($arg['meta_query']) and !isset($arg['meta_query'][0])) {
+                $arg['meta_query'] = [$arg['meta_query']];
+            }
+
             # Default
             $default = array(
                 'role__in' => array(),
