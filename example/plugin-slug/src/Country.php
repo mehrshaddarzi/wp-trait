@@ -9,7 +9,7 @@ class Country extends Taxonomy
 {
     use RowActions;
 
-    public $rowActions = array('type' => 'country');
+    public $rowActions = ['type' => 'country'];
 
     public function __construct($slug, $name, $post_types, $args, $plugin)
     {
