@@ -447,7 +447,14 @@ $request = $this->request->new(
 
 if(!$this->error->has($request)) {
     return $request;
-    # $request is an array ['headers' => '', 'body' => '', 'response' => '', 'cookies' => '', 'http_response' => '']
+    # $request is an array:
+    [
+        'headers' => '', 
+        'body' => '', 
+        'response' => ['code' => '', 'message' => ''], 
+        'cookies' => '', 
+        'http_response' => ''
+    ]
 }
 ```
 
