@@ -191,6 +191,17 @@ $this->post(1)->delete();
 // Get List Of post
 $this->post->list(['type' => 'post', 'status' => 'publish', 'cache' => false]);
 
+// Get Only SQL Query
+$this->post->toSql([
+    'type' => 'post',
+    'status' => 'publish',
+    'meta' => [
+        'key' => 'is_active',
+        'value' => 'yes',
+        'compare' => '='
+    ]
+]);
+
 // Get Post Thumbnail
 $this->post(1)->thumbnail()->url
 
@@ -423,22 +434,27 @@ $this->request->server('REQUEST_URI');
 
 // New Request
 $request = $this->request->new(
-                    'https://jsonplaceholder.typicode.com/todos/1',
-                    'GET',
-                    [
-                        'timeout' => 30,
-                        'ssl' => false,
-                        'headers' => [
-                            'Content-Type' => 'application/json',
-                        ]
-                    ]
-            );
+    'https://jsonplaceholder.typicode.com/todos/1',
+    'GET',
+    [
+        'timeout' => 30,
+        'ssl' => false,
+        'headers' => [
+            'Content-Type' => 'application/json',
+        ]
+    ]
+);
+
 if(!$this->error->has($request)) {
-    $request['headers'];
-    $request['body'];
-    $request['response'];
-    $request['cookies'];
-    $request['http_response'];
+    return $request;
+    # $request is an array:
+    [
+        'headers' => '', 
+        'body' => '', 
+        'response' => ['code' => '', 'message' => ''], 
+        'cookies' => '', 
+        'http_response' => ''
+    ]
 }
 ```
 
