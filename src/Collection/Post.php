@@ -245,6 +245,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
         private function aliasArgument()
         {
             return array(
+                'id' => 'ID',
                 'user' => 'post_author',
                 'author' => 'post_author',
                 'title' => 'post_title',
