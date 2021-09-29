@@ -12,15 +12,16 @@ if (!trait_exists('WPTrait\Hook\Ajax')) {
     {
         public function bootAjax($arg = array())
         {
-            $defaults = array(
-                'methods' => array(),
+            $defaults = [
+                'methods' => [],
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             if (is_array($args['methods'])) {
                 foreach ($args['methods'] as $method) {
                     $this->add_action('wp_ajax_nopriv_' . $method, 'admin_ajax_' . $method, $args['priority']);
+                    $this->add_action('wp_ajax_' . $method, 'admin_ajax_' . $method, $args['priority']);
                 }
             }
         }
