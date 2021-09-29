@@ -399,7 +399,7 @@ $this->comment->list(['post_id' => 1, 'nested' => true]);
 
 ```php
 // Get Request (GET or POST) field
-// ?first_name=mehrshad&last_name=darzi&email=info@site.com
+# ?first_name=mehrshad&last_name=darzi&email=info@site.com&age=29
 $this->request->input('first_name');
 
 // Get Only `GET` fields
@@ -413,6 +413,9 @@ $this->request->equal('first_name', 'mehrshad');
 
 // Check Exist and Not Empty fields
 $this->request->filled('first_name');
+
+// Check Exist and is Numeric value
+$this->request->numeric('age');
 
 // Get Custom Fields From Request
 $this->request->only(['email', 'last_name']);
@@ -431,6 +434,12 @@ $this->request->cookie('name');
 
 // Get $_SERVER params
 $this->request->server('REQUEST_URI');
+
+// Check is REST API request
+$this->request->is_rest();
+
+// Check is Ajax Request
+$this->request->is_ajax();
 
 // New Request
 $request = $this->request->new(
@@ -456,6 +465,9 @@ if(!$this->error->has($request)) {
         'http_response' => ''
     ]
 }
+
+// Return Json Response
+$this->request->json(['data' => 'value'], 200);
 ```
 
 ### Handle Error
