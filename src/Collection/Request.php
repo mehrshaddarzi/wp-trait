@@ -103,6 +103,26 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return (isset($files->{$name}) and !empty($files->{$name}["name"]));
         }
 
+        public function json($data = [], $status_code = 200, $headers = [])
+        {
+            if ($this->is_rest()) {
+                return new \WP_HTTP_Response($data, $status_code, $headers);
+            }
+
+            wp_send_json($data, $status_code);
+        }
+
+        public function is_rest()
+        {
+            #see https://developer.wordpress.org/reference/functions/rest_api_loaded/
+            return (defined('REST_REQUEST') && REST_REQUEST);
+        }
+
+        public function is_ajax()
+        {
+            return wp_doing_ajax();
+        }
+
         public function new($url, $method = 'GET', $args = array())
         {
             # alias
