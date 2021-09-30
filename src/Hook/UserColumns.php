@@ -20,7 +20,7 @@ if (!trait_exists('WPTrait\Hook\UserColumns')) {
             );
             $args = wp_parse_args($arg, $defaults);
 
-            $this->add_filter('manage_users_columns', $args['columns'], $args['priority']);
+            $this->add_filter('manage_users_columns', $args['method'], $args['priority']);
             $this->add_action('manage_users_custom_column', $args['content_method'], $args['priority'], 3);
         }
 
