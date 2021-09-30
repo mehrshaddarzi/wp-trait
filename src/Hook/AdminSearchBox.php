@@ -14,9 +14,17 @@ if (!trait_exists('WPTrait\Hook\AdminSearchBox')) {
 
         public static $SearchTypeField = 'search-type';
 
-        public $PreGetQuery = array(
-            'type' => 'posts'
-        );
+        public function bootAdminSearchBox($arg = array())
+        {
+            $defaults = array(
+                'type' => 'posts',
+                'priority' => 10,
+            );
+            $args = wp_parse_args($arg, $defaults);
+
+            $this->bootAdminFooter(['priority' => $args['priority']]);
+            $this->bootPreGetQuery(['type' => $args['type'], 'priority' => $args['priority']]);
+        }
 
         public function admin_footer_search_box()
         {
