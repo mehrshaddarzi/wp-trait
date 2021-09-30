@@ -123,7 +123,11 @@ if (!class_exists('WPTrait\Collection\User')) {
         public function list($arg = array())
         {
             $query = $this->query($arg);
-            return (array)$query->get_results();
+            $users = (array)$query->get_results();
+            if (isset($users[0]) and count((array)$users[0]) == 1) {
+                return array_column($users, key((array)$users[0]));
+            }
+            return $users;
         }
 
         public function toSql($arg = array())
