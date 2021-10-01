@@ -405,6 +405,10 @@ $this->request->input('first_name');
 // Get Only `GET` fields
 $this->request->query('email');
 
+// Get Field with Custom filter e.g. trim value
+$this->request->input('name', 'trim');
+$this->request->input('post_excerpt', ['trim', 'strip_tags']);
+
 // Check Has input
 $this->request->has('first_name');
 
