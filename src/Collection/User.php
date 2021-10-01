@@ -81,10 +81,27 @@ if (!class_exists('WPTrait\Collection\User')) {
             return wp_update_user($this->convertAliasArg($args));
         }
 
-        public function exists($user_id = null)
+        public function exists($value, $type = null)
         {
-            $user = $this->get((is_null($user_id) ? $this->user_id : $user_id));
-            return $user->exists();
+            # The field to query against: 'id', 'ID', 'slug', 'email' or 'login' or username.
+            if (!is_null($type)) {
+                $user = get_user_by(('username' == $type ? 'login' : $type), $value);
+                if ($user) {
+                    return $user->ID;
+                }
+                return false;
+            }
+
+            if (is_numeric($value)) {
+                $user = $this->get($value);
+                return ($user->exists() ? $value : false);
+            }
+
+            if (is_email($value)) {
+                return email_exists($value);
+            }
+
+            return username_exists($value);
         }
 
         public function query($arg = array())
