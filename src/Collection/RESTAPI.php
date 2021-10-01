@@ -31,6 +31,17 @@ if (!class_exists('WPTrait\Collection\RESTAPI')) {
             # Sanitize method name
             $args['methods'] = strtoupper($args['methods']);
 
+            # alias args
+            if (isset($args['args']) and !empty($args['args'])) {
+                foreach ($args['args'] as $key => $params) {
+                    $args['args'][$key] = $this->convertAliasArg($args['args'][$key], [
+                        'require' => 'required',
+                        'validate' => 'validate_callback',
+                        'sanitize' => 'sanitize_callback'
+                    ]);
+                }
+            }
+
             # Register route
             register_rest_route($namespace, $route, $args, $override);
         }
