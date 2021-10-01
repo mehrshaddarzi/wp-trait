@@ -19,19 +19,28 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return (object)$_array;
         }
 
-        public function input($name)
+        public function input($name, $filter = null)
         {
             $inputs = $this->all();
-            return (isset($inputs->{$name}) ? $inputs->{$name} : null);
+            return (isset($inputs->{$name}) ? $this->filter($inputs->{$name}, $filter) : null);
         }
 
-        public function query($name)
+        private function filter($value, $filter = [])
+        {
+            foreach ((array)$filter as $func) {
+                $value = $func($value);
+            }
+
+            return $value;
+        }
+
+        public function query($name, $filter = null)
         {
             $inputs = $this->all('GET');
-            return (isset($inputs->{$name}) ? $inputs->{$name} : null);
+            return (isset($inputs->{$name}) ? $this->filter($inputs->{$name}, $filter) : null);
         }
 
-        public function only($array = array())
+        public function only($array = array(), $filter = null)
         {
             $inputs = $this->all();
             foreach ($array as $name) {
@@ -39,7 +48,7 @@ if (!class_exists('WPTrait\Collection\Request')) {
             }
             foreach ($inputs as $name => $value) {
                 if (in_array($name, (array)$array)) {
-                    $_array[$name] = $value;
+                    $_array[$name] = $this->filter($value, $filter);
                 }
             }
 
