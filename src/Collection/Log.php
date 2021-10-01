@@ -19,11 +19,6 @@ if (!class_exists('WPTrait\Collection\Log')) {
             return false;
         }
 
-        public function read($type = 'debug')
-        {
-
-        }
-
         private function condition($condition = null)
         {
             if (is_null($condition)) {
@@ -47,10 +42,10 @@ if (!class_exists('WPTrait\Collection\Log')) {
         private function sanitize($log = '')
         {
             if (is_array($log) || is_object($log)) {
-                return json_encode($log, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $log = json_encode($log, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             }
 
-            return $log;
+            return "[" . date("Y-m-d H:i:s") . " UTC] $log\n";
         }
     }
 
