@@ -46,19 +46,10 @@ if (!class_exists('WPTrait\Collection\RESTAPI')) {
             register_rest_route($namespace, $route, $args, $override);
         }
 
-        public static function request($args = array())
+        public static function request($type = 'GET', $route = '', $params = array())
         {
-            $defaults = array(
-                'type' => 'GET',
-                'namespace' => '',
-                'route' => '',
-                'params' => array()
-            );
-            $args = wp_parse_args($args, $defaults);
-
-            # Send Request
-            $request = new \WP_REST_Request($args['type'], '/' . ltrim($args['namespace'], "/") . '/' . $args['route']);
-            $request->set_query_params($args['params']);
+            $request = new \WP_REST_Request($type, '/' . $route);
+            $request->set_query_params($params);
             $response = rest_do_request($request);
             $server = rest_get_server();
             return $server->response_to_data($response, false);
