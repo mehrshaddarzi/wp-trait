@@ -2,8 +2,8 @@
 
 namespace WPTrait;
 
-use WPTrait\Collection\
-{
+use WPTrait\Hook\Constant;
+use WPTrait\Collection\{
     Attachment,
     Cache,
     Comment,
@@ -14,11 +14,11 @@ use WPTrait\Collection\
     Option,
     Post,
     Request,
+    RESTAPI,
     Term,
     Transient,
     User
 };
-use WPTrait\Hook\Constant;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -30,7 +30,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest;
 
         public function __construct($plugin = array())
         {
@@ -55,6 +55,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->cache = new Cache();
             $this->event = new Event();
             $this->error = new Error();
+            $this->rest = new RESTAPI();
 
             # Boot WordPress Hooks
             $this->bootHooks();
