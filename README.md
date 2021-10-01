@@ -514,7 +514,7 @@ class MY_REST_API extends Model
     {
         $this->rest->add_route('student', 'register', [
             'method' => 'post',
-            'function' => array($this, 'register'),
+            'function' => [$this, 'register'],
             'arg' => [
                 'age' => [
                     'require' => true,
