@@ -10,6 +10,7 @@ use WPTrait\Collection\{
     Error,
     Event,
     Hooks,
+    Log,
     Nonce,
     Option,
     Post,
@@ -30,7 +31,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log;
 
         public function __construct($plugin = array())
         {
@@ -56,6 +57,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->event = new Event();
             $this->error = new Error();
             $this->rest = new RESTAPI();
+            $this->log = new Log();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -142,6 +144,11 @@ if (!class_exists('WPTrait\Model')) {
         public function transient($name)
         {
             return new Transient($name);
+        }
+
+        public function log($log = '', $type = 'debug', $condition = null)
+        {
+            return $this->log->add($log, $type, $condition);
         }
     }
 
