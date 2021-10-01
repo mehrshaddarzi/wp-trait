@@ -568,6 +568,26 @@ $this->event->schedules();
 $this->event->list();
 ```
 
+### Log
+```php
+// Add text log
+# wp-content/debug.log
+$this->log('text log', 'debug');
+
+// Add Array log
+$this->log(['user_id' => 1, 'status' => true], 'debug');
+
+// Custom Log File
+# wp-content/db.log
+$this->log('text log', 'db');
+
+// Custom Condition
+# By Default when WP_DEBUG_LOG === true
+# wp-content/plugin-slug.log
+$is_active_plugin_log = get_option('my_plugin_active_log');
+$this->log('text log', 'plugin-slug', $is_active_plugin_log);
+```
+
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
 
 
