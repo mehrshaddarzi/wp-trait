@@ -115,13 +115,21 @@ public function instantiate()
 
 ## Global function
 
-You can access to all classes method with global template function by your plugin slug. for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
+You can access to all classes method with global template function by your plugin slug. 
+for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
 
 ```php
 echo wp_user_mobile()->Admin->method_name();
 ```
 
-this function show `Code is Poetry`.
+or use global variables:
+
+```php
+gloabl $wp_user_mobile;
+echo $wp_user_mobile->Admin->method_name();
+```
+
+This function show `Code is Poetry`.
 
 
 ## Trait For WordPress Hooks
@@ -169,7 +177,10 @@ $this->post(1)->get();
 $this->post(1)->meta->all();
 
 // Get Custom Meta
-$this->post(1)->meta('key');
+$this->post(1)->meta->get('key');
+
+// Get Multiple Customer Meta Keys
+$this-post(1)->meta->only(['key_1', 'key_2']);
 
 // Save Post Meta
 $this->post(1)->meta->save('key', 'value');
@@ -180,11 +191,25 @@ $this->post(1)->delete();
 // Get List Of post
 $this->post->list(['type' => 'post', 'status' => 'publish', 'cache' => false]);
 
+// Get Only SQL Query
+$this->post->toSql([
+    'type' => 'post',
+    'status' => 'publish',
+    'meta' => [
+        'key' => 'is_active',
+        'value' => 'yes',
+        'compare' => '='
+    ]
+]);
+
 // Get Post Thumbnail
 $this->post(1)->thumbnail()->url
 
 // Add Post
-$this->post->add(['title' => '', 'content' => '']);
+$insert_post = $this->post->add(['title' => '', 'content' => '']);
+if($this->error->has($insert_post)){
+    echo $this->error->message($insert_post);
+}
 
 // Edit Post
 $this->post(38)->update(['title' => '']);
@@ -374,11 +399,15 @@ $this->comment->list(['post_id' => 1, 'nested' => true]);
 
 ```php
 // Get Request (GET or POST) field
-// ?first_name=mehrshad&last_name=darzi&email=info@site.com
+# ?first_name=mehrshad&last_name=darzi&email=info@site.com&age=29
 $this->request->input('first_name');
 
 // Get Only `GET` fields
 $this->request->query('email');
+
+// Get Field with Custom filter e.g. trim value
+$this->request->input('name', 'trim');
+$this->request->input('post_excerpt', ['trim', 'strip_tags']);
 
 // Check Has input
 $this->request->has('first_name');
@@ -388,6 +417,9 @@ $this->request->equal('first_name', 'mehrshad');
 
 // Check Exist and Not Empty fields
 $this->request->filled('first_name');
+
+// Check Exist and is Numeric value
+$this->request->numeric('age');
 
 // Get Custom Fields From Request
 $this->request->only(['email', 'last_name']);
@@ -407,8 +439,119 @@ $this->request->cookie('name');
 // Get $_SERVER params
 $this->request->server('REQUEST_URI');
 
+// Check is REST API request
+$this->request->is_rest();
+
+// Check is Ajax Request
+$this->request->is_ajax();
+
 // New Request
-$this->request->new('https://jsonplaceholder.typicode.com/todos/1', 'GET', ['timeout' => 30, 'ssl' => false]);
+$request = $this->request->new(
+    'https://jsonplaceholder.typicode.com/todos/1',
+    'GET',
+    [
+        'timeout' => 30,
+        'ssl' => false,
+        'headers' => [
+            'Content-Type' => 'application/json',
+        ]
+    ]
+);
+
+if(!$this->error->has($request)) {
+    return $request;
+    # $request is an array:
+    [
+        'headers' => '', 
+        'body' => '', 
+        'response' => ['code' => '', 'message' => ''], 
+        'cookies' => '', 
+        'http_response' => ''
+    ]
+}
+
+// Return Json Response
+$this->request->json(['data' => 'value'], 200);
+```
+
+### Handle Error
+```php
+$input_email = $this->request->input('email');
+$error = $this->error->new(); # Define new error Handle system
+
+if(empty($input_email)) {
+    $error->add('empty_email', __('Please Fill Your Email', 'my-plugin'));
+}
+
+if(!is_email($input_email)){
+    $error->add('valid_email', __('Please Fill valid Email', 'my-plugin'));
+}
+
+if($this->error->has($error)){
+    return $error; # Or use $error->get_error_messages();
+} else {
+    return true;
+}
+```
+
+### REST API
+```php
+// get REST API prefix url
+$this-rest->prefix();
+
+// get REST API url
+$this->rest->url('namespace/endpoint');
+
+// Making WordPress REST API Calls Internally
+$this->rest->request('GET', 'wp/v2/posts', [ 'per_page' => 12 ]);
+
+// Define new route in WordPress REST API with trait
+class MY_REST_API extends Model
+{
+    use RESTAPI;
+    
+    public function rest_api_init()
+    {
+        $this->rest->add_route('student', 'register', [
+            'method' => 'post',
+            'function' => [$this, 'register'],
+            'arg' => [
+                'age' => [
+                    'require' => true,
+                    'validate' => function ($param, $request, $key) {
+                        return is_numeric($param);
+                    }
+                ],
+                'name' => [
+                    'require' => true,
+                    'sanitize' => function ($param, $request, $key) {
+                        return strtolower($param);
+                    }
+                ]
+            ]
+        ]);
+    }
+
+    public function register($request)
+    {
+        # Get Params
+        $name = $request->get_param('name');
+        $age = $request->get_param('age');
+
+        # insert To Database
+        $this->db->insert(
+            $this->db->prefix . 'student',
+            ['name' => $name, 'age' => $age]
+        );
+
+        # Result Json
+        return $this->request->json(
+            ['message' => 'Completed Register', 'id' => $this->db->insert_id],
+            200,
+            ['X-Custom-Header' => 'value']
+        );
+    }
+}
 ```
 
 ### Event
@@ -422,8 +565,31 @@ $this->event->add(time(), 'hourly', 'action_name', array());
 // Delete Event
 $this->event->delete('action_name');
 
-// Check Equal fields
-$this->request->equal('first_name', 'mehrshad');
+// Retrieve supported event recurrence schedules
+$this->event->schedules();
+
+// Get List Current CrobJobs
+$this->event->list();
+```
+
+### Log
+```php
+// Add text log
+# wp-content/debug.log
+$this->log('text log', 'debug');
+
+// Add Array log
+$this->log(['user_id' => 1, 'status' => true], 'debug');
+
+// Custom Log File
+# wp-content/db.log
+$this->log('text log', 'db');
+
+// Custom Condition
+# By Default when WP_DEBUG_LOG === true
+# wp-content/plugin-slug.log
+$is_active_plugin_log = get_option('my_plugin_active_log');
+$this->log('text log', 'plugin-slug', $is_active_plugin_log);
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
