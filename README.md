@@ -490,6 +490,66 @@ if($this->error->has($error)){
 }
 ```
 
+### REST API
+```php
+// get REST API prefix url
+$this-rest->prefix();
+
+// get REST API url
+$this->rest->url('namespace/endpoint');
+
+// Making WordPress REST API Calls Internally
+$this->rest->request('GET', 'wp/v2/posts', [ 'per_page' => 12 ]);
+
+// Define new route in WordPress REST API with trait
+class MY_REST_API extends Model
+{
+    use RESTAPI;
+    
+    public function rest_api_init()
+    {
+        $this->rest->add_route('student', 'register', [
+            'method' => 'post',
+            'function' => array($this, 'register'),
+            'arg' => [
+                'age' => [
+                    'require' => true,
+                    'validate' => function ($param, $request, $key) {
+                        return is_numeric($param);
+                    }
+                ],
+                'name' => [
+                    'require' => true,
+                    'sanitize' => function ($param, $request, $key) {
+                        return strtolower($param);
+                    }
+                ]
+            ]
+        ]);
+    }
+
+    public function register($request)
+    {
+        # Get Params
+        $name = $request->get_param('name');
+        $age = $request->get_param('age');
+
+        # insert To Database
+        $this->db->insert(
+            $this->db->prefix . 'student',
+            ['name' => $name, 'age' => $age]
+        );
+
+        # Result Json
+        return $this->request->json(
+            ['message' => 'Completed Register', 'id' => $this->db->insert_id],
+            200,
+            ['X-Custom-Header' => 'value']
+        );
+    }
+}
+```
+
 ### Event
 ```php
 // Define single Event
