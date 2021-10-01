@@ -25,5 +25,41 @@ if (!class_exists('WPTrait\Collection\Cache')) {
         {
             return wp_cache_add($key, $data, $group, $expire);
         }
+
+        public function set($key, $data, $group = '', $expire = 0)
+        {
+            return wp_cache_set($key, $data, $group, $expire);
+        }
+
+        public function remember($key, $callback, $group = '', $expire = 0)
+        {
+            $found = false;
+            $cached = $this->get($key, $group, false, $found);
+
+            if (false !== $found) {
+                return $cached;
+            }
+
+            $value = $callback();
+
+            if (!is_wp_error($value)) {
+                $this->set($key, $value, $group, $expire);
+            }
+
+            return $value;
+        }
+
+        public function forget($key, $group = '', $default = null)
+        {
+            $found = false;
+            $cached = $this->get($key, $group, false, $found);
+
+            if (false !== $found) {
+                $this->delete($key, $group);
+                return $cached;
+            }
+
+            return $default;
+        }
     }
 }

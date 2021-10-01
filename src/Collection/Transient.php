@@ -32,5 +32,38 @@ if (!class_exists('WPTrait\Collection\Transient')) {
         {
             return set_transient($name, $value, $expiration);
         }
+
+        public function set(...$args)
+        {
+            $this->add(...$args);
+        }
+
+        public function remember($key, $callback, $expire = 0)
+        {
+            $cached = $this->get($key);
+            if (false !== $cached) {
+                return $cached;
+            }
+
+            $value = $callback();
+
+            if (!is_wp_error($value)) {
+                $this->add($key, $value, $expire);
+            }
+
+            return $value;
+        }
+
+        public function forget($key, $default = null)
+        {
+            $cached = $this->get($key);
+
+            if (false !== $cached) {
+                $this->delete($key);
+                return $cached;
+            }
+
+            return $default;
+        }
     }
 }
