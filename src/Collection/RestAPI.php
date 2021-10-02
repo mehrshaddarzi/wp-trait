@@ -6,9 +6,9 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('WPTrait\Collection\RESTAPI')) {
+if (!class_exists('WPTrait\Collection\RestAPI')) {
 
-    class RESTAPI
+    class RestAPI
     {
 
         public function add_route($namespace, $route, $args = [], $override = false)

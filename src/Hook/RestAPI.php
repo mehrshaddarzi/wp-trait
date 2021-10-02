@@ -6,12 +6,12 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('WPTrait\Hook\RESTAPI')) {
+if (!trait_exists('WPTrait\Hook\RestAPI')) {
 
-    trait RESTAPI
+    trait RestAPI
     {
 
-        public function bootRESTAPI($arg = [])
+        public function bootRestAPI($arg = [])
         {
             $defaults = [
                 'method' => 'rest_api_init',

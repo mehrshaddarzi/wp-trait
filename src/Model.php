@@ -15,7 +15,7 @@ use WPTrait\Collection\{
     Option,
     Post,
     Request,
-    RESTAPI,
+    RestAPI,
     Term,
     Transient,
     User
@@ -56,7 +56,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->cache = new Cache();
             $this->event = new Event();
             $this->error = new Error();
-            $this->rest = new RESTAPI();
+            $this->rest = new RestAPI();
             $this->log = new Log();
 
             # Boot WordPress Hooks
