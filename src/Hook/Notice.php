@@ -11,12 +11,12 @@ if (!trait_exists('WPTrait\Hook\Notice')) {
     trait Notice
     {
 
-        public function bootNotice($arg = array())
+        public function bootNotice($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'admin_notices',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             // Admin Page Notice
@@ -40,12 +40,12 @@ if (!trait_exists('WPTrait\Hook\Notice')) {
             }
         }
 
-        public function remove_query_arg_url($args = array())
+        public function remove_query_arg_url($args = [])
         {
             $_SERVER['REQUEST_URI'] = remove_query_arg($args);
         }
 
-        public function inline_admin_notice($alert, $page_url_args = array(), $priority = 10)
+        public function inline_admin_notice($alert, $page_url_args = [], $priority = 10)
         {
             if (!empty($page_url_args)) {
                 $this->remove_query_arg_url($page_url_args);

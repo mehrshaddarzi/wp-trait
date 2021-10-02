@@ -47,27 +47,27 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return wp_delete_post((is_null($post_id) ? $this->post_id : $post_id), $force);
         }
 
-        public function add($arg = array())
+        public function add($arg = [])
         {
             # Generate Alias Argument
-            $default = array(
+            $default = [
                 'title' => '',
                 'date' => current_time('mysql'),
                 'type' => $this->slug,
                 'status' => 'publish'
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
             return wp_insert_post($this->convertAliasArg($args));
         }
 
-        public function update($arg = array())
+        public function update($arg = [])
         {
             # Default
-            $default = array(
+            $default = [
                 'id' => $this->post_id
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
@@ -99,12 +99,12 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return is_string(get_post_status((is_null($post_id) ? $this->post_id : $post_id)));
         }
 
-        public function terms($taxonomy = 'post_tag', $args = array('fields' => 'all'), $post_id = null)
+        public function terms($taxonomy = 'post_tag', $args = ['fields' => 'all'], $post_id = null)
         {
             return wp_get_post_terms((is_null($post_id) ? $this->post_id : $post_id), $taxonomy, $args);
         }
 
-        public function collection($meta = array(), $taxonomy = array(), $post_id = null)
+        public function collection($meta = [], $taxonomy = [], $post_id = null)
         {
             $post_id = (is_null($post_id) ? $this->post_id : $post_id);
             $post_object = $this->get($post_id, OBJECT);
@@ -125,7 +125,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             if (!empty($taxonomy)) {
                 foreach ($taxonomy as $tax) {
                     if (taxonomy_exists($tax)) {
-                        $post_object->{$tax} = $this->terms($tax, array(), $post_id);
+                        $post_object->{$tax} = $this->terms($tax, [], $post_id);
                     }
                 }
             }
@@ -138,10 +138,10 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return get_edit_post_link((is_null($post_id) ? $this->post_id : $post_id), 'display');
         }
 
-        public function query($arg = array())
+        public function query($arg = [])
         {
             # alias
-            $alias = array(
+            $alias = [
                 'id' => 'p',
                 'user' => 'author',
                 'category' => 'cat',
@@ -155,11 +155,11 @@ if (!class_exists('WPTrait\Collection\Post')) {
                 'tax' => 'tax_query',
                 'mime_type ' => 'post_mime_type',
                 'return' => 'fields'
-            );
+            ];
             $arg = $this->convertAliasArg($arg, $alias);
 
             # Check Return only ids
-            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+            if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
                 $arg['fields'] = 'ids';
             }
 
@@ -167,12 +167,12 @@ if (!class_exists('WPTrait\Collection\Post')) {
             if (isset($arg['cache']) and $arg['cache'] === false) {
                 $arg = array_merge(
                     $arg,
-                    array(
+                    [
                         'cache_results' => false,
                         'no_found_rows' => true, #@see https://10up.github.io/Engineering-Best-Practices/php/#performance
                         'update_post_meta_cache' => false,
                         'update_post_term_cache' => false,
-                    )
+                    ]
                 );
                 unset($arg['cache']);
             }
@@ -189,12 +189,12 @@ if (!class_exists('WPTrait\Collection\Post')) {
             }
 
             # Default Params
-            $default = array(
+            $default = [
                 'post_type' => $this->slug,
                 'post_status' => 'publish',
                 'posts_per_page' => '-1',
                 'order' => 'DESC'
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # Return { $query->posts }
@@ -203,12 +203,12 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return new \WP_Query($args);
         }
 
-        public function list($arg = array())
+        public function list($arg = [])
         {
             return $this->query($arg)->posts;
         }
 
-        public function toSql($arg = array())
+        public function toSql($arg = [])
         {
             return $this->query($arg)->request;
         }
@@ -218,13 +218,13 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return $GLOBALS['post'];
         }
 
-        public function comments($args = array(), $post_id = null)
+        public function comments($args = [], $post_id = null)
         {
             $comment = new Comment();
             return $comment->list(array_merge(array('post_id' => (is_null($post_id) ? $this->post_id : $post_id), $args)));
         }
 
-        public function get_post_types($args = array(), $output = 'objects', $operator = 'and')
+        public function get_post_types($args = [], $output = 'objects', $operator = 'and')
         {
             return get_post_types($args, $output, $operator);
         }
@@ -235,11 +235,11 @@ if (!class_exists('WPTrait\Collection\Post')) {
             global $pagenow;
             if (!is_admin()) return false;
             if ($new_edit == "edit")
-                return in_array($pagenow, array('post.php',));
+                return in_array($pagenow, ['post.php']);
             elseif ($new_edit == "new")
-                return in_array($pagenow, array('post-new.php'));
+                return in_array($pagenow, ['post-new.php']);
             else
-                return in_array($pagenow, array('post.php', 'post-new.php'));
+                return in_array($pagenow, ['post.php', 'post-new.php']);
         }
 
         private function aliasArgument()
@@ -270,9 +270,9 @@ if (!class_exists('WPTrait\Collection\Post')) {
             );
         }
 
-        private function convertAliasArg($array = array(), $alias = null)
+        private function convertAliasArg($array = [], $alias = null)
         {
-            $_array = array();
+            $_array = [];
             $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
             foreach ($array as $key => $value) {
                 $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;

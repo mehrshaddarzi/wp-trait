@@ -11,12 +11,12 @@ if (!trait_exists('WPTrait\Hook\AdminMenu')) {
     trait AdminMenu
     {
 
-        public function bootAdminMenu($arg = array())
+        public function bootAdminMenu($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'admin_menu',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('admin_menu', $args['method'], $args['priority']);

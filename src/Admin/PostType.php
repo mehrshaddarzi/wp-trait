@@ -25,9 +25,9 @@ if (!class_exists('WPTrait\Admin\PostType')) {
     {
         use Notice, BulkActions, RowActions, AdminInit, AdminFooter, PostTypeColumns, SortableColumns, ViewsSub;
 
-        public $slug, $name, $args = array();
+        public $slug, $name, $args = [];
 
-        public function __construct($slug, $name, $args = array(), $plugin = array())
+        public function __construct($slug, $name, $args = [], $plugin = [])
         {
             // Define Post Type in WordPress
             $this->plugin = $plugin;
@@ -40,7 +40,7 @@ if (!class_exists('WPTrait\Admin\PostType')) {
 
             // Register Post Type
             // @see https://developer.wordpress.org/reference/functions/register_post_type/
-            add_action('init', array($this, 'register_post_type'));
+            add_action('init', [$this, 'register_post_type']);
 
             // Change Post Type Argument
             $this->add_filter('register_post_type_args', 'post_type_args', 10, 2);
@@ -57,13 +57,13 @@ if (!class_exists('WPTrait\Admin\PostType')) {
 
         public function register_post_type()
         {
-            $labels = array(
+            $labels = [
                 'name' => $this->name,
                 'singular_name' => $this->name,
                 'menu_name' => $this->name,
                 'name_admin_bar' => $this->name,
-            );
-            $default = array(
+            ];
+            $default = [
                 'labels' => $labels,
                 'description' => '',
                 'public' => true,
@@ -75,11 +75,11 @@ if (!class_exists('WPTrait\Admin\PostType')) {
                 'hierarchical' => false, #action_rows not work when is true
                 'capability_type' => 'post',
                 'map_meta_cap' => true,
-                'rewrite' => array(
+                'rewrite' => [
                     'slug' => $this->slug,
                     'with_front' => true
-                )
-            );
+                ]
+            ];
             $args = wp_parse_args($this->args, $default);
             register_post_type($this->slug, $args);
         }
@@ -101,7 +101,7 @@ if (!class_exists('WPTrait\Admin\PostType')) {
             return ($pagenow == "edit.php" and isset($_GET['post_type']) and $_GET['post_type'] == $this->slug);
         }
 
-        public function admin_url($args = array(), $paged = false, $search = false)
+        public function admin_url($args = [], $paged = false, $search = false)
         {
             if ($paged) {
                 $args = array_merge($args, array('paged' => (get_query_var('paged')) ? get_query_var('paged') : 1));

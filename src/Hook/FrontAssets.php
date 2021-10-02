@@ -14,12 +14,12 @@ if (!trait_exists('WPTrait\Hook\FrontAssets')) {
     {
         use Assets;
 
-        public function bootFrontAssets($arg = array())
+        public function bootFrontAssets($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'wp_enqueue_scripts',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('wp_enqueue_scripts', $args['method'], $args['priority']);

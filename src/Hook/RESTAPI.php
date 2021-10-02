@@ -11,12 +11,12 @@ if (!trait_exists('WPTrait\Hook\RESTAPI')) {
     trait RESTAPI
     {
 
-        public function bootRESTAPI($arg = array())
+        public function bootRESTAPI($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'rest_api_init',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('rest_api_init', $args['method'], $args['priority']);

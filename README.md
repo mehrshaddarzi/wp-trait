@@ -40,7 +40,7 @@ require_once dirname(__FILE__) . '/vendor/autoload.php';
 class WP_User_Mobile extends \WPTrait\Plugin
 {
 
-    public function __construct($slug, $args = array())
+    public function __construct($slug, $args = [])
     {
         parent::__construct($slug, $args);
     }
@@ -560,7 +560,7 @@ class MY_REST_API extends Model
 $this->event->single($this->constant('hour'), 'action_name');
 
 // Define recurring Event
-$this->event->add(time(), 'hourly', 'action_name', array());
+$this->event->add(time(), 'hourly', 'action_name', []);
 
 // Delete Event
 $this->event->delete('action_name');

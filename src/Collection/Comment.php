@@ -38,33 +38,33 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             return wp_delete_comment($force_delete, (is_null($id) ? $this->id : $id));
         }
 
-        public function add($arg = array())
+        public function add($arg = [])
         {
-            $default = array(
+            $default = [
                 'content' => '',
                 'post_id' => 0,
                 'type' => 'comment',
                 'name' => '',
                 'email' => ''
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (int|false) The new comment's ID on success, false on failure.
             return wp_insert_comment($this->convertAliasArg($args));
         }
 
-        public function update($arg = array())
+        public function update($arg = [])
         {
-            $default = array(
+            $default = [
                 'id' => $this->id
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (int|false|WP_Error)
             return wp_update_comment($this->convertAliasArg($args));
         }
 
-        public function query($arg = array())
+        public function query($arg = [])
         {
             # Cache
             if (isset($arg['cache']) and $arg['cache'] === false) {
@@ -74,13 +74,13 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             }
 
             # alias
-            $alias = array(
+            $alias = [
                 'return' => 'fields',
                 'meta' => 'meta_query',
                 'date' => 'date_query',
                 'email' => 'author_email',
                 'url' => 'author_url'
-            );
+            ];
             $arg = $this->convertAliasArg($arg, $alias);
 
             # Nested
@@ -90,7 +90,7 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             }
 
             # Check Return only ids
-            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+            if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
                 $arg['fields'] = 'ids';
             }
 
@@ -100,27 +100,27 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             }
 
             # Default Params
-            $default = array(
+            $default = [
                 'count' => false,
                 'hierarchical' => false
-            );
+            ];
             $args = wp_parse_args($arg, $default);
             return new \WP_Comment_Query($args);
         }
 
-        public function list($arg = array())
+        public function list($arg = [])
         {
             return $this->query($arg)->query();
         }
 
-        public function toSql($arg = array())
+        public function toSql($arg = [])
         {
             return $this->query($arg)->request;
         }
 
         private function aliasArgument()
         {
-            return array(
+            return [
                 'id' => 'comment_ID',
                 'ID' => 'comment_ID',
                 'agent' => 'comment_agent',
@@ -142,12 +142,12 @@ if (!class_exists('WPTrait\Collection\Comment')) {
                 'post_id' => 'comment_post_ID',
                 'type' => 'comment_type',
                 'meta' => 'comment_meta'
-            );
+            ];
         }
 
-        private function convertAliasArg($array = array(), $alias = null)
+        private function convertAliasArg($array = [], $alias = null)
         {
-            $_array = array();
+            $_array = [];
             $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
             foreach ($array as $key => $value) {
                 $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;

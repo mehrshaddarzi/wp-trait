@@ -25,14 +25,14 @@ if (!trait_exists('WPTrait\Collection\Hooks')) {
         public function add_filter($filter_name, $method = '', $priority = 10, $accepted_args = 1)
         {
             foreach ($this->search_methods($method) as $method) {
-                add_filter($filter_name, array($this, $method), $priority, $accepted_args);
+                add_filter($filter_name, [$this, $method], $priority, $accepted_args);
             }
         }
 
         public function add_action($filter_name, $method = '', $priority = 10, $accepted_args = 1)
         {
             foreach ($this->search_methods($method) as $method) {
-                add_action($filter_name, array($this, $method), $priority, $accepted_args);
+                add_action($filter_name, [$this, $method], $priority, $accepted_args);
             }
         }
     }

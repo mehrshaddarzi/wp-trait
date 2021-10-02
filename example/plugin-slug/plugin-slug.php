@@ -25,7 +25,7 @@ use WPTrait\Plugin;
 class PLUGIN_SLUG extends Plugin
 {
 
-    public function __construct($slug, $args = array())
+    public function __construct($slug, $args = [])
     {
         parent::__construct($slug, $args);
     }
@@ -33,7 +33,7 @@ class PLUGIN_SLUG extends Plugin
     public function instantiate()
     {
         $this->Admin = new \PLUGIN_SLUG\Admin($this->plugin);
-        $this->Country = new \PLUGIN_SLUG\Country('country', __('Country', $this->plugin->textdomain), array('post'), array(), $this->plugin);
+        $this->Country = new \PLUGIN_SLUG\Country('country', __('Country', $this->plugin->textdomain), ['post'], [], $this->plugin);
     }
 
     public function register_activation_hook()

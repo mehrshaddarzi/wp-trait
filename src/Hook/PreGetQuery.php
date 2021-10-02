@@ -11,13 +11,13 @@ if (!trait_exists('WPTrait\Hook\PreGetQuery')) {
     trait PreGetQuery
     {
 
-        public function bootPreGetQuery($arg = array())
+        public function bootPreGetQuery($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'type' => 'posts',
                 'method' => '',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             /**

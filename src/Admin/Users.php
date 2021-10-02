@@ -26,9 +26,9 @@ if (!class_exists('WPTrait\Admin\Users')) {
     {
         use Notice, AdminAssets, BulkActions, RowActions, AdminInit, AdminFooter, SortableColumns, UserProfileFields, UserColumns;
 
-        public $rowActions = array('type' => 'user');
+        public $rowActions = ['type' => 'user'];
 
-        public function __construct($plugin = array())
+        public function __construct($plugin = [])
         {
             parent::__construct($plugin);
         }
@@ -39,7 +39,7 @@ if (!class_exists('WPTrait\Admin\Users')) {
             return ($pagenow == "users.php");
         }
 
-        public function admin_url($args = array(), $paged = false, $search = false)
+        public function admin_url($args = [], $paged = false, $search = false)
         {
             if ($paged) {
                 $args = array_merge($args, array('paged' => (get_query_var('paged')) ? get_query_var('paged') : 1));

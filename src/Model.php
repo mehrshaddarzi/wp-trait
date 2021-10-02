@@ -33,7 +33,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log;
 
-        public function __construct($plugin = array())
+        public function __construct($plugin = [])
         {
             # @see https://codex.wordpress.org/Global_Variables
             $this->db = $GLOBALS['wpdb'];
@@ -65,12 +65,12 @@ if (!class_exists('WPTrait\Model')) {
 
         public function bootHooks()
         {
-            $booted = array();
+            $booted = [];
             $Trait = (array)array_keys($this->getUsedTraits($this));
             foreach ($Trait as $trait) {
                 $basename = basename(str_replace('\\', '/', $trait));
                 $method = 'boot' . $basename;
-                $args = array();
+                $args = [];
                 if (method_exists($trait, $method) && !in_array($method, $booted)) {
                     $booted[] = $method;
                     $variable = lcfirst($basename);

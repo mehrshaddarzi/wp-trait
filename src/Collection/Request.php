@@ -12,7 +12,7 @@ if (!class_exists('WPTrait\Collection\Request')) {
     {
         public function all($var = 'REQUEST')
         {
-            $_array = array();
+            $_array = [];
             foreach ((array)$var as $key) {
                 $_array = array_merge($_array, $this->getGlobalVariable($key));
             }
@@ -40,7 +40,7 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return (isset($inputs->{$name}) ? $this->filter($inputs->{$name}, $filter) : null);
         }
 
-        public function only($array = array(), $filter = null)
+        public function only($array = [], $filter = null)
         {
             $inputs = $this->all();
             foreach ($array as $name) {
@@ -132,7 +132,7 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return wp_doing_ajax();
         }
 
-        public function new($url, $method = 'GET', $args = array())
+        public function new($url, $method = 'GET', $args = [])
         {
             # alias
             if (isset($args['ssl'])) {
@@ -141,30 +141,30 @@ if (!class_exists('WPTrait\Collection\Request')) {
             }
 
             # https://developer.wordpress.org/reference/classes/WP_Http/request/
-            return wp_remote_request($url, array_merge(array('method' => strtoupper($method)), $args));
+            return wp_remote_request($url, array_merge(['method' => strtoupper($method)], $args));
         }
 
         private function getGlobalVariable($name = 'REQUEST')
         {
             switch (strtolower($name)) {
                 case "get":
-                    return (isset($_GET) ? $_GET : array());
+                    return (isset($_GET) ? $_GET : []);
                     break;
                 case "post":
-                    return (isset($_POST) ? $_POST : array());
+                    return (isset($_POST) ? $_POST : []);
                     break;
                 case "file":
                 case "files":
-                    return (isset($_FILES) ? $_FILES : array());
+                    return (isset($_FILES) ? $_FILES : []);
                     break;
                 case "cookie":
-                    return (isset($_COOKIE) ? $_COOKIE : array());
+                    return (isset($_COOKIE) ? $_COOKIE : []);
                     break;
                 case "server":
-                    return (isset($_SERVER) ? $_SERVER : array());
+                    return (isset($_SERVER) ? $_SERVER : []);
                     break;
                 default:
-                    return (isset($_REQUEST) ? $_REQUEST : array());
+                    return (isset($_REQUEST) ? $_REQUEST : []);
             }
         }
     }

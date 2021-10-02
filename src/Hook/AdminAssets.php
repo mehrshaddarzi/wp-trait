@@ -14,12 +14,12 @@ if (!trait_exists('WPTrait\Hook\AdminAssets')) {
     {
         use Assets;
 
-        public function bootAdminAssets($arg = array())
+        public function bootAdminAssets($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'admin_enqueue_scripts',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('admin_enqueue_scripts', $args['method'], $args['priority']);

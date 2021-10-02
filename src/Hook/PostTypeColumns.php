@@ -12,14 +12,14 @@ if (!trait_exists('WPTrait\Hook\PostTypeColumns')) {
     {
         public $slug;
 
-        public function bootPostTypeColumns($arg = array())
+        public function bootPostTypeColumns($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'columns',
                 'content_method' => 'content_columns',
                 'slug' => $this->slug,
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_filter('manage_' . $args['slug'] . '_posts_columns', $args['method'], $args['priority']);

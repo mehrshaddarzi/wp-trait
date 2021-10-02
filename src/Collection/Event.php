@@ -11,12 +11,12 @@ if (!class_exists('WPTrait\Collection\Event')) {
     class Event
     {
 
-        public function single($timestamp, $hook, $args = array(), $wp_error = false)
+        public function single($timestamp, $hook, $args = [], $wp_error = false)
         {
             return wp_schedule_single_event($timestamp, $hook, $args, $wp_error);
         }
 
-        public function add($timestamp, $recurrence, $hook, $args = array(), $wp_error = false)
+        public function add($timestamp, $recurrence, $hook, $args = [], $wp_error = false)
         {
             return wp_schedule_event($timestamp, $recurrence, $hook, $args, $wp_error);
         }

@@ -27,7 +27,7 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
          *
          * @var string[]
          */
-        public static $ImageExtensions = array('jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg', 'bmp');
+        public static $ImageExtensions = ['jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg', 'bmp'];
 
         public function __construct($attachment_id = null)
         {
@@ -114,7 +114,7 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             return 'other';
         }
 
-        public function upload($file_id, $post_id = 0, $post_data = array(), $overrides = array('test_form' => false))
+        public function upload($file_id, $post_id = 0, $post_data = [], $overrides = ['test_form' => false])
         {
             # These files need to be included as dependencies when on the front end.
             $this->requirePHPImage();
@@ -148,18 +148,18 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             $get_intermediate_image_sizes = get_intermediate_image_sizes();
 
             # Create the full array with sizes and crop info
-            $sizes = array();
+            $sizes = [];
             foreach ($get_intermediate_image_sizes as $_size) {
-                if (in_array($_size, array('thumbnail', 'medium', 'large'))) {
+                if (in_array($_size, ['thumbnail', 'medium', 'large'])) {
                     $sizes[$_size]['width'] = get_option($_size . '_size_w');
                     $sizes[$_size]['height'] = get_option($_size . '_size_h');
                     $sizes[$_size]['crop'] = (bool)get_option($_size . '_crop');
                 } elseif (isset($wp_additional_image_sizes[$_size])) {
-                    $sizes[$_size] = array(
+                    $sizes[$_size] = [
                         'width' => $wp_additional_image_sizes[$_size]['width'],
                         'height' => $wp_additional_image_sizes[$_size]['height'],
                         'crop' => $wp_additional_image_sizes[$_size]['crop']
-                    );
+                    ];
                 }
             }
 

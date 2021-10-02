@@ -12,14 +12,14 @@ if (!trait_exists('WPTrait\Hook\TaxonomyColumns')) {
     {
         public $slug;
 
-        public function bootTaxonomyColumns($arg = array())
+        public function bootTaxonomyColumns($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'columns',
                 'content_method' => 'content_columns',
                 'slug' => (isset($this->slug) ? $this->slug : ''),
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_filter('manage_edit-' . $args['slug'] . '_columns', $args['method'], $args['priority']);

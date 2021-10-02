@@ -12,14 +12,14 @@ if (!trait_exists('WPTrait\Hook\BulkActions')) {
     {
         public $slug;
 
-        public function bootBulkActions($arg = array())
+        public function bootBulkActions($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'bulk_actions',
                 'handle_method' => 'handle_bulk_actions',
                 'slug' => $this->slug,
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             // Admin Bulk Action

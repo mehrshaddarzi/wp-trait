@@ -10,7 +10,7 @@ if (!trait_exists('WPTrait\Hook\Ajax')) {
 
     trait Ajax
     {
-        public function bootAjax($arg = array())
+        public function bootAjax($arg = [])
         {
             $defaults = [
                 'methods' => [],
@@ -31,7 +31,7 @@ if (!trait_exists('WPTrait\Hook\Ajax')) {
             return wp_doing_ajax();
         }
 
-        public function ajax_url($action = '', $args = array())
+        public function ajax_url($action = '', $args = [])
         {
             return add_query_arg(array_merge(array('action' => $action), $args), admin_url('admin-ajax.php'));
         }

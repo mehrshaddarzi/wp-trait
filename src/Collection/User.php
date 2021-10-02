@@ -54,27 +54,27 @@ if (!class_exists('WPTrait\Collection\User')) {
             return wp_delete_user((is_null($user_id) ? $this->user_id : $user_id), $reassign);
         }
 
-        public function add($arg = array())
+        public function add($arg = [])
         {
-            $default = array(
+            $default = [
                 'username' => '',
                 'email' => '',
                 'first_name' => '',
                 'last_name' => '',
                 'fullname' => '',
                 'password' => ''
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The newly created user's ID or a WP_Error object if the user could not be created.
             return wp_insert_user($this->convertAliasArg($args));
         }
 
-        public function update($arg = array())
+        public function update($arg = [])
         {
-            $default = array(
+            $default = [
                 'id' => $this->user_id
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
@@ -104,19 +104,19 @@ if (!class_exists('WPTrait\Collection\User')) {
             return username_exists($value);
         }
 
-        public function query($arg = array())
+        public function query($arg = [])
         {
             # alias
-            $alias = array(
+            $alias = [
                 'return' => 'fields',
                 'meta' => 'meta_query',
                 'date' => 'date_query',
-            );
+            ];
             $arg = $this->convertAliasArg($arg, $alias);
 
             # Check Return only ids
-            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
-                $arg['fields'] = array('ID');
+            if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
+                $arg['fields'] = ['ID'];
             }
 
             # Sanitize Meta Query
@@ -125,19 +125,19 @@ if (!class_exists('WPTrait\Collection\User')) {
             }
 
             # Default
-            $default = array(
-                'role__in' => array(),
+            $default = [
+                'role__in' => [],
                 'orderby' => 'id',
                 'order' => 'ASC',
                 'count_total' => false
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # Query
             return new \WP_User_Query($args);
         }
 
-        public function list($arg = array())
+        public function list($arg = [])
         {
             $query = $this->query($arg);
             $users = (array)$query->get_results();
@@ -147,7 +147,7 @@ if (!class_exists('WPTrait\Collection\User')) {
             return $users;
         }
 
-        public function toSql($arg = array())
+        public function toSql($arg = [])
         {
             return $this->query($arg)->request;
         }
@@ -180,7 +180,7 @@ if (!class_exists('WPTrait\Collection\User')) {
 
         private function aliasArgument()
         {
-            return array(
+            return [
                 'id' => 'ID',
                 'pass' => 'user_pass',
                 'password' => 'user_pass',
@@ -197,12 +197,12 @@ if (!class_exists('WPTrait\Collection\User')) {
                 'created_at' => 'user_registered',
                 'admin_bar' => 'show_admin_bar_front',
                 'ssl' => 'use_ssl'
-            );
+            ];
         }
 
-        private function convertAliasArg($array = array(), $alias = null)
+        private function convertAliasArg($array = [], $alias = null)
         {
-            $_array = array();
+            $_array = [];
             $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
             foreach ($array as $key => $value) {
                 $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;

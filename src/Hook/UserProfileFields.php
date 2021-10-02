@@ -11,13 +11,13 @@ if (!trait_exists('WPTrait\Hook\UserProfileFields')) {
     trait UserProfileFields
     {
 
-        public function bootUserProfileFields($arg = array())
+        public function bootUserProfileFields($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'admin_user_profile_fields',
                 'save_method' => 'save_admin_user_profile_fields',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('show_user_profile', $args['method'], $args['priority']);

@@ -11,13 +11,13 @@ if (!trait_exists('WPTrait\Hook\RowActions')) {
     trait RowActions
     {
 
-        public function bootRowActions($arg = array())
+        public function bootRowActions($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'row_actions',
                 'type' => 'post',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             /**

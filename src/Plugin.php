@@ -17,19 +17,19 @@ if (!class_exists('WPTrait\Plugin')) {
 
         public $plugin;
 
-        public function __construct($slug, $args = array())
+        public function __construct($slug, $args = [])
         {
             // Set Plugin Slug
             $this->plugin = new \stdClass();
             $this->plugin->slug = $slug;
 
             // Check Custom argument
-            $default = array(
+            $default = [
                 'main_file' => $this->constant('plugin_dir') . '/' . $slug . '/' . $slug . '.php',
                 'global' => $this->sanitize_plugin_slug($slug),
                 'prefix' => $this->sanitize_plugin_slug($slug),
-                'when_load' => array('action' => 'plugins_loaded', 'priority' => 10)
-            );
+                'when_load' => ['action' => 'plugins_loaded', 'priority' => 10]
+            ];
             $arg = wp_parse_args($args, $default);
 
             // Set Main File
@@ -57,7 +57,7 @@ if (!class_exists('WPTrait\Plugin')) {
             }
 
             // Instantiate Object Class
-            add_action($arg['when_load']['action'], array($this, 'instantiate'), $arg['when_load']['priority']);
+            add_action($arg['when_load']['action'], [$this, 'instantiate'], $arg['when_load']['priority']);
 
             // Plugin Loaded Action
             do_action($this->plugin->prefix . '_loaded');
@@ -96,17 +96,17 @@ if (!class_exists('WPTrait\Plugin')) {
 
             // register_activation_hook
             if (method_exists($this, 'register_activation_hook')) {
-                register_activation_hook($this->plugin->main_file, array($this, 'register_activation_hook'));
+                register_activation_hook($this->plugin->main_file, [$this, 'register_activation_hook']);
             }
 
             // register_deactivation_hook
             if (method_exists($this, 'register_deactivation_hook')) {
-                register_deactivation_hook($this->plugin->main_file, array($this, 'register_deactivation_hook'));
+                register_deactivation_hook($this->plugin->main_file, [$this, 'register_deactivation_hook']);
             }
 
             // register_uninstall_hook
             if (method_exists($this, 'register_uninstall_hook')) {
-                register_uninstall_hook($this->plugin->main_file, array(__CLASS__, 'register_uninstall_hook'));
+                register_uninstall_hook($this->plugin->main_file, [__CLASS__, 'register_uninstall_hook']);
             }
         }
 

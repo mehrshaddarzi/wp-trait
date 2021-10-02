@@ -56,13 +56,13 @@ if (!class_exists('WPTrait\Collection\Term')) {
             return term_exists((is_null($term_id) ? $this->term_id : $term_id), $taxonomy, $parent);
         }
 
-        public function add($name, $arg = array(), $taxonomy = null)
+        public function add($name, $arg = [], $taxonomy = null)
         {
-            $default = array(
+            $default = [
                 'description' => '',
                 'slug' => '',
                 'parent' => 0,
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (array('term_id'=>'','term_taxonomy_id'=>'') | WP_Error)
@@ -73,19 +73,19 @@ if (!class_exists('WPTrait\Collection\Term')) {
             );
         }
 
-        public function update($arg = array(), $taxonomy = null, $term_id = null)
+        public function update($arg = [], $taxonomy = null, $term_id = null)
         {
             # @see https://developer.wordpress.org/reference/functions/wp_update_term
-            $default = array(
+            $default = [
                 'name' => ''
-            );
+            ];
             $args = wp_parse_args($arg, $default);
 
             # (array('term_id'=>'','term_taxonomy_id'=>'') | WP_Error)
             return wp_update_term((is_null($term_id) ? $this->term_id : $term_id), (is_null($taxonomy) ? $this->get($term_id)->taxonomy : $taxonomy), $args);
         }
 
-        public function query($arg = array())
+        public function query($arg = [])
         {
             # Cache
             if (isset($arg['cache']) and $arg['cache'] === false) {
@@ -94,15 +94,15 @@ if (!class_exists('WPTrait\Collection\Term')) {
             }
 
             # Alias
-            $alias = array(
+            $alias = [
                 'return' => 'fields',
                 'meta' => 'meta_query',
                 'tax' => 'taxonomy'
-            );
+            ];
             $arg = $this->convertAliasArg($arg, $alias);
 
             # Check Return only ids
-            if (isset($arg['fields']) and in_array($arg['fields'], array('id', 'ids', 'ID'))) {
+            if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
                 $arg['fields'] = 'ids';
             }
 
@@ -112,23 +112,23 @@ if (!class_exists('WPTrait\Collection\Term')) {
             }
 
             # Default Params
-            $default = array(
+            $default = [
                 'taxonomy' => $this->slug,
                 'orderby' => 'term_id',
                 'order' => 'ASC',
                 'parent' => '',
                 'hide_empty' => false
-            );
+            ];
             $args = wp_parse_args($arg, $default);
             return new \WP_Term_Query($args);
         }
 
-        public function list($arg = array())
+        public function list($arg = [])
         {
             return $this->query($arg)->get_terms();
         }
 
-        public function toSql($arg = array())
+        public function toSql($arg = [])
         {
             return $this->query($arg)->request;
         }
@@ -142,14 +142,14 @@ if (!class_exists('WPTrait\Collection\Term')) {
             return get_taxonomy($taxonomy);
         }
 
-        public function get_taxonomies($args = array(), $output = 'objects', $operator = 'and')
+        public function get_taxonomies($args = [], $output = 'objects', $operator = 'and')
         {
             return get_taxonomies($args, $output, $operator);
         }
 
         public function sort_terms_hierarchically(array $terms, $parentId = 0)
         {
-            $into = array();
+            $into = [];
             foreach ($terms as $i => $term) {
                 if ($term->parent == $parentId) {
                     $term->children = $this->sort_terms_hierarchically($terms, $term->term_id);
@@ -160,9 +160,9 @@ if (!class_exists('WPTrait\Collection\Term')) {
             return $into;
         }
 
-        private function convertAliasArg($array = array(), $alias = null)
+        private function convertAliasArg($array = [], $alias = null)
         {
-            $_array = array();
+            $_array = [];
             $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
             foreach ($array as $key => $value) {
                 $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;

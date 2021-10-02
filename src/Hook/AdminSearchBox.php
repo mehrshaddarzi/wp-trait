@@ -14,12 +14,12 @@ if (!trait_exists('WPTrait\Hook\AdminSearchBox')) {
 
         public static $SearchTypeField = 'search-type';
 
-        public function bootAdminSearchBox($arg = array())
+        public function bootAdminSearchBox($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'type' => 'posts',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->bootAdminFooter(['priority' => $args['priority']]);
@@ -74,7 +74,7 @@ if (!trait_exists('WPTrait\Hook\AdminSearchBox')) {
                     )
                 )
             );*/
-            return array();
+            return [];
         }
 
         public function is_admin_search_request()

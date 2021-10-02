@@ -11,13 +11,13 @@ if (!trait_exists('WPTrait\Hook\ImageSize')) {
     trait ImageSize
     {
 
-        public function bootImageSize($arg = array())
+        public function bootImageSize($arg = [])
         {
             # Setup Image Size
-            $defaults = array(
+            $defaults = [
                 'method' => 'setup_image_size',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
             $this->add_action('after_setup_theme', $args['method'], $args['priority']);
 

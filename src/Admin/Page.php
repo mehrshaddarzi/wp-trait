@@ -13,7 +13,7 @@ if (!class_exists('WPTrait\Admin\Page')) {
     abstract class Page extends Model
     {
 
-        public function __construct($plugin = array())
+        public function __construct($plugin = [])
         {
             parent::__construct($plugin);
         }

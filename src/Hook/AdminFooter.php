@@ -11,12 +11,12 @@ if (!trait_exists('WPTrait\Hook\AdminFooter')) {
     trait AdminFooter
     {
 
-        public function bootAdminFooter($arg = array())
+        public function bootAdminFooter($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'admin_footer',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('admin_footer', $args['method'], $args['priority']);

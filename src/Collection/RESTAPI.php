@@ -11,7 +11,7 @@ if (!class_exists('WPTrait\Collection\RESTAPI')) {
     class RESTAPI
     {
 
-        public function add_route($namespace, $route, $args = array(), $override = false)
+        public function add_route($namespace, $route, $args = [], $override = false)
         {
             # alias
             $args = $this->convertAliasArg($args, [
@@ -46,7 +46,7 @@ if (!class_exists('WPTrait\Collection\RESTAPI')) {
             register_rest_route($namespace, $route, $args, $override);
         }
 
-        public static function request($type = 'GET', $route = '', $params = array())
+        public static function request($type = 'GET', $route = '', $params = [])
         {
             $request = new \WP_REST_Request($type, '/' . $route);
             $request->set_query_params($params);
@@ -65,9 +65,9 @@ if (!class_exists('WPTrait\Collection\RESTAPI')) {
             return rest_get_url_prefix();
         }
 
-        private function convertAliasArg($array = array(), $alias = array())
+        private function convertAliasArg($array = [], $alias = [])
         {
-            $_array = array();
+            $_array = [];
             foreach ($array as $key => $value) {
                 $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
             }

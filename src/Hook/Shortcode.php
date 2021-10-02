@@ -11,12 +11,12 @@ if (!trait_exists('WPTrait\Hook\Shortcode')) {
     trait Shortcode
     {
 
-        public function bootShortcode($arg = array())
+        public function bootShortcode($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'add_shortcode',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_action('add_shortcode', $args['method'], $args['priority'], 2);
@@ -38,7 +38,7 @@ if (!trait_exists('WPTrait\Hook\Shortcode')) {
 
         public function get_shortcode_tags()
         {
-            return (isset($GLOBALS['shortcode_tags']) ? $GLOBALS['shortcode_tags'] : array());
+            return (isset($GLOBALS['shortcode_tags']) ? $GLOBALS['shortcode_tags'] : []);
         }
     }
 

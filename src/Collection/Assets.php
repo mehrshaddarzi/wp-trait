@@ -10,7 +10,7 @@ if (!trait_exists('WPTrait\Collection\Assets')) {
 
     trait Assets
     {
-        public function add_script($handle, $src, $deps = array(), $ver = false, $in_footer = false, $enqueue = true, $localize = array(), $inline_script = '')
+        public function add_script($handle, $src, $deps = [], $ver = false, $in_footer = false, $enqueue = true, $localize = [], $inline_script = '')
         {
             wp_register_script($handle, $src, $deps, $this->get_asset_version($ver), $in_footer);
             if ($enqueue) {
@@ -26,7 +26,7 @@ if (!trait_exists('WPTrait\Collection\Assets')) {
             }
         }
 
-        public function add_style($handle, $src, $deps = array(), $ver = false, $media = 'all', $enqueue = true, $inline_style = '')
+        public function add_style($handle, $src, $deps = [], $ver = false, $media = 'all', $enqueue = true, $inline_style = '')
         {
             wp_register_style($handle, $src, $deps, $this->get_asset_version($ver), $media);
 

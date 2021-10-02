@@ -12,13 +12,13 @@ if (!trait_exists('WPTrait\Hook\SortableColumns')) {
     {
         public $slug;
 
-        public function bootSortableColumns($arg = array())
+        public function bootSortableColumns($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'sortable_columns',
                 'slug' => (isset($this->slug) ? $this->slug : ''),
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_filter('manage_edit-' . $args['slug'] . '_sortable_columns', $args['method'], $args['priority']);

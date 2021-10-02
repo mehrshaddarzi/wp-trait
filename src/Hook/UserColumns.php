@@ -11,13 +11,13 @@ if (!trait_exists('WPTrait\Hook\UserColumns')) {
     trait UserColumns
     {
 
-        public function bootUserColumns($arg = array())
+        public function bootUserColumns($arg = [])
         {
-            $defaults = array(
+            $defaults = [
                 'method' => 'columns',
                 'content_method' => 'content_columns',
                 'priority' => 10,
-            );
+            ];
             $args = wp_parse_args($arg, $defaults);
 
             $this->add_filter('manage_users_columns', $args['method'], $args['priority']);
