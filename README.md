@@ -13,6 +13,9 @@
   * [Generate Model in Command Line](#generate-model-in-command-line)
   * [Generate Model manually](#generate-model-manually)
 - [Global function](#global-function)
+- [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
+  * [How To Work Trait Hooks](#how-to-work-trait-hooks)
+  * [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
 - [Collection Class](#collection-class)
   * [Post](#post)
   * [Attachment](#attachment)
@@ -26,7 +29,6 @@
   * [REST API](#rest-api)
   * [Event](#event)
   * [Log](#log)
-- [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
 - [Starter Plugin](#starter-plugin)
 - [Contributing](#contributing)
 - [License](#license)
@@ -214,7 +216,7 @@ This function show `Code is Poetry`.
 This package has list of php trait for WordPress Hooks, that you can uses.
 trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
 
-### How To Work Trait Hooks?
+### How To Work Trait Hooks
 
 1) First add trait in your class.
 
@@ -237,6 +239,25 @@ public function init_save_form_data() {
   // Code Here
 }
 ```
+
+### List Of Trait With Prefix Method Name
+
+<table>
+ 
+ <tr>
+ <td>Usage</td>
+ <td>Method Prefix</td>
+ <td>Option Class variable</td>
+ </tr>
+ 
+ <tr> 
+ <td>use Init;</td>
+ <td>init_</td>
+ <td>public $init;</td>
+ </tr>
+ 
+ </table>
+
 
 ## Collection Class
 
