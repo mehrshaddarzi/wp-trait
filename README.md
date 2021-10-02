@@ -494,6 +494,37 @@ if($this->error->has($error)){
 }
 ```
 
+### Cache and Transient
+```php
+// Remember Cache last Post in One Hour
+$this->cache->remember('latest_post', function(){
+    return $this->post->list(['type' => 'product', 'return' => 'id'])
+}, 'cache_group_name', $this->constant('hour'));
+
+// Delete Cache
+$this->cache->delete('cache_name', 'group');
+
+// Add Cache
+$this->cache->add('cache_name', $value, 'group_name', 5 * $this->constant('minute'));
+
+// Get Cache
+$this->cache->get('name', 'group');
+
+// Remember Transient
+$this->transient->remember('latest_users', function(){
+    return $this->user->list(['role' => 'subscriber', 'return' => 'id'])
+}, $this->constant('hour'));
+
+// Delete transient
+$this->transient->delete('name');
+
+// Add Transient
+$this->transient->add('name', $value, $this->constant('day'));
+
+// Get Transient
+$this->transient->get('name');
+```
+
 ### REST API
 ```php
 // get REST API prefix url
