@@ -152,6 +152,20 @@ or
 wp make model User\Register
 ```
 
+#### Generate New Post-Type Model
+
+```console
+wp make post-type Order
+```
+
+#### Generate New Taxonomy Model
+
+```console
+wp make taxonomy City
+```
+
+Read More Options [wp-cli-trait-command](https://github.com/mehrshaddarzi/wp-cli-trait-command) Package.
+
 ### Generate Model manually
 
 1) Add new `Admin.php` file in `src/` dir:
@@ -193,7 +207,7 @@ public function instantiate()
 }
 ```
 
-## Global function
+## Global Function
 
 You can access to all classes method with global template function by your plugin slug. 
 for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
@@ -210,6 +224,37 @@ echo $wp_user_mobile->Admin->method_name();
 ```
 
 This function show `Code is Poetry`.
+
+### How to Change Global variable and function name?
+
+You can add `global` parameters in PHP Main WordPress File:
+
+```php
+new WP_User_Mobile('wp-user-mobile', ['global' => 'my_global']);
+```
+
+and Usage:
+
+```php
+echo my_global()->Admin->method_name();
+```
+
+Also for disable global function set `null`.
+
+```php
+new WP_User_Mobile('wp-user-mobile', ['global' => null]);
+```
+
+List of arguments when Create new Plugin object:
+
+```php
+$default = [
+   'main_file' => '',
+   'global' => null,
+   'prefix' => null,
+   'when_load' => ['action' => 'plugins_loaded', 'priority' => 10]
+];
+```
 
 ## Trait For WordPress Hooks
 
@@ -255,6 +300,127 @@ public function init_save_form_data() {
  <td>init_</td>
  <td>public $init;</td>
  </tr>
+ 
+<tr> 
+<td>use AdminAssets;</td>
+<td>admin_enqueue_scripts_</td>
+<td>public $adminAssets;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminFooter;</td>
+<td>admin_footer_</td>
+<td>public $adminFooter;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminInit;</td>
+<td>admin_init_</td>
+<td>public $adminInit;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminMenu;</td>
+<td>admin_menu_</td>
+<td>public $adminMenu;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminSearchBox;</td>
+<td>get_search_fields_</td>
+<td>public $adminSearchBox;</td>
+</tr>
+ 
+<tr> 
+<td>use Ajax;</td>
+<td>admin_ajax_{$method_name}</td>
+<td>public $ajax;</td>
+</tr>
+ 
+<tr> 
+<td>use BulkActions;</td>
+<td>bulk_actions_ & handle_bulk_actions_</td>
+<td>public $bulkActions;</td>
+</tr>
+ 
+<tr> 
+<td>use FrontAssets;</td>
+<td>wp_enqueue_scripts_</td>
+<td>public $frontAssets;</td>
+</tr>
+ 
+<tr> 
+<td>use ImageSize;</td>
+<td>setup_image_size_</td>
+<td>public $imageSize;</td>
+</tr>
+ 
+<tr> 
+<td>use Notice;</td>
+<td>admin_notices_</td>
+<td>public $notice;</td>
+</tr>
+ 
+<tr> 
+<td>use PostTypeColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $postTypeColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use PreGetQuery;</td>
+<td>pre_get_posts_ & pre_get_users_ & pre_get_terms_</td>
+<td>public $preGetQuery;</td>
+</tr>
+ 
+<tr> 
+<td>use RESTAPI;</td>
+<td>rest_api_init_</td>
+<td>public $restapi;</td>
+</tr>
+ 
+<tr> 
+<td>use RowActions;</td>
+<td>row_actions_</td>
+<td>public $rowActions;</td>
+</tr>
+ 
+<tr> 
+<td>use Shortcode;</td>
+<td>add_shortcode_</td>
+<td>public $shortcode;</td>
+</tr>
+ 
+<tr> 
+<td>use SortableColumns;</td>
+<td>sortable_columns_</td>
+<td>public $sortableColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use TaxonomyColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $taxonomyColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use UserColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $userColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use UserProfileFields;</td>
+<td>admin_user_profile_fields_ & save_admin_user_profile_fields_</td>
+<td>public $userProfileFields;</td>
+</tr>
+ 
+  
+<tr> 
+<td>use ViewsSub;</td>
+<td>views_edit_sub_</td>
+<td>public $viewsSub;</td>
+</tr>
  
  </table>
 
