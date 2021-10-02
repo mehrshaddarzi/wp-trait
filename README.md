@@ -4,7 +4,63 @@
 ![Packagist Version](https://img.shields.io/github/v/release/mehrshaddarzi/wp-trait)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mehrshaddarzi/wp-trait)
 
+## Table of Contents
+
+- [Installation](#installation)
+  * [install with WP-CLI](#install-with-wp-cli)
+  * [install with Composer](#install-with-composer)
+- [Create New Model](#create-new-model)
+  * [Generate Model in Command Line](#generate-model-in-command-line)
+  * [Generate Model manually](#generate-model-manually)
+- [Global function](#global-function)
+- [Collection Class](#collection-class)
+  * [Post](#post)
+  * [Attachment](#attachment)
+  * [User](#user)
+  * [Term](#term)
+  * [Option](#option)
+  * [Comment](#comment)
+  * [Request](#request)
+  * [Handle Error](#handle-error)
+  * [Cache and Transient](#cache-and-transient)
+  * [REST API](#rest-api)
+  * [Event](#event)
+  * [Log](#log)
+- [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
+- [Starter Plugin](#starter-plugin)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
+
+### install with WP-CLI
+
+You Can Generate new plugin with `Wp-Trait` Structure:
+
+```console
+wp trait start
+```
+
+And fill Your Plugin information e.g. slug and namespace:
+
+```
+1/12 [--slug=<slug>]: wp-plugin
+2/12 [--namespace=<namespace>]: WP_Plugin
+3/12 [--plugin_name=<title>]: plugin-name
+4/12 [--plugin_description=<description>]: q
+5/12 [--plugin_author=<author>]: Mehrshad Darzi
+6/12 [--plugin_author_uri=<url>]: https://profiles.wordpress.org/mehrshaddarzi/
+7/12 [--plugin_uri=<url>]: https://github.com/mehrshaddarzi/wp-trait
+8/12 [--skip-tests] (Y/n): n
+9/12 [--ci=<provider>]: travis
+10/12 [--activate] (Y/n): y
+11/12 [--activate-network] (Y/n): n
+12/12 [--force] (Y/n): y
+```
+
+Read More About [wp-cli-trait-command](https://github.com/mehrshaddarzi/wp-cli-trait-command) Package.
+
+### install with Composer
 
 1) First Create a new directory in your WordPress plugins dir e.g. `wp-content/plugins/wp-user-mobile`.
 
@@ -72,7 +128,29 @@ new WP_User_Mobile('wp-user-mobile');
 }
 ```
 
-## Example
+## Create New Model
+
+### Generate Model in Command Line
+
+You Can Create new Model With Custom namespace in WP-CLI:
+
+```console
+wp make model <class>
+```
+
+For Example:
+
+```console
+wp make model Option
+```
+
+or
+
+```console
+wp make model User\Register
+```
+
+### Generate Model manually
 
 1) Add new `Admin.php` file in `src/` dir:
 
@@ -131,15 +209,14 @@ echo $wp_user_mobile->Admin->method_name();
 
 This function show `Code is Poetry`.
 
-
 ## Trait For WordPress Hooks
 
 This package has list of php trait for WordPress Hooks, that you can uses.
 trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
 
-#### how To Work Trait Hooks?
+### How To Work Trait Hooks?
 
-1) first add trait in your class.
+1) First add trait in your class.
 
 ```php
 use Init;
@@ -624,7 +701,6 @@ $this->log('text log', 'plugin-slug', $is_active_plugin_log);
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
-
 
 ## Starter Plugin
 
