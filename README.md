@@ -247,7 +247,7 @@ public function init_save_form_data() {
  <tr>
  <td>Usage</td>
  <td>Method Prefix</td>
- <td>Option Class variable</td>
+ <td>Variable option on your model</td>
  </tr>
  
  <tr> 
