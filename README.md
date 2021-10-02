@@ -451,16 +451,6 @@ class Admin extends Model
         # Get Input Email
         $email = $this->request->input('email');
 
-        # Check empty email
-        if (!$this->request->filled('email')) {
-            $this->request->json(['message' => __('Please fill your email', 'wp-plugin')], 400);
-        }
-
-        # Check this Email has in site
-        if ($this->user->exists($email)) {
-            $this->request->json(['message' => __('Sorry, that email address is already used!', 'wp-plugin')], 400);
-        }
-
         # Create User
         $user_id = $this->user->add([
             'email' => $email,
