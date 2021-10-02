@@ -4,7 +4,69 @@
 ![Packagist Version](https://img.shields.io/github/v/release/mehrshaddarzi/wp-trait)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mehrshaddarzi/wp-trait)
 
+## Table of Contents
+
+- [Installation](#installation)
+  * [install with WP-CLI](#install-with-wp-cli)
+  * [install with Composer](#install-with-composer)
+- [Create New Model](#create-new-model)
+  * [Generate Model in Command Line](#generate-model-in-command-line)
+    + [Generate New Post-Type Model](#generate-new-post-type-model)
+    + [Generate New Taxonomy Model](#generate-new-taxonomy-model)
+  * [Generate Model manually](#generate-model-manually)
+- [Global Function](#global-function)
+  * [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
+- [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
+  * [How To Work Trait Hooks](#how-to-work-trait-hooks)
+  * [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
+  * [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
+- [Collection Class](#collection-class)
+  * [Post](#post)
+  * [Attachment](#attachment)
+  * [User](#user)
+  * [Term](#term)
+  * [Option](#option)
+  * [Comment](#comment)
+  * [Request](#request)
+  * [Handle Error](#handle-error)
+  * [Cache and Transient](#cache-and-transient)
+  * [REST API](#rest-api)
+  * [Event](#event)
+  * [Log](#log)
+- [Starter Plugin](#starter-plugin)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
+
+### install with WP-CLI
+
+You Can Generate new plugin with `Wp-Trait` Structure:
+
+```console
+wp trait start
+```
+
+And fill Your Plugin information e.g. slug and namespace:
+
+```
+1/12 [--slug=<slug>]: wp-plugin
+2/12 [--namespace=<namespace>]: WP_Plugin
+3/12 [--plugin_name=<title>]: plugin-name
+4/12 [--plugin_description=<description>]: q
+5/12 [--plugin_author=<author>]: Mehrshad Darzi
+6/12 [--plugin_author_uri=<url>]: https://profiles.wordpress.org/mehrshaddarzi/
+7/12 [--plugin_uri=<url>]: https://github.com/mehrshaddarzi/wp-trait
+8/12 [--skip-tests] (Y/n): n
+9/12 [--ci=<provider>]: travis
+10/12 [--activate] (Y/n): y
+11/12 [--activate-network] (Y/n): n
+12/12 [--force] (Y/n): y
+```
+
+Read More About [wp-cli-trait-command](https://github.com/mehrshaddarzi/wp-cli-trait-command) Package.
+
+### install with Composer
 
 1) First Create a new directory in your WordPress plugins dir e.g. `wp-content/plugins/wp-user-mobile`.
 
@@ -40,7 +102,7 @@ require_once dirname(__FILE__) . '/vendor/autoload.php';
 class WP_User_Mobile extends \WPTrait\Plugin
 {
 
-    public function __construct($slug, $args = array())
+    public function __construct($slug, $args = [])
     {
         parent::__construct($slug, $args);
     }
@@ -72,7 +134,43 @@ new WP_User_Mobile('wp-user-mobile');
 }
 ```
 
-## Example
+## Create New Model
+
+### Generate Model in Command Line
+
+You Can Create new Model With Custom namespace in WP-CLI:
+
+```console
+wp make model <class>
+```
+
+For Example:
+
+```console
+wp make model Option
+```
+
+or
+
+```console
+wp make model User\Register
+```
+
+#### Generate New Post-Type Model
+
+```console
+wp make post-type Order
+```
+
+#### Generate New Taxonomy Model
+
+```console
+wp make taxonomy City
+```
+
+Read More Options [wp-cli-trait-command](https://github.com/mehrshaddarzi/wp-cli-trait-command) Package.
+
+### Generate Model manually
 
 1) Add new `Admin.php` file in `src/` dir:
 
@@ -113,7 +211,7 @@ public function instantiate()
 }
 ```
 
-## Global function
+## Global Function
 
 You can access to all classes method with global template function by your plugin slug. 
 for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
@@ -131,15 +229,45 @@ echo $wp_user_mobile->Admin->method_name();
 
 This function show `Code is Poetry`.
 
+### How to Change Global variable and function name
+
+You can add `global` parameters in PHP Main WordPress File:
+
+```php
+new WP_User_Mobile('wp-user-mobile', ['global' => 'my_global']);
+```
+
+and Usage:
+
+```php
+echo my_global()->Admin->method_name();
+```
+
+Also for disable global function set `null`.
+
+```php
+new WP_User_Mobile('wp-user-mobile', ['global' => null]);
+```
+
+List of arguments when Create new Plugin object:
+
+```php
+$default = [
+   'main_file' => '',
+   'global' => null,
+   'prefix' => null,
+   'when_load' => ['action' => 'plugins_loaded', 'priority' => 10]
+];
+```
 
 ## Trait For WordPress Hooks
 
 This package has list of php trait for WordPress Hooks, that you can uses.
 trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
 
-#### how To Work Trait Hooks?
+### How To Work Trait Hooks
 
-1) first add trait in your class.
+1) First add trait in your class.
 
 ```php
 use Init;
@@ -159,6 +287,192 @@ public function init_check_user_login(){
 public function init_save_form_data() {
   // Code Here
 }
+```
+
+### List Of Trait With Prefix Method Name
+
+<table>
+ 
+ <tr>
+ <td>Usage</td>
+ <td>Method Prefix</td>
+ <td>Variable option on your model</td>
+ </tr>
+ 
+ <tr> 
+ <td>use Init;</td>
+ <td>init_</td>
+ <td>public $init;</td>
+ </tr>
+ 
+<tr> 
+<td>use AdminAssets;</td>
+<td>admin_enqueue_scripts_</td>
+<td>public $adminAssets;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminFooter;</td>
+<td>admin_footer_</td>
+<td>public $adminFooter;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminInit;</td>
+<td>admin_init_</td>
+<td>public $adminInit;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminMenu;</td>
+<td>admin_menu_</td>
+<td>public $adminMenu;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminSearchBox;</td>
+<td>get_search_fields_</td>
+<td>public $adminSearchBox;</td>
+</tr>
+ 
+<tr> 
+<td>use Ajax;</td>
+<td>admin_ajax_{$method_name}</td>
+<td>public $ajax;</td>
+</tr>
+ 
+<tr> 
+<td>use BulkActions;</td>
+<td>bulk_actions_ & handle_bulk_actions_</td>
+<td>public $bulkActions;</td>
+</tr>
+ 
+<tr> 
+<td>use FrontAssets;</td>
+<td>wp_enqueue_scripts_</td>
+<td>public $frontAssets;</td>
+</tr>
+ 
+<tr> 
+<td>use ImageSize;</td>
+<td>setup_image_size_</td>
+<td>public $imageSize;</td>
+</tr>
+ 
+<tr> 
+<td>use Notice;</td>
+<td>admin_notices_</td>
+<td>public $notice;</td>
+</tr>
+ 
+<tr> 
+<td>use PostTypeColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $postTypeColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use PreGetQuery;</td>
+<td>pre_get_posts_ & pre_get_users_ & pre_get_terms_</td>
+<td>public $preGetQuery;</td>
+</tr>
+ 
+<tr> 
+<td>use RestAPI;</td>
+<td>rest_api_init_</td>
+<td>public $restAPI;</td>
+</tr>
+ 
+<tr> 
+<td>use RowActions;</td>
+<td>row_actions_</td>
+<td>public $rowActions;</td>
+</tr>
+ 
+<tr> 
+<td>use Shortcode;</td>
+<td>add_shortcode_</td>
+<td>public $shortcode;</td>
+</tr>
+ 
+<tr> 
+<td>use SortableColumns;</td>
+<td>sortable_columns_</td>
+<td>public $sortableColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use TaxonomyColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $taxonomyColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use UserColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $userColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use UserProfileFields;</td>
+<td>admin_user_profile_fields_ & save_admin_user_profile_fields_</td>
+<td>public $userProfileFields;</td>
+</tr>
+ 
+  
+<tr> 
+<td>use ViewsSub;</td>
+<td>views_edit_sub_</td>
+<td>public $viewsSub;</td>
+</tr>
+ 
+</table>
+
+### Example Create Ajax Request with Trait
+
+```php
+use WPTrait\Hook\Ajax;
+
+class Admin extends Model
+{
+    use Ajax;
+
+    public $ajax = [
+        'methods' => ['signup_user']
+    ];
+
+    public function admin_ajax_signup_user()
+    {
+        # Check User is Auth
+        if ($this->user->auth()) {
+            $this->request->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
+        }
+
+        # Get Input Email
+        $email = $this->request->input('email');
+
+        # Create User
+        $user_id = $this->user->add([
+            'email' => $email,
+            'username' => $email
+        ]);
+        if ($this->error->has($user_id)) {
+            $this->request->json(['message' => $this->error->message($user_id)], 400);
+        }
+
+        # Return Success
+        $this->request->json(['user_id' => $user_id], 200);
+
+        # Need for End of WordPress Ajax request
+        exit;
+    }
+}
+```
+
+You can access top ajax request:
+
+```
+http://site.com/wp-admin/admin-ajax.php?action=signup_user&email=info@site.com
 ```
 
 ## Collection Class
@@ -494,6 +808,37 @@ if($this->error->has($error)){
 }
 ```
 
+### Cache and Transient
+```php
+// Remember Cache last Post in One Hour
+$this->cache->remember('latest_post', function(){
+    return $this->post->list(['type' => 'product', 'return' => 'id'])
+}, 'cache_group_name', $this->constant('hour'));
+
+// Delete Cache
+$this->cache->delete('cache_name', 'group');
+
+// Add Cache
+$this->cache->add('cache_name', $value, 'group_name', 5 * $this->constant('minute'));
+
+// Get Cache
+$this->cache->get('name', 'group');
+
+// Remember Transient
+$this->transient->remember('latest_users', function(){
+    return $this->user->list(['role' => 'subscriber', 'return' => 'id'])
+}, $this->constant('hour'));
+
+// Delete transient
+$this->transient->delete('name');
+
+// Add Transient
+$this->transient->add('name', $value, $this->constant('day'));
+
+// Get Transient
+$this->transient->get('name');
+```
+
 ### REST API
 ```php
 // get REST API prefix url
@@ -508,7 +853,7 @@ $this->rest->request('GET', 'wp/v2/posts', [ 'per_page' => 12 ]);
 // Define new route in WordPress REST API with trait
 class MY_REST_API extends Model
 {
-    use RESTAPI;
+    use RestAPI;
     
     public function rest_api_init()
     {
@@ -560,7 +905,7 @@ class MY_REST_API extends Model
 $this->event->single($this->constant('hour'), 'action_name');
 
 // Define recurring Event
-$this->event->add(time(), 'hourly', 'action_name', array());
+$this->event->add(time(), 'hourly', 'action_name', []);
 
 // Delete Event
 $this->event->delete('action_name');
@@ -593,7 +938,6 @@ $this->log('text log', 'plugin-slug', $is_active_plugin_log);
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
-
 
 ## Starter Plugin
 
