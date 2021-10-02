@@ -4,6 +4,8 @@
 ![Packagist Version](https://img.shields.io/github/v/release/mehrshaddarzi/wp-trait)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mehrshaddarzi/wp-trait)
 
+WP-Trait is an easy framework for Standard and Fast development of WordPress plugins according php MVC model.
+
 ## Table of Contents
 
 - [Installation](#installation)
