@@ -11,11 +11,15 @@
   * [install with Composer](#install-with-composer)
 - [Create New Model](#create-new-model)
   * [Generate Model in Command Line](#generate-model-in-command-line)
+    + [Generate New Post-Type Model](#generate-new-post-type-model)
+    + [Generate New Taxonomy Model](#generate-new-taxonomy-model)
   * [Generate Model manually](#generate-model-manually)
-- [Global function](#global-function)
+- [Global Function](#global-function)
+  * [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
 - [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
   * [How To Work Trait Hooks](#how-to-work-trait-hooks)
   * [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
+  * [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
 - [Collection Class](#collection-class)
   * [Post](#post)
   * [Attachment](#attachment)
@@ -225,7 +229,7 @@ echo $wp_user_mobile->Admin->method_name();
 
 This function show `Code is Poetry`.
 
-### How to Change Global variable and function name?
+### How to Change Global variable and function name
 
 You can add `global` parameters in PHP Main WordPress File:
 
@@ -374,9 +378,9 @@ public function init_save_form_data() {
 </tr>
  
 <tr> 
-<td>use RESTAPI;</td>
+<td>use RestAPI;</td>
 <td>rest_api_init_</td>
-<td>public $restapi;</td>
+<td>public $restAPI;</td>
 </tr>
  
 <tr> 
@@ -422,8 +426,64 @@ public function init_save_form_data() {
 <td>public $viewsSub;</td>
 </tr>
  
- </table>
+</table>
 
+### Example Create Ajax Request with Trait
+
+```php
+use WPTrait\Hook\Ajax;
+
+class Admin extends Model
+{
+    use Ajax;
+
+    public $ajax = [
+        'methods' => ['signup_user']
+    ];
+
+    public function admin_ajax_signup_user()
+    {
+        # Check User is Auth
+        if ($this->user->auth()) {
+            $this->request->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
+        }
+
+        # Get Input Email
+        $email = $this->request->input('email');
+
+        # Check empty email
+        if (!$this->request->filled('email')) {
+            $this->request->json(['message' => __('Please fill your email', 'wp-plugin')], 400);
+        }
+
+        # Check this Email has in site
+        if ($this->user->exists($email)) {
+            $this->request->json(['message' => __('Sorry, that email address is already used!', 'wp-plugin')], 400);
+        }
+
+        # Create User
+        $user_id = $this->user->add([
+            'email' => $email,
+            'username' => $email
+        ]);
+        if ($this->error->has($user_id)) {
+            $this->request->json(['message' => $this->error->message($user_id)], 400);
+        }
+
+        # Return Success
+        $this->request->json(['user_id' => $user_id], 200);
+
+        # Need for End of WordPress Ajax request
+        exit;
+    }
+}
+```
+
+You can access top ajax request:
+
+```
+http://site.com/wp-admin/admin-ajax.php?action=signup_user&email=info@site.com
+```
 
 ## Collection Class
 
@@ -803,7 +863,7 @@ $this->rest->request('GET', 'wp/v2/posts', [ 'per_page' => 12 ]);
 // Define new route in WordPress REST API with trait
 class MY_REST_API extends Model
 {
-    use RESTAPI;
+    use RestAPI;
     
     public function rest_api_init()
     {
