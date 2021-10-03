@@ -495,7 +495,7 @@ $this->post(1)->meta->all();
 // Get Custom Meta
 $this->post(1)->meta->get('key');
 
-// Get Multiple Customer Meta Keys
+// Get Multiple Custome Meta Keys
 $this-post(1)->meta->only(['key_1', 'key_2']);
 
 // Save Post Meta
@@ -597,10 +597,27 @@ $this->attachment(1)->size();
 
 // Get User
 $user = $this->user(1)->get();
-# ['data' => '', 'ID' => '', 'roles' => '', 'allcaps' => '']
+$user->ID
+$user->user_login
+$user->user_pass
+$user->user_nicename
+$user->user_email
+$user->user_url
+$user->user_registered
+$user->user_activation_key
+$user->user_status
+$user->display_name
+$user->first_name
+$user->last_name
+$user->caps
+$user->roles
+$user->allcaps
 
-// Get Meta
+// Get All Meta
 $this->user(1)->meta->all();
+
+// Get Custom Meta
+$this->user(1)->meta->get('meta_name');
 
 // Save Meta
 $this->user(1)->meta->update('phone', '09xxxxxxxx');
