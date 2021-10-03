@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -99,7 +101,7 @@ if (!class_exists('WPTrait\Collection\Term')) {
                 'meta' => 'meta_query',
                 'tax' => 'taxonomy'
             ];
-            $arg = $this->convertAliasArg($arg, $alias);
+            $arg = Arr::alias($arg, $alias);
 
             # Check Return only ids
             if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
@@ -160,16 +162,6 @@ if (!class_exists('WPTrait\Collection\Term')) {
             return $into;
         }
 
-        private function convertAliasArg($array = [], $alias = null)
-        {
-            $_array = [];
-            $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
-            foreach ($array as $key => $value) {
-                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
-            }
-
-            return $_array;
-        }
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -28,6 +30,35 @@ if (!class_exists('WPTrait\Collection\Post')) {
          * Meta Class
          */
         public $meta;
+
+        /**
+         * Alias Argument in insert/update Post
+         */
+        public $alias = [
+            'id' => 'ID',
+            'user' => 'post_author',
+            'author' => 'post_author',
+            'title' => 'post_title',
+            'date' => 'post_date',
+            'date_gmt' => 'post_date_gmt',
+            'content' => 'post_content',
+            'content_filtered' => 'content_filtered',
+            'excerpt' => 'post_excerpt',
+            'status' => 'post_status',
+            'type' => 'post_type',
+            'name' => 'post_name',
+            'modified' => 'post_modified',
+            'modified_gmt' => 'modified_gmt',
+            'parent' => 'post_parent',
+            'parent_id' => 'post_parent',
+            'mime' => 'post_mime_type',
+            'mime_type' => 'post_mime_type',
+            'category' => 'post_category',
+            'tags' => 'tags_input',
+            'tag' => 'tags_input',
+            'tax' => 'tax_input',
+            'meta' => 'meta_input'
+        ];
 
         public function __construct($post_id = null, $slug = 'post')
         {
@@ -59,7 +90,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
-            return wp_insert_post($this->convertAliasArg($args));
+            return wp_insert_post(Arr::alias($args, $this->alias));
         }
 
         public function update($arg = [])
@@ -71,7 +102,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
-            return wp_update_post($this->convertAliasArg($args));
+            return wp_update_post(Arr::alias($args, $this->alias));
         }
 
         public function permalink($post_id = null, $leave_name = false)
@@ -156,7 +187,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
                 'mime_type ' => 'post_mime_type',
                 'return' => 'fields'
             ];
-            $arg = $this->convertAliasArg($arg, $alias);
+            $arg = Arr::alias($arg, $alias);
 
             # Check Return only ids
             if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
@@ -242,44 +273,6 @@ if (!class_exists('WPTrait\Collection\Post')) {
                 return in_array($pagenow, ['post.php', 'post-new.php']);
         }
 
-        private function aliasArgument()
-        {
-            return array(
-                'id' => 'ID',
-                'user' => 'post_author',
-                'author' => 'post_author',
-                'title' => 'post_title',
-                'date' => 'post_date',
-                'date_gmt' => 'post_date_gmt',
-                'content' => 'post_content',
-                'content_filtered' => 'content_filtered',
-                'excerpt' => 'post_excerpt',
-                'status' => 'post_status',
-                'type' => 'post_type',
-                'name' => 'post_name',
-                'modified' => 'post_modified',
-                'modified_gmt' => 'modified_gmt',
-                'parent' => 'post_parent',
-                'parent_id' => 'post_parent',
-                'mime_type' => 'post_mime_type',
-                'category' => 'post_category',
-                'tags' => 'tags_input',
-                'tag' => 'tags_input',
-                'tax' => 'tax_input',
-                'meta' => 'meta_input'
-            );
-        }
-
-        private function convertAliasArg($array = [], $alias = null)
-        {
-            $_array = [];
-            $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
-            foreach ($array as $key => $value) {
-                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
-            }
-
-            return $_array;
-        }
     }
 
 }

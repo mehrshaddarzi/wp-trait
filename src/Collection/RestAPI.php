@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -14,7 +16,7 @@ if (!class_exists('WPTrait\Collection\RestAPI')) {
         public function add_route($namespace, $route, $args = [], $override = false)
         {
             # alias
-            $args = $this->convertAliasArg($args, [
+            $args = Arr::alias($args, [
                 'method' => 'methods',
                 'function' => 'callback',
                 'arg' => 'args',
@@ -34,7 +36,7 @@ if (!class_exists('WPTrait\Collection\RestAPI')) {
             # alias args
             if (isset($args['args']) and !empty($args['args'])) {
                 foreach ($args['args'] as $key => $params) {
-                    $args['args'][$key] = $this->convertAliasArg($args['args'][$key], [
+                    $args['args'][$key] = Arr::alias($args['args'][$key], [
                         'require' => 'required',
                         'validate' => 'validate_callback',
                         'sanitize' => 'sanitize_callback'
@@ -46,7 +48,7 @@ if (!class_exists('WPTrait\Collection\RestAPI')) {
             register_rest_route($namespace, $route, $args, $override);
         }
 
-        public static function request($type = 'GET', $route = '', $params = [])
+        public function request($type = 'GET', $route = '', $params = [])
         {
             $request = new \WP_REST_Request($type, '/' . $route);
             $request->set_query_params($params);
@@ -65,15 +67,6 @@ if (!class_exists('WPTrait\Collection\RestAPI')) {
             return rest_get_url_prefix();
         }
 
-        private function convertAliasArg($array = [], $alias = [])
-        {
-            $_array = [];
-            foreach ($array as $key => $value) {
-                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
-            }
-
-            return $_array;
-        }
     }
 
 }

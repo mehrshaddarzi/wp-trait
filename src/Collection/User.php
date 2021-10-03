@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -22,6 +24,28 @@ if (!class_exists('WPTrait\Collection\User')) {
          * Meta Class
          */
         public $meta;
+
+        /**
+         * Alias argument for insert/update User
+         */
+        public $alias = [
+            'id' => 'ID',
+            'pass' => 'user_pass',
+            'password' => 'user_pass',
+            'login' => 'user_login',
+            'username' => 'user_login',
+            'nicename' => 'user_nicename',
+            'url' => 'user_url',
+            'site' => 'user_url',
+            'email' => 'user_email',
+            'name' => 'display_name',
+            'fullname' => 'display_name',
+            'color' => 'admin_color',
+            'date' => 'user_registered',
+            'created_at' => 'user_registered',
+            'admin_bar' => 'show_admin_bar_front',
+            'ssl' => 'use_ssl'
+        ];
 
         public function __construct($user_id = null)
         {
@@ -67,7 +91,7 @@ if (!class_exists('WPTrait\Collection\User')) {
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The newly created user's ID or a WP_Error object if the user could not be created.
-            return wp_insert_user($this->convertAliasArg($args));
+            return wp_insert_user(Arr::alias($args, $this->alias));
         }
 
         public function update($arg = [])
@@ -78,7 +102,7 @@ if (!class_exists('WPTrait\Collection\User')) {
             $args = wp_parse_args($arg, $default);
 
             # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
-            return wp_update_user($this->convertAliasArg($args));
+            return wp_update_user(Arr::alias($args, $this->alias));
         }
 
         public function exists($value, $type = null)
@@ -112,7 +136,7 @@ if (!class_exists('WPTrait\Collection\User')) {
                 'meta' => 'meta_query',
                 'date' => 'date_query',
             ];
-            $arg = $this->convertAliasArg($arg, $alias);
+            $arg = Arr::alias($arg, $alias);
 
             # Check Return only ids
             if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
@@ -173,42 +197,10 @@ if (!class_exists('WPTrait\Collection\User')) {
             return in_array($role, (array)$user->roles);
         }
 
-        public function user_can($cap, $user_id = null)
+        public function can($cap, $user_id = null)
         {
             return user_can((is_null($user_id) ? $this->user_id : $user_id), $cap);
         }
 
-        private function aliasArgument()
-        {
-            return [
-                'id' => 'ID',
-                'pass' => 'user_pass',
-                'password' => 'user_pass',
-                'login' => 'user_login',
-                'username' => 'user_login',
-                'nicename' => 'user_nicename',
-                'url' => 'user_url',
-                'site' => 'user_url',
-                'email' => 'user_email',
-                'name' => 'display_name',
-                'fullname' => 'display_name',
-                'color' => 'admin_color',
-                'date' => 'user_registered',
-                'created_at' => 'user_registered',
-                'admin_bar' => 'show_admin_bar_front',
-                'ssl' => 'use_ssl'
-            ];
-        }
-
-        private function convertAliasArg($array = [], $alias = null)
-        {
-            $_array = [];
-            $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
-            foreach ($array as $key => $value) {
-                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
-            }
-
-            return $_array;
-        }
     }
 }

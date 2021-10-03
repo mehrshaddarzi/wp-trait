@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -21,6 +23,33 @@ if (!class_exists('WPTrait\Collection\Comment')) {
          * Meta Class
          */
         public $meta;
+
+        /**
+         * Alias Argument insert/update Comment
+         */
+        public $alias = [
+            'id' => 'comment_ID',
+            'ID' => 'comment_ID',
+            'agent' => 'comment_agent',
+            'approved' => 'comment_approved',
+            'author' => 'comment_author',
+            'name' => 'comment_author',
+            'author_email' => 'comment_author_email',
+            'email' => 'comment_author_email',
+            'ip' => 'comment_author_IP',
+            'url' => 'comment_author_url',
+            'site' => 'comment_author_url',
+            'content' => 'comment_content',
+            'date' => 'comment_date',
+            'date_gmt' => 'comment_date_gmt',
+            'karma' => 'comment_karma',
+            'parent' => 'comment_parent',
+            'parent_id' => 'comment_parent',
+            'post_ID' => 'comment_post_ID',
+            'post_id' => 'comment_post_ID',
+            'type' => 'comment_type',
+            'meta' => 'comment_meta'
+        ];
 
         public function __construct($id = null)
         {
@@ -50,7 +79,7 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             $args = wp_parse_args($arg, $default);
 
             # (int|false) The new comment's ID on success, false on failure.
-            return wp_insert_comment($this->convertAliasArg($args));
+            return wp_insert_comment(Arr::alias($args, $this->alias));
         }
 
         public function update($arg = [])
@@ -61,7 +90,7 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             $args = wp_parse_args($arg, $default);
 
             # (int|false|WP_Error)
-            return wp_update_comment($this->convertAliasArg($args));
+            return wp_update_comment(Arr::alias($args, $this->alias));
         }
 
         public function query($arg = [])
@@ -81,7 +110,7 @@ if (!class_exists('WPTrait\Collection\Comment')) {
                 'email' => 'author_email',
                 'url' => 'author_url'
             ];
-            $arg = $this->convertAliasArg($arg, $alias);
+            $arg = Arr::alias($arg, $alias);
 
             # Nested
             if (isset($arg['nested']) and $arg['nested'] === true) {
@@ -118,43 +147,6 @@ if (!class_exists('WPTrait\Collection\Comment')) {
             return $this->query($arg)->request;
         }
 
-        private function aliasArgument()
-        {
-            return [
-                'id' => 'comment_ID',
-                'ID' => 'comment_ID',
-                'agent' => 'comment_agent',
-                'approved' => 'comment_approved',
-                'author' => 'comment_author',
-                'name' => 'comment_author',
-                'author_email' => 'comment_author_email',
-                'email' => 'comment_author_email',
-                'ip' => 'comment_author_IP',
-                'url' => 'comment_author_url',
-                'site' => 'comment_author_url',
-                'content' => 'comment_content',
-                'date' => 'comment_date',
-                'date_gmt' => 'comment_date_gmt',
-                'karma' => 'comment_karma',
-                'parent' => 'comment_parent',
-                'parent_id' => 'comment_parent',
-                'post_ID' => 'comment_post_ID',
-                'post_id' => 'comment_post_ID',
-                'type' => 'comment_type',
-                'meta' => 'comment_meta'
-            ];
-        }
-
-        private function convertAliasArg($array = [], $alias = null)
-        {
-            $_array = [];
-            $alias = (is_null($alias) ? $this->aliasArgument() : $alias);
-            foreach ($array as $key => $value) {
-                $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
-            }
-
-            return $_array;
-        }
     }
 
 }
