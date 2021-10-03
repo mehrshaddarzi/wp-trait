@@ -722,7 +722,7 @@ $this->option('name')->get($default);
 $this->option('settings.user.id')->get();
 
 // Save Option
-$this->option('name')->update('value');
+$this->option('name')->save('value');
 
 // Delete Options
 $this->option('name')->delete();
@@ -891,8 +891,8 @@ $this->transient->get('name');
 
 ### REST API
 ```php
-// get REST API prefix url
-$this-rest->prefix();
+// Get REST API prefix url
+$this->rest->prefix();
 
 // get REST API url
 $this->rest->url('namespace/endpoint');
@@ -907,7 +907,7 @@ class MY_REST_API extends Model
     
     public function rest_api_init()
     {
-        $this->rest->add_route('student', 'register', [
+        $this->route->add('student', 'register', [
             'method' => 'post',
             'function' => [$this, 'register'],
             'arg' => [
@@ -947,6 +947,14 @@ class MY_REST_API extends Model
         );
     }
 }
+
+// Remove Route
+$this->route->remove('/wp/v2/posts');
+
+// Get List WordPress REST API routes
+$list = $this->route->list();
+$list->namespaces;
+$list->routes;
 ```
 
 ### Event

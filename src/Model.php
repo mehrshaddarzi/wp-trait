@@ -16,6 +16,7 @@ use WPTrait\Collection\{
     Post,
     Request,
     RestAPI,
+    Route,
     Term,
     Transient,
     User
@@ -31,7 +32,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route;
 
         public function __construct($plugin = [])
         {
@@ -58,6 +59,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->error = new Error();
             $this->rest = new RestAPI();
             $this->log = new Log();
+            $this->route = new Route();
 
             # Boot WordPress Hooks
             $this->bootHooks();
