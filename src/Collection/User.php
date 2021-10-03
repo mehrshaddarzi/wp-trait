@@ -18,7 +18,7 @@ if (!class_exists('WPTrait\Collection\User')) {
          *
          * @var int
          */
-        public $user_id;
+        public $user_id = null;
 
         /**
          * Meta Class
@@ -47,10 +47,16 @@ if (!class_exists('WPTrait\Collection\User')) {
             'ssl' => 'use_ssl'
         ];
 
+        /**
+         * Password Utility Class
+         */
+        public $password;
+
         public function __construct($user_id = null)
         {
             $this->user_id = $user_id;
             $this->meta = new Meta('user', $this->user_id);
+            $this->password = new Password($this->user_id);
         }
 
         public function get($user_id = null)
@@ -59,7 +65,6 @@ if (!class_exists('WPTrait\Collection\User')) {
              * @see https://core.trac.wordpress.org/browser/tags/5.8/src/wp-includes/class-wp-user.php
              * List Of Methods:
              *
-             * exists
              * add_role
              * remove_role
              * set_role
@@ -67,8 +72,8 @@ if (!class_exists('WPTrait\Collection\User')) {
              * remove_cap
              * remove_all_caps
              * has_cap
+             * exists
              *
-             * @return object { 'data' => '', 'ID' => '', 'roles' => '', 'allcaps' => ''}
              */
             return new \WP_User((is_null($user_id) ? $this->user_id : $user_id));
         }
@@ -202,5 +207,19 @@ if (!class_exists('WPTrait\Collection\User')) {
             return user_can((is_null($user_id) ? $this->user_id : $user_id), $cap);
         }
 
+        public function authenticate($username, $password)
+        {
+            return wp_authenticate($username, $password);
+        }
+
+        public function login($username, $password, $remember = false, $secure_cookie = '')
+        {
+            return wp_signon(['user_login' => $username, 'user_password' => $password, 'remember' => $remember], $secure_cookie);
+        }
+
+        public function logout()
+        {
+            wp_logout();
+        }
     }
 }
