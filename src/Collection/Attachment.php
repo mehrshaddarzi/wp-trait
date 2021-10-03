@@ -93,7 +93,7 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             return get_post_mime_type((is_null($attachment_id) ? $this->attachment_id : $attachment_id));
         }
 
-        public function is($attachment_id = null, $file_path = false)
+        public function is($type = 'image', $attachment_id = null, $file_path = false)
         {
             $path = ($file_path === false ? $this->path((is_null($attachment_id) ? $this->attachment_id : $attachment_id)) : $file_path);
             $ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -103,15 +103,16 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             $audio_ext = wp_get_audio_extensions();
             $video_ext = wp_get_video_extensions();
 
+            $file_type = 'other';
             if (in_array($ext, $image_ext)) {
-                return 'image';
+                $file_type = 'image';
             } elseif (in_array($ext, $video_ext)) {
-                return 'video';
+                $file_type = 'video';
             } elseif (in_array($ext, $audio_ext)) {
-                return 'audio';
+                $file_type = 'audio';
             }
 
-            return 'other';
+            return (strtolower($type) == $file_type);
         }
 
         public function upload($file_id, $post_id = 0, $post_data = [], $overrides = ['test_form' => false])

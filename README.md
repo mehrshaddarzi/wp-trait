@@ -584,8 +584,8 @@ $this->attachment->get_wordpress_image_sizes();
 // Get Uploads Dir
 $this->attachment->upload_dir();
 
-// Check Attachment type File (image or video or audio)
-if($this->attachment(1)->is() == "image") { }
+// Check Attachment type File (image or video or audio or other)
+$this->attachment(1)->is('image');
 
 // Get Size Of Attachment
 $this->attachment(1)->size();
