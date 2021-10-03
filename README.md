@@ -715,6 +715,12 @@ $this->terms->get_taxonomies();
 // Get Option
 $this->option('name')->get();
 
+// Get default Value if Not Found
+$this->option('name')->get($default);
+
+// Get Nested Array Option Value With dot
+$this->option('settings.user.id')->get();
+
 // Save Option
 $this->option('name')->update('value');
 

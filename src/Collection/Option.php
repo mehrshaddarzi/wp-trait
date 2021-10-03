@@ -23,10 +23,11 @@ if (!class_exists('WPTrait\Collection\Option')) {
         public function get($default = false, $name = null)
         {
             $name = (is_null($name) ? $this->name : $name);
-            $explode = explode(".", $name);
+            $explode = explode(".", trim($name));
             if (count($explode) > 1) {
                 $name = $explode[0];
-                return Arr::get(get_option($name, $default), $name, $default);
+                array_shift($explode);
+                return Arr::get(get_option($name, $default), implode(".", $explode), $default);
             }
 
             return get_option($name, $default);
