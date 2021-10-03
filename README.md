@@ -772,6 +772,9 @@ $this->user(1)->meta->get('first_name');
 // Get Multiple Custom Meta Keys
 $this->post(1)->meta->only(['key_1', 'key_2']);
 
+// Delete Meta
+$this->user(1)->meta->delete('mobile');
+
 // Save Meta
 $this->term(1)->meta->save('key', 'value');
 
