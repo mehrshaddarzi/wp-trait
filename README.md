@@ -55,7 +55,7 @@ And fill Your Plugin information e.g. slug and namespace:
 1/12 [--slug=<slug>]: wp-plugin
 2/12 [--namespace=<namespace>]: WP_Plugin
 3/12 [--plugin_name=<title>]: plugin-name
-4/12 [--plugin_description=<description>]: q
+4/12 [--plugin_description=<description>]: plugin description
 5/12 [--plugin_author=<author>]: Mehrshad Darzi
 6/12 [--plugin_author_uri=<url>]: https://profiles.wordpress.org/mehrshaddarzi/
 7/12 [--plugin_uri=<url>]: https://github.com/mehrshaddarzi/wp-trait
@@ -597,21 +597,25 @@ $this->attachment(1)->size();
 
 // Get User
 $user = $this->user(1)->get();
-$user->ID
-$user->user_login
-$user->user_pass
-$user->user_nicename
-$user->user_email
-$user->user_url
-$user->user_registered
-$user->user_activation_key
-$user->user_status
-$user->display_name
-$user->first_name
-$user->last_name
-$user->caps
-$user->roles
-$user->allcaps
+/**
+* List of object return:
+* 
+* $user->ID
+* $user->user_login
+* $user->user_pass
+* $user->user_nicename
+* $user->user_email
+* $user->user_url
+* $user->user_registered
+* $user->user_activation_key
+* $user->user_status
+* $user->display_name
+* $user->first_name
+* $user->last_name
+* $user->caps
+* $user->roles
+* $user->allcaps
+*/
 
 // Get All Meta
 $this->user(1)->meta->all();
@@ -649,7 +653,25 @@ $this->user(1)->can('manage_options');
 // Check Exist User Id
 $this->user->exists(12);
 
-// Set Role and Capability for user
+// Login User
+$this->user->login($username, $password, $remember = true);
+
+// Authenticate User [Useful for REST-API or Ajax Without set any Cookie]
+$this->user->authenticate($username, $password);
+
+// Set New Password For User
+$this->user(1)->password->set('new_password');
+
+// Check User Password
+$this->user(1)->password->check($this->request->input('password', 'trim'), $hash);
+
+// Convert PlainText Password To Hash
+$this->user->password->hash('123456');
+
+// Generate Password With custom length
+$this->user->password->generate(8, $special_chars = false);
+
+// Set Role and Capability for User
 $user = $this->user(1)->get();
 $user->set_role('author');
 $user->add_cap('cap_name');
