@@ -486,7 +486,6 @@ This package has list of wordpress helper class, that you can uses.
 ### Post
 
 ```php
-
 // Get Post
 $this->post(1)->get();
 
@@ -497,7 +496,7 @@ $this->post(1)->meta->all();
 $this->post(1)->meta->get('key');
 
 // Get Multiple Custom Meta Keys
-$this-post(1)->meta->only(['key_1', 'key_2']);
+$this->post(1)->meta->only(['key_1', 'key_2']);
 
 // Save Post Meta
 $this->post(1)->meta->save('key', 'value');
@@ -771,7 +770,7 @@ $this->post(1)->meta->all();
 $this->user(1)->meta->get('first_name');
 
 // Get Multiple Custom Meta Keys
-$this-post(1)->meta->only(['key_1', 'key_2']);
+$this->post(1)->meta->only(['key_1', 'key_2']);
 
 // Save Meta
 $this->term(1)->meta->save('key', 'value');
