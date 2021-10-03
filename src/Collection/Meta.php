@@ -84,7 +84,15 @@ if (!class_exists('WPTrait\Collection\Meta')) {
             return $func($arg->object_id, $meta);
         }
 
-        public function setTypeMetaData($type)
+        public function clean($object_id = null, $type = null)
+        {
+            $all = $this->all($object_id, $type);
+            foreach ($all as $name => $value) {
+                $this->delete($name, $object_id, $type);
+            }
+        }
+
+        private function setTypeMetaData($type)
         {
             if (in_array($type, ['post', 'attachment'])) {
                 return 'post';
@@ -93,7 +101,7 @@ if (!class_exists('WPTrait\Collection\Meta')) {
             return $type;
         }
 
-        public function sanitizeArg($object_id, $type)
+        private function sanitizeArg($object_id, $type)
         {
             $return = new \stdClass();
             $return->object_id = (is_null($object_id) ? $this->object_id : $object_id);

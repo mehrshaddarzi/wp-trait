@@ -29,6 +29,7 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
   * [Term](#term)
   * [Option](#option)
   * [Comment](#comment)
+  * [Meta](#meta)
   * [Request](#request)
   * [Handle Error](#handle-error)
   * [Cache and Transient](#cache-and-transient)
@@ -269,7 +270,7 @@ trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trai
 
 ### How To Work Trait Hooks
 
-1) First add trait in your class.
+1) First add `trait` in your class.
 
 ```php
 use Init;
@@ -495,7 +496,7 @@ $this->post(1)->meta->all();
 // Get Custom Meta
 $this->post(1)->meta->get('key');
 
-// Get Multiple Custome Meta Keys
+// Get Multiple Custom Meta Keys
 $this-post(1)->meta->only(['key_1', 'key_2']);
 
 // Save Post Meta
@@ -594,7 +595,6 @@ $this->attachment(1)->size();
 ### User
 
 ```php
-
 // Get User
 $user = $this->user(1)->get();
 /**
@@ -757,6 +757,27 @@ $this->comment->add(['post_id' => 1, 'name' => 'Mehrshad Darzi', 'content' => ''
 
 // Get List Comments
 $this->comment->list(['post_id' => 1, 'nested' => true]);
+```
+
+### Meta
+
+Meta data list: `post`, `user`, `term`, `comment`.
+
+```php
+// Get All Meta From Object
+$this->post(1)->meta->all();
+
+// Get Custom Meta
+$this->user(1)->meta->get('first_name');
+
+// Get Multiple Custom Meta Keys
+$this-post(1)->meta->only(['key_1', 'key_2']);
+
+// Save Meta
+$this->term(1)->meta->save('key', 'value');
+
+// Remove all Meta from Object
+$this->comment(1)->meta->clean();
 ```
 
 ### Request
