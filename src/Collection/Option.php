@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -20,7 +22,14 @@ if (!class_exists('WPTrait\Collection\Option')) {
 
         public function get($default = false, $name = null)
         {
-            return get_option((is_null($name) ? $this->name : $name), $default);
+            $name = (is_null($name) ? $this->name : $name);
+            $explode = explode(".", $name);
+            if (count($explode) > 1) {
+                $name = $explode[0];
+                return Arr::get(get_option($name, $default), $name, $default);
+            }
+
+            return get_option($name, $default);
         }
 
         public function delete($name = null)
