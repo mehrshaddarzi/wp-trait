@@ -626,6 +626,9 @@ $this->user->id();
 // Check User Has Role
 $this->user->has_role('administrator');
 
+// Check User Has Capability
+$this->user(1)->can('manage_options');
+
 // Check Exist User Id
 $this->user->exists(12);
 
