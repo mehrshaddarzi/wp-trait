@@ -771,6 +771,8 @@ $this->request->query('email');
 
 // Get Field with Custom filter e.g. trim value
 $this->request->input('name', 'trim');
+
+// Get field with multiple filter
 $this->request->input('post_excerpt', ['trim', 'strip_tags']);
 
 // Check Has input
@@ -841,7 +843,9 @@ $this->request->json(['data' => 'value'], 200);
 ### Handle Error
 ```php
 $input_email = $this->request->input('email');
-$error = $this->error->new(); # Define new error Handle system
+
+// Define new error Handle system
+$error = $this->error->new();
 
 if(empty($input_email)) {
     $error->add('empty_email', __('Please Fill Your Email', 'my-plugin'));
@@ -952,7 +956,7 @@ class MY_REST_API extends Model
 $this->route->remove('/wp/v2/posts');
 
 // Get List WordPress REST API routes
-$list = $this->route->list();
+$list = $this->route->all();
 $list->namespaces;
 $list->routes;
 ```

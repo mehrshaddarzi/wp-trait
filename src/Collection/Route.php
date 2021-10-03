@@ -59,7 +59,7 @@ if (!class_exists('WPTrait\Collection\Route')) {
             }, $priority);
         }
 
-        public function list()
+        public function all()
         {
             $rest = ['namespaces' => [], 'routes' => []];
             if (function_exists('rest_get_server')) {
