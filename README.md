@@ -144,31 +144,31 @@ new WP_User_Mobile('wp-user-mobile');
 You Can Create new Model With Custom namespace in WP-CLI:
 
 ```console
-wp make model <class>
+wp trait make model <class>
 ```
 
 For Example:
 
 ```console
-wp make model Option
+wp trait make model Option
 ```
 
 or
 
 ```console
-wp make model User\Register
+wp trait make model User\Register
 ```
 
 #### Generate New Post-Type Model
 
 ```console
-wp make post-type Order
+wp trait make post-type Order
 ```
 
 #### Generate New Taxonomy Model
 
 ```console
-wp make taxonomy City
+wp trait make taxonomy City
 ```
 
 Read More Options [wp-cli-trait-command](https://github.com/mehrshaddarzi/wp-cli-trait-command) Package.
