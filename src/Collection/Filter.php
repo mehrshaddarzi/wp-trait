@@ -21,7 +21,7 @@ if (!trait_exists('WPTrait\Collection\Filter')) {
             return remove_filter($hook_name, $callback, $priority);
         }
 
-        public function do(...$args)
+        public function apply(...$args)
         {
             return apply_filters(...$args);
         }
