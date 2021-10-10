@@ -52,6 +52,7 @@ if (!class_exists('WPTrait\Collection\Meta')) {
 
         public function only($meta_keys = [], $object_id = null, $type = null)
         {
+            $_array = array();
             foreach ((array)$meta_keys as $meta) {
                 $_array[$meta] = $this->get($meta, $object_id, $type);
             }
