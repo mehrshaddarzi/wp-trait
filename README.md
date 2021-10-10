@@ -1020,6 +1020,15 @@ $this->log('text log', 'db');
 # wp-content/plugin-slug.log
 $is_active_plugin_log = get_option('my_plugin_active_log');
 $this->log('text log', 'plugin-slug', $is_active_plugin_log);
+
+// Change Datetime in Log File
+# By default the dates are saved in the log file based on `UTC`, you can change it with the WordPress filter:
+add_filter('wp_trait_log_date', function ($date, $type) {
+    if ($type == "my-plugin-slug") {
+        return date("Y-m-d", current_time('timestamp')) . ' UTC+3.5';
+    }
+    return $date;
+});
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
