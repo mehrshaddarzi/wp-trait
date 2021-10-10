@@ -4,11 +4,13 @@ namespace WPTrait;
 
 use WPTrait\Hook\Constant;
 use WPTrait\Collection\{
+    Action,
     Attachment,
     Cache,
     Comment,
     Error,
     Event,
+    Filter,
     Hooks,
     Log,
     Nonce,
@@ -32,7 +34,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action;
 
         public function __construct($plugin = [])
         {
@@ -45,21 +47,28 @@ if (!class_exists('WPTrait\Model')) {
             $this->plugin = $plugin;
 
             # Setup Collection
-            $this->post = new Post();
-            $this->term = new Term();
-            $this->attachment = new Attachment();
-            $this->user = new User();
-            $this->option = new Option();
-            $this->request = new Request();
-            $this->comment = new Comment();
-            $this->nonce = new Nonce();
-            $this->transient = new Transient();
-            $this->cache = new Cache();
-            $this->event = new Event();
-            $this->error = new Error();
-            $this->rest = new RestAPI();
-            $this->log = new Log();
-            $this->route = new Route();
+            $collection = [
+                'post' => 'Post',
+                'term' => 'Term',
+                'attachment' => 'Attachment',
+                'user' => 'User',
+                'option' => 'Option',
+                'request' => 'Request',
+                'comment' => 'Comment',
+                'nonce' => 'Nonce',
+                'transient' => 'Transient',
+                'cache' => 'Cache',
+                'event' => 'Event',
+                'error' => 'Error',
+                'rest' => 'RestAPI',
+                'log' => 'Log',
+                'route' => 'Route',
+                'filter' => 'Filter',
+                'action' => 'Action'
+            ];
+            foreach ($collection as $variable => $class) {
+                $this->{$variable} = new $class();
+            }
 
             # Boot WordPress Hooks
             $this->bootHooks();
