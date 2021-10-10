@@ -48,23 +48,23 @@ if (!class_exists('WPTrait\Model')) {
 
             # Setup Collection
             $collection = [
-                'post' => 'Post',
-                'term' => 'Term',
-                'attachment' => 'Attachment',
-                'user' => 'User',
-                'option' => 'Option',
-                'request' => 'Request',
-                'comment' => 'Comment',
-                'nonce' => 'Nonce',
-                'transient' => 'Transient',
-                'cache' => 'Cache',
-                'event' => 'Event',
-                'error' => 'Error',
-                'rest' => 'RestAPI',
-                'log' => 'Log',
-                'route' => 'Route',
-                'filter' => 'Filter',
-                'action' => 'Action'
+                'post' => Post::class,
+                'term' => Term::class,
+                'attachment' => Attachment::class,
+                'user' => User::class,
+                'option' => Option::class,
+                'request' => Request::class,
+                'comment' => Comment::class,
+                'nonce' => Nonce::class,
+                'transient' => Transient::class,
+                'cache' => Cache::class,
+                'event' => Event::class,
+                'error' => Error::class,
+                'rest' => Request::class,
+                'log' => Log::class,
+                'route' => Route::class,
+                'filter' => Filter::class,
+                'action' => Action::class
             ];
             foreach ($collection as $variable => $class) {
                 $this->{$variable} = new $class();
