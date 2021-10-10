@@ -42,7 +42,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             'date' => 'post_date',
             'date_gmt' => 'post_date_gmt',
             'content' => 'post_content',
-            'content_filtered' => 'content_filtered',
+            'content_filtered' => 'post_content_filtered',
             'excerpt' => 'post_excerpt',
             'status' => 'post_status',
             'type' => 'post_type',
