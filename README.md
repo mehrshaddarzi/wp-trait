@@ -1025,7 +1025,7 @@ $this->log('text log', 'plugin-slug', $is_active_plugin_log);
 # By default the dates are saved in the log file based on `UTC`, you can change it with the WordPress filter:
 add_filter('wp_trait_log_date', function ($date, $type) {
     if ($type == "my-plugin-slug") {
-        return date("Y-m-d", current_time('timestamp')) . ' UTC+3.5';
+        return date_i18n(get_option( 'date_format' ), current_time('timestamp')) . ' UTC+3.5';
     }
     return $date;
 });
