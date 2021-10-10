@@ -13,7 +13,9 @@ if (!class_exists('WPTrait\Collection\Log')) {
         public function add($log = '', $type = 'debug', $condition = null)
         {
             if ($this->condition($condition)) {
-                return error_log($this->sanitize($log), 3, $this->location($type));
+                $type = $this->location($type);
+                $text = $this->sanitize($log, $type);
+                return error_log($text, 3, $type);
             }
 
             return false;
@@ -39,13 +41,14 @@ if (!class_exists('WPTrait\Collection\Log')) {
             return WP_CONTENT_DIR . '/' . $type . '.log';
         }
 
-        private function sanitize($log = '')
+        private function sanitize($log = '', $type = 'debug')
         {
             if (is_array($log) || is_object($log)) {
                 $log = json_encode($log, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             }
 
-            return "[" . date("Y-m-d H:i:s") . " UTC] $log\n";
+            $date = apply_filters('wp_trait_log_date', date("Y-m-d H:i:s") . " UTC", $type);
+            return "[" . $date . "] $log\n";
         }
     }
 

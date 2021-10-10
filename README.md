@@ -144,31 +144,31 @@ new WP_User_Mobile('wp-user-mobile');
 You Can Create new Model With Custom namespace in WP-CLI:
 
 ```console
-wp make model <class>
+wp trait make model <class>
 ```
 
 For Example:
 
 ```console
-wp make model Option
+wp trait make model Option
 ```
 
 or
 
 ```console
-wp make model User\Register
+wp trait make model User\Register
 ```
 
 #### Generate New Post-Type Model
 
 ```console
-wp make post-type Order
+wp trait make post-type Order
 ```
 
 #### Generate New Taxonomy Model
 
 ```console
-wp make taxonomy City
+wp trait make taxonomy City
 ```
 
 Read More Options [wp-cli-trait-command](https://github.com/mehrshaddarzi/wp-cli-trait-command) Package.
@@ -772,6 +772,9 @@ $this->user(1)->meta->get('first_name');
 // Get Multiple Custom Meta Keys
 $this->post(1)->meta->only(['key_1', 'key_2']);
 
+// Delete Meta
+$this->user(1)->meta->delete('mobile');
+
 // Save Meta
 $this->term(1)->meta->save('key', 'value');
 
@@ -1017,6 +1020,15 @@ $this->log('text log', 'db');
 # wp-content/plugin-slug.log
 $is_active_plugin_log = get_option('my_plugin_active_log');
 $this->log('text log', 'plugin-slug', $is_active_plugin_log);
+
+// Change Datetime in Log File
+# By default the dates are saved in the log file based on `UTC`, you can change it with the WordPress filter:
+add_filter('wp_trait_log_date', function ($date, $type) {
+    if ($type == "my-plugin-slug") {
+        return date_i18n(get_option( 'date_format' ), current_time('timestamp')) . ' UTC+3.5';
+    }
+    return $date;
+});
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
