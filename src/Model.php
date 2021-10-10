@@ -60,7 +60,7 @@ if (!class_exists('WPTrait\Model')) {
                 'cache' => Cache::class,
                 'event' => Event::class,
                 'error' => Error::class,
-                'rest' => Request::class,
+                'rest' => RestAPI::class,
                 'log' => Log::class,
                 'route' => Route::class,
                 'filter' => Filter::class,
