@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Utils\Arr;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -52,11 +54,12 @@ if (!class_exists('WPTrait\Collection\Meta')) {
 
         public function only($meta_keys = [], $object_id = null, $type = null)
         {
-            $_array = array();
-            foreach ((array)$meta_keys as $meta) {
-                $_array[$meta] = $this->get($meta, $object_id, $type);
-            }
-            return $_array;
+            return Arr::only($this->all($object_id, $type), $meta_keys);
+        }
+
+        public function except($meta_keys = [], $object_id = null, $type = null)
+        {
+            return Arr::except($this->all($object_id, $type), $meta_keys);
         }
 
         public function save($meta, $value, $object_id = null, $type = null)

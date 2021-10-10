@@ -42,14 +42,10 @@ if (!class_exists('WPTrait\Collection\Request')) {
 
         public function only($array = [], $filter = null)
         {
+            $_array = [];
             $inputs = $this->all();
-            foreach ($array as $name) {
-                $_array[$name] = null;
-            }
             foreach ($inputs as $name => $value) {
-                if (in_array($name, (array)$array)) {
-                    $_array[$name] = $this->filter($value, $filter);
-                }
+                $_array[$name] = (in_array($name, (array)$array) ? $this->filter($value, $filter) : null);
             }
 
             return (object)$_array;

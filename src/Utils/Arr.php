@@ -41,4 +41,14 @@ class Arr
         return $array;
     }
 
+    public static function except(array $array, $keys)
+    {
+        return array_diff_key($array, array_flip((array)$keys));
+    }
+
+    public static function only(array $array, $keys)
+    {
+        return array_intersect_key($array, array_flip((array)$keys));
+    }
+
 }
