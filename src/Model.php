@@ -36,6 +36,8 @@ if (!class_exists('WPTrait\Model')) {
 
         public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action;
 
+        protected $actions, $filters = [];
+
         public function __construct($plugin = [])
         {
             # @see https://codex.wordpress.org/Global_Variables
@@ -76,30 +78,8 @@ if (!class_exists('WPTrait\Model')) {
 
         public function bootHooks()
         {
-            $booted = [];
-            $Trait = (array)array_keys($this->getUsedTraits($this));
-            foreach ($Trait as $trait) {
-                $basename = basename(str_replace('\\', '/', $trait));
-                $method = 'boot' . $basename;
-                $args = [];
-                if (method_exists($trait, $method) && !in_array($method, $booted)) {
-                    $booted[] = $method;
-                    $variable = lcfirst($basename);
-                    $this->{$method}((isset($this->{$variable}) ? $this->{$variable} : $args));
-                }
-            }
-        }
-
-        private function getUsedTraits($classInstance)
-        {
-            $parentClasses = class_parents($classInstance);
-            $traits = class_uses($classInstance);
-
-            foreach ($parentClasses as $parentClass) {
-                $traits = array_merge($traits, class_uses($parentClass));
-            }
-
-            return $traits;
+            $this->bootTraitHooks();
+            $this->bootVariableHooks();
         }
 
         public function getFile($path = '', $type = 'url')
@@ -160,6 +140,51 @@ if (!class_exists('WPTrait\Model')) {
         public function log($log = '', $type = 'debug', $condition = null)
         {
             return $this->log->add($log, $type, $condition);
+        }
+
+        private function bootTraitHooks()
+        {
+            $booted = [];
+            $Trait = (array)array_keys($this->getUsedTraits($this));
+            foreach ($Trait as $trait) {
+                $basename = basename(str_replace('\\', '/', $trait));
+                $method = 'boot' . $basename;
+                $args = [];
+                if (method_exists($trait, $method) && !in_array($method, $booted)) {
+                    $booted[] = $method;
+                    $variable = lcfirst($basename);
+                    $this->{$method}((isset($this->{$variable}) ? $this->{$variable} : $args));
+                }
+            }
+        }
+
+        private function bootVariableHooks()
+        {
+            foreach (['filters', 'actions'] as $hooks) {
+                foreach ($this->{$hooks} as $name => $args) {
+                    $this->runVariableHooks(substr($hooks, 0, -1), $name, $args);
+                }
+            }
+        }
+
+        private function runVariableHooks($type, $name, $args)
+        {
+            $function = (is_array($args) ? $args[0] : $args);
+            $priority = (is_array($args) ? (isset($args[1]) ? $args[1] : 10) : 10);
+            $accepted_args = (is_array($args) ? (isset($args[2]) ? $args[2] : 1) : 1);
+            $this->{$type}->add($name, [__CLASS__, $function], $priority, $accepted_args);
+        }
+
+        private function getUsedTraits($classInstance)
+        {
+            $parentClasses = class_parents($classInstance);
+            $traits = class_uses($classInstance);
+
+            foreach ($parentClasses as $parentClass) {
+                $traits = array_merge($traits, class_uses($parentClass));
+            }
+
+            return $traits;
         }
     }
 
