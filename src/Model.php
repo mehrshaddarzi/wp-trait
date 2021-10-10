@@ -161,8 +161,10 @@ if (!class_exists('WPTrait\Model')) {
         private function bootVariableHooks()
         {
             foreach (['filters', 'actions'] as $hooks) {
-                foreach ($this->{$hooks} as $name => $args) {
-                    $this->runVariableHooks(substr($hooks, 0, -1), $name, $args);
+                if (is_array($this->{$hooks})) {
+                    foreach ((array)$this->{$hooks} as $name => $args) {
+                        $this->runVariableHooks(substr($hooks, 0, -1), $name, $args);
+                    }
                 }
             }
         }
@@ -172,7 +174,7 @@ if (!class_exists('WPTrait\Model')) {
             $function = (is_array($args) ? $args[0] : $args);
             $priority = (is_array($args) ? (isset($args[1]) ? $args[1] : 10) : 10);
             $accepted_args = (is_array($args) ? (isset($args[2]) ? $args[2] : 1) : 1);
-            $this->{$type}->add($name, [__CLASS__, $function], $priority, $accepted_args);
+            $this->{$type}->add($name, [$this, $function], $priority, $accepted_args);
         }
 
         private function getUsedTraits($classInstance)
