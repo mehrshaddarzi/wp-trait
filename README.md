@@ -772,6 +772,9 @@ $this->user(1)->meta->get('first_name');
 // Get Multiple Custom Meta Keys
 $this->post(1)->meta->only(['key_1', 'key_2']);
 
+// Get All Meta Key Except Custom keys
+$this->post(1)->meta->except(['_edit_lock', '_edit_last']);
+
 // Delete Meta
 $this->user(1)->meta->delete('mobile');
 
