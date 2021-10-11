@@ -3,11 +3,11 @@
 namespace WPTrait;
 
 use WPTrait\Hook\Constant;
-use WPTrait\Collection\{
-    Action,
+use WPTrait\Collection\{Action,
     Attachment,
     Cache,
     Comment,
+    Cookie,
     Error,
     Event,
     Filter,
@@ -34,7 +34,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie;
 
         protected $actions, $filters = [];
 
@@ -66,7 +66,8 @@ if (!class_exists('WPTrait\Model')) {
                 'log' => Log::class,
                 'route' => Route::class,
                 'filter' => Filter::class,
-                'action' => Action::class
+                'action' => Action::class,
+                'cookie' => Cookie::class
             ];
             foreach ($collection as $variable => $class) {
                 $this->{$variable} = new $class();

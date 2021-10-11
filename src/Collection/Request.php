@@ -144,24 +144,26 @@ if (!class_exists('WPTrait\Collection\Request')) {
         {
             switch (strtolower($name)) {
                 case "get":
-                    return (isset($_GET) ? $_GET : []);
+                    $return = (isset($_GET) ? $_GET : []);
                     break;
                 case "post":
-                    return (isset($_POST) ? $_POST : []);
+                    $return = (isset($_POST) ? $_POST : []);
                     break;
                 case "file":
                 case "files":
-                    return (isset($_FILES) ? $_FILES : []);
+                    $return = (isset($_FILES) ? $_FILES : []);
                     break;
                 case "cookie":
-                    return (isset($_COOKIE) ? $_COOKIE : []);
+                    $return = (isset($_COOKIE) ? $_COOKIE : []);
                     break;
                 case "server":
-                    return (isset($_SERVER) ? $_SERVER : []);
+                    $return = (isset($_SERVER) ? $_SERVER : []);
                     break;
                 default:
-                    return (isset($_REQUEST) ? $_REQUEST : []);
+                    $return = (isset($_REQUEST) ? $_REQUEST : []);
             }
+
+            return $return;
         }
     }
 }
