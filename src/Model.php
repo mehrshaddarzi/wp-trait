@@ -49,7 +49,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->plugin = $plugin;
 
             # Setup Collection
-            $this->bootVariable();
+            $this->bootCollection();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -156,7 +156,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->{$type}->add($name, [$this, $function], $priority, $accepted_args);
         }
 
-        private function bootVariable()
+        private function bootCollection()
         {
             $this->post = new Post();
             $this->term = new Term();
