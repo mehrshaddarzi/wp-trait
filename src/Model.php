@@ -123,6 +123,11 @@ if (!class_exists('WPTrait\Model')) {
             return new Option($name);
         }
 
+        public function cookie($name)
+        {
+            return new Cookie($name);
+        }
+
         public function nonce($action)
         {
             return new Nonce($action);
