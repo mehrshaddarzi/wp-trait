@@ -47,6 +47,11 @@ if (!trait_exists('WPTrait\Collection\Cookie')) {
             return setcookie($name, ($sanitize === true ? $this->sanitizeCookieValue($value) : $value), time() + ($expire == "" ? $this->constant('hour') : $expire), COOKIEPATH, COOKIE_DOMAIN);
         }
 
+        public function save($value, $expire = '', $sanitize = true, $name = null)
+        {
+            return $this->set((is_null($name) ? $this->name : $name), $value, $expire, $sanitize);
+        }
+
         public function delete($name = null)
         {
             $name = (is_null($name) ? $this->name : $name);

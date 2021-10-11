@@ -88,7 +88,7 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             return size_format($bytes, $decimals);
         }
 
-        public function mime_type($attachment_id = null)
+        public function mimeType($attachment_id = null)
         {
             return get_post_mime_type((is_null($attachment_id) ? $this->attachment_id : $attachment_id));
         }
@@ -133,13 +133,6 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             wp_update_attachment_metadata($attachment_id, $attach_data);
         }
 
-        public function requirePHPImage()
-        {
-            require_once(ABSPATH . 'wp-admin/includes/image.php');
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            require_once(ABSPATH . 'wp-admin/includes/media.php');
-        }
-
         public function get_wordpress_image_sizes($size = '')
         {
             # additional by theme or plugin
@@ -175,6 +168,12 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             return $sizes;
         }
 
+        private function requirePHPImage()
+        {
+            require_once(ABSPATH . 'wp-admin/includes/image.php');
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
+            require_once(ABSPATH . 'wp-admin/includes/media.php');
+        }
     }
 
 }
