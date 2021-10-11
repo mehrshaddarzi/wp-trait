@@ -49,29 +49,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->plugin = $plugin;
 
             # Setup Collection
-            $collection = [
-                'post' => Post::class,
-                'term' => Term::class,
-                'attachment' => Attachment::class,
-                'user' => User::class,
-                'option' => Option::class,
-                'request' => Request::class,
-                'comment' => Comment::class,
-                'nonce' => Nonce::class,
-                'transient' => Transient::class,
-                'cache' => Cache::class,
-                'event' => Event::class,
-                'error' => Error::class,
-                'rest' => RestAPI::class,
-                'log' => Log::class,
-                'route' => Route::class,
-                'filter' => Filter::class,
-                'action' => Action::class,
-                'cookie' => Cookie::class
-            ];
-            foreach ($collection as $variable => $class) {
-                $this->{$variable} = new $class();
-            }
+            $this->bootVariable();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -176,6 +154,28 @@ if (!class_exists('WPTrait\Model')) {
             $priority = (is_array($args) ? (isset($args[1]) ? $args[1] : 10) : 10);
             $accepted_args = (is_array($args) ? (isset($args[2]) ? $args[2] : 1) : 1);
             $this->{$type}->add($name, [$this, $function], $priority, $accepted_args);
+        }
+
+        private function bootVariable()
+        {
+            $this->post = new Post();
+            $this->term = new Term();
+            $this->attachment = new Attachment();
+            $this->user = new User();
+            $this->option = new Option();
+            $this->request = new Request();
+            $this->comment = new Comment();
+            $this->nonce = new Nonce();
+            $this->transient = new Transient();
+            $this->cache = new Cache();
+            $this->event = new Event();
+            $this->error = new Error();
+            $this->rest = new RestAPI();
+            $this->log = new Log();
+            $this->route = new Route();
+            $this->filter = new Filter();
+            $this->action = new Action();
+            $this->cookie = new Cookie();
         }
 
         private function getUsedTraits($classInstance)
