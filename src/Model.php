@@ -49,7 +49,24 @@ if (!class_exists('WPTrait\Model')) {
             $this->plugin = $plugin;
 
             # Setup Collection
-            $this->bootCollection();
+            $this->post = new Post();
+            $this->term = new Term();
+            $this->attachment = new Attachment();
+            $this->user = new User();
+            $this->option = new Option();
+            $this->request = new Request();
+            $this->comment = new Comment();
+            $this->nonce = new Nonce();
+            $this->transient = new Transient();
+            $this->cache = new Cache();
+            $this->event = new Event();
+            $this->error = new Error();
+            $this->rest = new RestAPI();
+            $this->log = new Log();
+            $this->route = new Route();
+            $this->filter = new Filter();
+            $this->action = new Action();
+            $this->cookie = new Cookie();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -154,28 +171,6 @@ if (!class_exists('WPTrait\Model')) {
             $priority = (is_array($args) ? (isset($args[1]) ? $args[1] : 10) : 10);
             $accepted_args = (is_array($args) ? (isset($args[2]) ? $args[2] : 1) : 1);
             $this->{$type}->add($name, [$this, $function], $priority, $accepted_args);
-        }
-
-        private function bootCollection()
-        {
-            $this->post = new Post();
-            $this->term = new Term();
-            $this->attachment = new Attachment();
-            $this->user = new User();
-            $this->option = new Option();
-            $this->request = new Request();
-            $this->comment = new Comment();
-            $this->nonce = new Nonce();
-            $this->transient = new Transient();
-            $this->cache = new Cache();
-            $this->event = new Event();
-            $this->error = new Error();
-            $this->rest = new RestAPI();
-            $this->log = new Log();
-            $this->route = new Route();
-            $this->filter = new Filter();
-            $this->action = new Action();
-            $this->cookie = new Cookie();
         }
 
         private function getUsedTraits($classInstance)
