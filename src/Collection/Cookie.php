@@ -23,8 +23,8 @@ if (!trait_exists('WPTrait\Collection\Cookie')) {
         public function get($name = '', $default = null)
         {
             $data = Arr::get($this->all(), $name, $default);
-            if (is_string($data) && is_array(json_decode($data, true))) {
-                return json_decode($data);
+            if (is_string($data) && is_array(json_decode(stripslashes_deep($data), true))) {
+                return json_decode(stripslashes_deep($data));
             }
 
             return $data;
