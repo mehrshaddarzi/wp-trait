@@ -11,6 +11,7 @@ use WPTrait\Collection\{
     Cookie,
     Error,
     Event,
+    File,
     Filter,
     Hooks,
     Log,
@@ -36,7 +37,8 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $response, $comment,
+            $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie, $file;
 
         protected $actions, $filters = [];
 
@@ -70,6 +72,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->filter = new Filter();
             $this->action = new Action();
             $this->cookie = new Cookie();
+            $this->file = new File();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -139,6 +142,11 @@ if (!class_exists('WPTrait\Model')) {
         public function transient($name)
         {
             return new Transient($name);
+        }
+
+        public function file($file)
+        {
+            return new File($file);
         }
 
         public function log($log = '', $type = 'debug', $condition = null)
