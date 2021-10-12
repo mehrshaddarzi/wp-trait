@@ -47,7 +47,7 @@ class Admin extends Model
     {
         # Check User is Auth
         if ($this->user->auth()) {
-            $this->request->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
+            $this->response->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
         }
 
         # Get Input Email
@@ -55,12 +55,12 @@ class Admin extends Model
 
         # Check empty email
         if (!$this->request->filled('email')) {
-            $this->request->json(['message' => __('Please fill your email', 'wp-plugin')], 400);
+            $this->response->json(['message' => __('Please fill your email', 'wp-plugin')], 400);
         }
 
         # Check this Email has in site
         if ($this->user->exists($email)) {
-            $this->request->json(['message' => __('Sorry, that email address is already used!', 'wp-plugin')], 400);
+            $this->response->json(['message' => __('Sorry, that email address is already used!', 'wp-plugin')], 400);
         }
 
         # Create User
@@ -69,11 +69,11 @@ class Admin extends Model
             'username' => $email
         ]);
         if ($this->error->has($user_id)) {
-            $this->request->json(['message' => $this->error->message($user_id)], 400);
+            $this->response->json(['message' => $this->error->message($user_id)], 400);
         }
 
         # Return Success
-        $this->request->json(['user_id' => $user_id], 200);
+        $this->response->json(['user_id' => $user_id], 200);
 
         # Need for End of WordPress Ajax request
         exit;

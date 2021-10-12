@@ -3,7 +3,8 @@
 namespace WPTrait;
 
 use WPTrait\Hook\Constant;
-use WPTrait\Collection\{Action,
+use WPTrait\Collection\{
+    Action,
     Attachment,
     Cache,
     Comment,
@@ -17,6 +18,7 @@ use WPTrait\Collection\{Action,
     Option,
     Post,
     Request,
+    Response,
     RestAPI,
     Route,
     Term,
@@ -34,7 +36,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie;
+        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie;
 
         protected $actions, $filters = [];
 
@@ -55,6 +57,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->user = new User();
             $this->option = new Option();
             $this->request = new Request();
+            $this->response = new Response();
             $this->comment = new Comment();
             $this->nonce = new Nonce();
             $this->transient = new Transient();

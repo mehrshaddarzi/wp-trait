@@ -448,7 +448,7 @@ class Admin extends Model
     {
         # Check User is Auth
         if ($this->user->auth()) {
-            $this->request->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
+            $this->response->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
         }
 
         # Get Input Email
@@ -460,11 +460,11 @@ class Admin extends Model
             'username' => $email
         ]);
         if ($this->error->has($user_id)) {
-            $this->request->json(['message' => $this->error->message($user_id)], 400);
+            $this->response->json(['message' => $this->error->message($user_id)], 400);
         }
 
         # Return Success
-        $this->request->json(['user_id' => $user_id], 200);
+        $this->response->json(['user_id' => $user_id], 200);
 
         # Need for End of WordPress Ajax request
         exit;
@@ -863,7 +863,7 @@ if(!$this->error->has($request)) {
 }
 
 // Return Json Response
-$this->request->json(['data' => 'value'], 200);
+$this->response->json(['data' => 'value'], 200);
 ```
 
 ### Handle Error
@@ -970,7 +970,7 @@ class MY_REST_API extends Model
         );
 
         # Result Json
-        return $this->request->json(
+        return $this->response->json(
             ['message' => 'Completed Register', 'id' => $this->db->insert_id],
             200,
             ['X-Custom-Header' => 'value']
