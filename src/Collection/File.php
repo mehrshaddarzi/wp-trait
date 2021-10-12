@@ -62,16 +62,14 @@ if (!class_exists('WPTrait\Collection\File')) {
 
         public function copy($destination, $overwrite = false, $mode = false, $source = null)
         {
-            $source = (is_null($source) ? $this->file : $source);
-            $destination = ($this->isDir($destination) ? trailingslashit($destination) . $this->basename($source) : $destination);
-            return $this->wp_filesystem->copy($source, $destination, $overwrite, $mode);
+            $path = $this->prepareDestination($source, $destination);
+            return $this->wp_filesystem->copy($path->source, $path->destination, $overwrite, $mode);
         }
 
         public function move($destination, $overwrite = false, $source = null)
         {
-            $source = (is_null($source) ? $this->file : $source);
-            $destination = ($this->isDir($destination) ? trailingslashit($destination) . $this->basename($source) : $destination);
-            return $this->wp_filesystem->move($source, $destination, $overwrite);
+            $path = $this->prepareDestination($source, $destination);
+            return $this->wp_filesystem->move($path->source, $path->destination, $overwrite);
         }
 
         public function delete($recursive = false, $type = false, $file = null)
@@ -132,6 +130,23 @@ if (!class_exists('WPTrait\Collection\File')) {
         public function extension($path = null)
         {
             return pathinfo((is_null($path) ? $this->file : $path), PATHINFO_EXTENSION);
+        }
+
+        private function prepareDestination($source = null, $destination = '')
+        {
+            $source = (is_null($source) ? $this->file : $source);
+            $destination = ($this->isDir($destination) ? trailingslashit($destination) . $this->basename($source) : $destination);
+            $this->autoCreateDir($destination);
+
+            return (object)['source' => $source, 'destination' => $destination];
+        }
+
+        private function autoCreateDir($dir)
+        {
+            $path = $this->dirname($dir);
+            if (!$this->exists($path)) {
+                $this->mkdir($path);
+            }
         }
 
         private function WP_FileSystem()
