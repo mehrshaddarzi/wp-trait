@@ -52,6 +52,12 @@ if (!trait_exists('WPTrait\Hook\Constant')) {
                     return WP_PLUGIN_DIR;
                 case "plugin_url":
                     return WP_PLUGIN_URL;
+                case "mu_plugin_dir":
+                    return WPMU_PLUGIN_DIR;
+                case "mu_plugin_url":
+                    return WPMU_PLUGIN_URL;
+                case "template_path":
+                    return TEMPLATEPATH;
                 default:
                     return $name;
             }
