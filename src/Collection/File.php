@@ -62,12 +62,16 @@ if (!class_exists('WPTrait\Collection\File')) {
 
         public function copy($destination, $overwrite = false, $mode = false, $source = null)
         {
-            return $this->wp_filesystem->copy((is_null($source) ? $this->file : $source), $destination, $overwrite, $mode);
+            $source = (is_null($source) ? $this->file : $source);
+            $destination = ($this->isDir($destination) ? trailingslashit($destination) . $this->basename($source) : $destination);
+            return $this->wp_filesystem->copy($source, $destination, $overwrite, $mode);
         }
 
-        public function move($destination, $overwrite = false, $source = false)
+        public function move($destination, $overwrite = false, $source = null)
         {
-            return $this->wp_filesystem->move((is_null($source) ? $this->file : $source), $destination, $overwrite);
+            $source = (is_null($source) ? $this->file : $source);
+            $destination = ($this->isDir($destination) ? trailingslashit($destination) . $this->basename($source) : $destination);
+            return $this->wp_filesystem->move($source, $destination, $overwrite);
         }
 
         public function delete($recursive = false, $type = false, $file = null)
