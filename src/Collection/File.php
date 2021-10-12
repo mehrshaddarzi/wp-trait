@@ -50,6 +50,11 @@ if (!class_exists('WPTrait\Collection\File')) {
             return $this->put(...$arg);
         }
 
+        public function mkdir($chmod = false, $path = null)
+        {
+            return $this->wp_filesystem->mkdir((is_null($path) ? $this->file : $path), $chmod);
+        }
+
         public function chmod($mode = false, $recursive = false, $file = null)
         {
             return $this->wp_filesystem->chmod((is_null($file) ? $this->file : $file), $mode, $recursive);
