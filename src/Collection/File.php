@@ -50,6 +50,21 @@ if (!class_exists('WPTrait\Collection\File')) {
             return $this->put(...$arg);
         }
 
+        public function prepend($data, $path = null)
+        {
+            $path = (is_null($path) ? $this->file : $path);
+            if ($this->exists($path)) {
+                return $this->put($data . $this->get($path), $path);
+            }
+
+            return $this->put($data, $path);
+        }
+
+        public function append($data, $path = null)
+        {
+            return @file_put_contents((is_null($path) ? $this->file : $path), $data, FILE_APPEND);
+        }
+
         public function mkdir($path, $chmod = false)
         {
             return $this->wp_filesystem->mkdir($path, $chmod);
