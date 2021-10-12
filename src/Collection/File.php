@@ -65,9 +65,9 @@ if (!class_exists('WPTrait\Collection\File')) {
             return @file_put_contents((is_null($path) ? $this->file : $path), $data, FILE_APPEND);
         }
 
-        public function mkdir($path, $chmod = false)
+        public function mkdir($path, $chmod = null)
         {
-            return $this->wp_filesystem->mkdir($path, $chmod);
+            return @mkdir($path, (is_null($chmod) ? FS_CHMOD_DIR : $chmod), true);
         }
 
         public function chmod($mode = false, $recursive = false, $file = null)
