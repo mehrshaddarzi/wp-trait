@@ -58,6 +58,8 @@ if (!trait_exists('WPTrait\Hook\Constant')) {
                     return WPMU_PLUGIN_URL;
                 case "template_path":
                     return TEMPLATEPATH;
+                case "theme_root":
+                    return get_theme_root();
                 default:
                     return $name;
             }
