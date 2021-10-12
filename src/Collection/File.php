@@ -166,15 +166,13 @@ if (!class_exists('WPTrait\Collection\File')) {
 
         private function WP_FileSystem()
         {
-            if (isset($GLOBALS['wp_trait_filesystem'])) {
+            if (isset($GLOBALS['_wp_filesystem_direct_method'])) {
                 return $GLOBALS['wp_filesystem'];
             }
 
             require_once(ABSPATH . '/wp-admin/includes/file.php');
             WP_Filesystem();
-            global $wp_filesystem;
-            $GLOBALS['wp_trait_filesystem'] = true;
-            return $wp_filesystem;
+            return $GLOBALS['wp_filesystem'];
         }
 
     }
