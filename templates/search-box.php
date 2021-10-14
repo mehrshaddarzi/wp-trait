@@ -81,17 +81,6 @@
     });
 </script>
 <style>
-    #<?php echo $search_input_id; ?>
-    {
-        display: none;
-    }
-
-    .search-box select[name="s"], .tablenav .search-plugins select[name="s"], .tagsdiv .newtag {
-        float: right;
-        margin: 1px 0 0 4px;
-    }
-
-    .search-box input[name="s"], .tablenav .search-plugins input[name="s"], .tagsdiv .newtag {
-        margin: 1px 0 0 4px;
-    }
+    #<?php echo $search_input_id; ?> {  display: none;  }
+    select[name=search-type] { margin-top: <?php echo (is_rtl() ? '-2' : '-4'); ?>px; }
 </style>
