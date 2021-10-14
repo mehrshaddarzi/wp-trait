@@ -5,7 +5,7 @@
         $("input#<?php echo $search_input_id; ?>").attr('autocomplete', 'off');
         $(`<select name="search-type" data-current-value="<?php echo $current_value; ?>">
         <?php
-        $search_fields = apply_filters('admin_post_type_search_box_fields', $search_fields);
+        $search_fields = apply_filters('wp_trait_admin_search_box_fields', $search_fields);
         foreach ($search_fields as $name => $value) {
 
         // Check Value Type
@@ -81,8 +81,11 @@
     });
 </script>
 <style>
-    #<?php echo $search_input_id; ?> {
-        display: none;
+    #
+    <?php echo $search_input_id; ?>
+    {
+        display: none
+    ;
     }
 
     .search-box select[name="s"], .tablenav .search-plugins select[name="s"], .tagsdiv .newtag {

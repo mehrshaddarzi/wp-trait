@@ -190,8 +190,11 @@ if (!class_exists('WPTrait\Collection\Post')) {
             $arg = Arr::alias($arg, $alias);
 
             # Check Return only ids
-            if (isset($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
-                $arg['fields'] = 'ids';
+            if (isset($arg['fields'])) {
+                $arg['fields'] = ((is_array($arg['fields']) and count($arg['fields']) == 1) ? $arg['fields'][0] : $arg['fields']);
+                if (is_string($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
+                    $arg['fields'] = 'ids';
+                }
             }
 
             # Cache Result
