@@ -84,21 +84,6 @@ if (!class_exists('WPTrait\Model')) {
             $this->bootVariableHooks();
         }
 
-        public function getFile($path = '', $type = 'url')
-        {
-            return rtrim($this->plugin->{$type}, '/') . '/' . ltrim($path, '/');
-        }
-
-        public function getFileUrl($path = '')
-        {
-            return $this->getFile($path, 'url');
-        }
-
-        public function getFilePath($path = '')
-        {
-            return $this->getFile($path, 'path');
-        }
-
         public function post($post_id)
         {
             return new Post($post_id);
@@ -183,10 +168,10 @@ if (!class_exists('WPTrait\Model')) {
 
         private function runVariableHooks($type, $name, $args)
         {
-            $function = (is_array($args) ? $args[0] : $args);
+            $function = (is_array($args) ? $args[0] : ((is_bool($args) ? ($args === true ? '__return_true' : '__return_false') : $args)));
             $priority = (is_array($args) ? (isset($args[1]) ? $args[1] : 10) : 10);
             $accepted_args = (is_array($args) ? (isset($args[2]) ? $args[2] : 1) : 1);
-            $this->{$type}->add($name, [$this, $function], $priority, $accepted_args);
+            $this->{$type}->add($name, (in_array($function, array('__return_false', '__return_true')) ? $function : [$this, $function]), $priority, $accepted_args);
         }
 
         private function getUsedTraits($classInstance)
