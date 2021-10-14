@@ -11,6 +11,15 @@ class Admin extends Model
 {
     use Notice, RowActions, Ajax;
 
+    public $actions = [
+        'save_post' => ['save_author', 11, 3]
+    ];
+
+    public $filters = [
+        'the_content' => 'add_prefix_content',
+        'show_admin_bar' => 'return__false'
+    ];
+
     public $ajax = [
         'methods' => ['signup_user']
     ];
@@ -77,6 +86,16 @@ class Admin extends Model
 
         # Need for End of WordPress Ajax request
         exit;
+    }
+
+    public function add_prefix_content($content)
+    {
+        return __('This text is from wp-trait example plugin', $this->plugin->textdomain) . '<br/>' . $content;
+    }
+
+    public function save_author($post_ID, $post, $update)
+    {
+        $this->log($this->user($post->post_author)->get()->user_login . ' updated the ' . $post_ID);
     }
 
 }
