@@ -81,11 +81,9 @@
     });
 </script>
 <style>
-    #
-    <?php echo $search_input_id; ?>
+    #<?php echo $search_input_id; ?>
     {
-        display: none
-    ;
+        display: none;
     }
 
     .search-box select[name="s"], .tablenav .search-plugins select[name="s"], .tagsdiv .newtag {
