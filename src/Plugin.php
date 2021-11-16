@@ -52,7 +52,7 @@ if (!class_exists('WPTrait\Plugin')) {
                 $GLOBALS[$arg['global']] = $this;
 
                 // Create global function for backwards compatibility.
-                $function = 'function ' . $arg['global'] . '() { return $GLOBALS[\'' . $arg['global'] . '\']; }';
+                $function = 'if(!function_exists(\'' . $arg['global'] . '\')) { function ' . $arg['global'] . '() { return $GLOBALS[\'' . $arg['global'] . '\']; }}';
                 eval($function);
             }
 
