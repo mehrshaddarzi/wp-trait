@@ -44,10 +44,12 @@ if (!class_exists('WPTrait\Model')) {
 
         public function __construct($plugin = [])
         {
+            global $wpdb, $wp, $pagenow;
+
             # @see https://codex.wordpress.org/Global_Variables
-            $this->db = $GLOBALS['wpdb'];
-            $this->wp = $GLOBALS['wp'];
-            $this->pagenow = $GLOBALS['pagenow'];
+            $this->db = $wpdb;
+            $this->wp = $wp;
+            $this->pagenow = $pagenow;
 
             # Set Plugin information
             $this->plugin = $plugin;
