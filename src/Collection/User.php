@@ -52,11 +52,25 @@ if (!class_exists('WPTrait\Collection\User')) {
          */
         public $password;
 
+        /*
+         * Email Class
+         */
+        public $email = null;
+
         public function __construct($user_id = null)
         {
             $this->user_id = $user_id;
             $this->meta = new Meta('user', $this->user_id);
             $this->password = new Password($this->user_id);
+        }
+
+        public function __get($property)
+        {
+            if (is_null($this->email) and !empty($this->user_id)) {
+                $this->email = $this->get($this->user_id)->user_email;
+            }
+
+            return $this->$property;
         }
 
         public function get($user_id = null)
