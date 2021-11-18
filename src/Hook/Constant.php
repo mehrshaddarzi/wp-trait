@@ -52,6 +52,8 @@ if (!trait_exists('WPTrait\Hook\Constant')) {
                     return WP_PLUGIN_DIR;
                 case "plugin_url":
                     return WP_PLUGIN_URL;
+                case "upload_dir":
+                    return (object)wp_get_upload_dir();
                 case "mu_plugin_dir":
                     return WPMU_PLUGIN_DIR;
                 case "mu_plugin_url":
