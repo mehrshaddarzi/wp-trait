@@ -11,6 +11,7 @@ use WPTrait\Collection\{
     Cookie,
     Error,
     Event,
+    Email,
     File,
     Filter,
     Hooks,
@@ -37,19 +38,20 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $post, $term, $attachment, $user, $option, $request, $response, $comment,
-            $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie, $file;
+        public $db, $wp, $plugin, $pagenow, $admin_bar, $post, $term, $attachment, $user, $option, $request, $response,
+            $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action, $cookie, $file, $email;
 
         protected $actions, $filters = [];
 
         public function __construct($plugin = [])
         {
-            global $wpdb, $wp, $pagenow;
+            global $wpdb, $wp, $pagenow, $wp_admin_bar;
 
             # @see https://codex.wordpress.org/Global_Variables
             $this->db = $wpdb;
             $this->wp = $wp;
             $this->pagenow = $pagenow;
+            $this->admin_bar = $wp_admin_bar;
 
             # Set Plugin information
             $this->plugin = $plugin;
@@ -68,6 +70,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->cache = new Cache();
             $this->event = new Event();
             $this->error = new Error();
+            $this->email = new Email();
             $this->rest = new RestAPI();
             $this->log = new Log();
             $this->route = new Route();
@@ -129,6 +132,11 @@ if (!class_exists('WPTrait\Model')) {
         public function transient($name)
         {
             return new Transient($name);
+        }
+
+        public function email($email)
+        {
+            return new Email($email);
         }
 
         public function file($file)
