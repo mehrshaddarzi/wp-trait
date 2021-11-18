@@ -133,6 +133,25 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
             wp_update_attachment_metadata($attachment_id, $attach_data);
         }
 
+        public function sideload($file_url = '', $timeout = 300, $post_id = 0, $desc = null, $post_data = [])
+        {
+            $this->requirePHPImage();
+            $tmp = download_url($file_url, $timeout);
+            $file_array = [
+                'name' => basename($file_url),
+                'tmp_name' => $tmp
+            ];
+
+            if (is_wp_error($tmp)) {
+                @unlink($file_array['tmp_name']);
+                return $tmp;
+            }
+
+            $attachment_id = media_handle_sideload($file_array, $post_id, $desc, $post_data);
+            @unlink($file_array['tmp_name']);
+            return $attachment_id;
+        }
+
         public function get_wordpress_image_sizes($size = '')
         {
             # additional by theme or plugin
