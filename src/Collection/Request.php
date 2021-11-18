@@ -131,6 +131,25 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return wp_remote_request($url, array_merge(['method' => strtoupper($method)], $args));
         }
 
+        public function download($file_url, $path = false, $timeout = 300, $signature_verification = false)
+        {
+            if (!function_exists('download_url')) {
+                require_once ABSPATH . 'wp-admin/includes/file.php';
+            }
+
+            $tmp_file = download_url($file_url, $timeout, $signature_verification);
+            if (is_wp_error($tmp_file)) {
+                return $tmp_file;
+            }
+
+            if ($path != false) {
+                copy($tmp_file, $path);
+                @unlink($tmp_file);
+            }
+
+            return $tmp_file;
+        }
+
         private function getGlobalVariable($name = 'REQUEST')
         {
             switch (strtolower($name)) {
