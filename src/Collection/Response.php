@@ -18,5 +18,15 @@ if (!class_exists('WPTrait\Collection\Response')) {
 
             wp_send_json($data, $status_code);
         }
+
+        public function success($data = [], $status_code = 200, $headers = [])
+        {
+            return $this->json(['success' => true, 'data' => $data], $status_code, $headers);
+        }
+
+        public function error($data = [], $status_code = 400, $headers = [])
+        {
+            return $this->json(['success' => false, 'data' => $data], $status_code, $headers);
+        }
     }
 }
