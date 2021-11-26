@@ -110,6 +110,11 @@ if (!class_exists('WPTrait\Collection\Post')) {
             return get_the_permalink((is_null($post_id) ? $this->post_id : $post_id), $leave_name);
         }
 
+        public function shortlink($post_id = null, $context = 'post', $allow_slugs = true)
+        {
+            return wp_get_shortlink((is_null($post_id) ? $this->post_id : $post_id), $context, $allow_slugs);
+        }
+
         public function thumbnail($post_id = null)
         {
             $thumbnail_id = get_post_thumbnail_id((is_null($post_id) ? $this->post_id : $post_id));
