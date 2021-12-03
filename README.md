@@ -8,37 +8,44 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
 
 ## Table of Contents
 
-- [Installation](#installation)
-  * [install with WP-CLI](#install-with-wp-cli)
-  * [install with Composer](#install-with-composer)
-- [Create New Model](#create-new-model)
-  * [Generate Model in Command Line](#generate-model-in-command-line)
-    + [Generate New Post-Type Model](#generate-new-post-type-model)
-    + [Generate New Taxonomy Model](#generate-new-taxonomy-model)
-  * [Generate Model manually](#generate-model-manually)
-- [Global Function](#global-function)
-  * [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
-- [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
-  * [How To Work Trait Hooks](#how-to-work-trait-hooks)
-  * [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
-  * [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
-- [Collection Class](#collection-class)
-  * [Post](#post)
-  * [Attachment](#attachment)
-  * [User](#user)
-  * [Term](#term)
-  * [Option](#option)
-  * [Comment](#comment)
-  * [Meta](#meta)
-  * [Request](#request)
-  * [Handle Error](#handle-error)
-  * [Cache and Transient](#cache-and-transient)
-  * [REST API](#rest-api)
-  * [Event](#event)
-  * [Log](#log)
-- [Starter Plugin](#starter-plugin)
-- [Contributing](#contributing)
-- [License](#license)
+  * [Installation](#installation)
+    + [install with WP-CLI](#install-with-wp-cli)
+    + [install with Composer](#install-with-composer)
+  * [Create New Model](#create-new-model)
+    + [Generate Model in Command Line](#generate-model-in-command-line)
+      - [Generate New Post-Type Model](#generate-new-post-type-model)
+      - [Generate New Taxonomy Model](#generate-new-taxonomy-model)
+    + [Generate Model manually](#generate-model-manually)
+  * [Global Function](#global-function)
+    + [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
+  * [WordPress Hooks](#wordpress-hooks)
+  * [Model Property](#model-property)
+    + [Use WPDB](#use-wpdb)
+    + [Current Plugin information](#current-plugin-information)
+  * [Collection Class](#collection-class)
+    + [Post](#post)
+    + [Attachment](#attachment)
+    + [User](#user)
+    + [Term](#term)
+    + [Option](#option)
+    + [Comment](#comment)
+    + [Meta](#meta)
+    + [Request](#request)
+    + [Handle Error](#handle-error)
+    + [Cache and Transient](#cache-and-transient)
+    + [REST API](#rest-api)
+    + [Event](#event)
+    + [Log](#log)
+  * [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
+    + [How To Work Trait Hooks](#how-to-work-trait-hooks)
+    + [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
+    + [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
+  * [Starter Plugin](#starter-plugin)
+  * [Contributing](#contributing)
+  * [License](#license)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ## Installation
 
@@ -263,219 +270,73 @@ $default = [
 ];
 ```
 
-## Trait For WordPress Hooks
+## WordPress Hooks
 
-This package has list of php trait for WordPress Hooks, that you can uses.
-trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
-
-### How To Work Trait Hooks
-
-1) First add `trait` in your class.
+You can use `$actions` and `$filters` property in All Class, for example:
 
 ```php
-use Init;
-```
+use WPTrait\Model;
 
-2) every method in your class that have `init` prefix in method name call in this action:
-
-```php
-public function init(){
-  // Code Here
-}
-
-public function init_check_user_login(){
-  // Code Here
-}
-
-public function init_save_form_data() {
-  // Code Here
-}
-```
-
-### List Of Trait With Prefix Method Name
-
-<table>
- 
- <tr>
- <td>Usage</td>
- <td>Method Prefix</td>
- <td>Variable option on your model</td>
- </tr>
- 
- <tr> 
- <td>use Init;</td>
- <td>init_</td>
- <td>public $init;</td>
- </tr>
- 
-<tr> 
-<td>use AdminAssets;</td>
-<td>admin_enqueue_scripts_</td>
-<td>public $adminAssets;</td>
-</tr>
- 
-<tr> 
-<td>use AdminFooter;</td>
-<td>admin_footer_</td>
-<td>public $adminFooter;</td>
-</tr>
- 
-<tr> 
-<td>use AdminInit;</td>
-<td>admin_init_</td>
-<td>public $adminInit;</td>
-</tr>
- 
-<tr> 
-<td>use AdminMenu;</td>
-<td>admin_menu_</td>
-<td>public $adminMenu;</td>
-</tr>
- 
-<tr> 
-<td>use AdminSearchBox;</td>
-<td>get_search_fields_</td>
-<td>public $adminSearchBox;</td>
-</tr>
- 
-<tr> 
-<td>use Ajax;</td>
-<td>admin_ajax_{$method_name}</td>
-<td>public $ajax;</td>
-</tr>
- 
-<tr> 
-<td>use BulkActions;</td>
-<td>bulk_actions_ & handle_bulk_actions_</td>
-<td>public $bulkActions;</td>
-</tr>
- 
-<tr> 
-<td>use FrontAssets;</td>
-<td>wp_enqueue_scripts_</td>
-<td>public $frontAssets;</td>
-</tr>
- 
-<tr> 
-<td>use ImageSize;</td>
-<td>setup_image_size_</td>
-<td>public $imageSize;</td>
-</tr>
- 
-<tr> 
-<td>use Notice;</td>
-<td>admin_notices_</td>
-<td>public $notice;</td>
-</tr>
- 
-<tr> 
-<td>use PostTypeColumns;</td>
-<td>columns_ & content_columns_</td>
-<td>public $postTypeColumns;</td>
-</tr>
- 
-<tr> 
-<td>use PreGetQuery;</td>
-<td>pre_get_posts_ & pre_get_users_ & pre_get_terms_</td>
-<td>public $preGetQuery;</td>
-</tr>
- 
-<tr> 
-<td>use RestAPI;</td>
-<td>rest_api_init_</td>
-<td>public $restAPI;</td>
-</tr>
- 
-<tr> 
-<td>use RowActions;</td>
-<td>row_actions_</td>
-<td>public $rowActions;</td>
-</tr>
- 
-<tr> 
-<td>use Shortcode;</td>
-<td>add_shortcode_</td>
-<td>public $shortcode;</td>
-</tr>
- 
-<tr> 
-<td>use SortableColumns;</td>
-<td>sortable_columns_</td>
-<td>public $sortableColumns;</td>
-</tr>
- 
-<tr> 
-<td>use TaxonomyColumns;</td>
-<td>columns_ & content_columns_</td>
-<td>public $taxonomyColumns;</td>
-</tr>
- 
-<tr> 
-<td>use UserColumns;</td>
-<td>columns_ & content_columns_</td>
-<td>public $userColumns;</td>
-</tr>
- 
-<tr> 
-<td>use UserProfileFields;</td>
-<td>admin_user_profile_fields_ & save_admin_user_profile_fields_</td>
-<td>public $userProfileFields;</td>
-</tr>
- 
-  
-<tr> 
-<td>use ViewsSub;</td>
-<td>views_edit_sub_</td>
-<td>public $viewsSub;</td>
-</tr>
- 
-</table>
-
-### Example Create Ajax Request with Trait
-
-```php
-use WPTrait\Hook\Ajax;
-
-class Admin extends Model
+class Post extends Model
 {
-    use Ajax;
-
-    public $ajax = [
-        'methods' => ['signup_user']
+    public $actions = [
+        'init' => 'init_check_user',
+        'save_post' => ['save_post_view', 10, 3],
+        'pre_get_posts' => 'custom_query_action'
     ];
 
-    public function admin_ajax_signup_user()
+    public $filters = [
+        'the_content' => 'add_custom_text',
+        'show_admin_bar' => '__return_false',
+        'rest_enabled' => false
+    ];
+
+    public function add_custom_text($content)
     {
-        # Check User is Auth
-        if ($this->user->auth()) {
-            $this->response->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
+        return $content . 'My Text';
+    }
+
+    public function save_post_view($post_ID, $post, $update)
+    {
+        if (!$update) {
+            $this->post($post_ID)->meta->save('views', 1);
         }
-
-        # Get Input Email
-        $email = $this->request->input('email');
-
-        # Create User
-        $user_id = $this->user->add([
-            'email' => $email,
-            'username' => $email
-        ]);
-        if ($this->error->has($user_id)) {
-            $this->response->json(['message' => $this->error->message($user_id)], 400);
-        }
-
-        # Return Success
-        $this->response->json(['user_id' => $user_id], 200);
-
-        # Need for End of WordPress Ajax request
-        exit;
     }
 }
 ```
 
-You can access top ajax request:
+## Model Property
 
+### Use WPDB
+
+use `$this->db` for run Query in WordPress Database:
+
+```php
+public function get_student_list()
+{
+    $lists = $this->db->get_results("SELECT ID, first_name FROM {$this->db->prefix}students ORDER BY ID");
+    foreach ($lists as $student) {
+        // Do Stuff
+    }
+}
 ```
-http://site.com/wp-admin/admin-ajax.php?action=signup_user&email=info@site.com
+
+### Current Plugin information
+
+for get Current plugin information use `$this->plugin` variable:
+
+```php
+// Get Plugin Base Url
+echo $this->plugin->url;
+
+// Get Plugin Base Path
+echo $this->plugin->path;
+
+// Get Plugin TextDomain
+echo $this->plugin->textdomain;
+
+// Show All Variable
+var_dump($this->plugin);
 ```
 
 ## Collection Class
@@ -1035,6 +896,221 @@ add_filter('wp_trait_log_date', function ($date, $type) {
 ```
 
 Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
+
+## Trait For WordPress Hooks
+
+This package has list of php trait for WordPress Hooks, that you can uses.
+trait Lists are available under [/Hook](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Hook).
+
+### How To Work Trait Hooks
+
+1) First add `trait` in your class.
+
+```php
+use Init;
+```
+
+2) every method in your class that have `init` prefix in method name call in this action:
+
+```php
+public function init(){
+  // Code Here
+}
+
+public function init_check_user_login(){
+  // Code Here
+}
+
+public function init_save_form_data() {
+  // Code Here
+}
+```
+
+### List Of Trait With Prefix Method Name
+
+<table>
+ 
+ <tr>
+ <td>Usage</td>
+ <td>Method Prefix</td>
+ <td>Variable option on your model</td>
+ </tr>
+ 
+ <tr> 
+ <td>use Init;</td>
+ <td>init_</td>
+ <td>public $init;</td>
+ </tr>
+ 
+<tr> 
+<td>use AdminAssets;</td>
+<td>admin_enqueue_scripts_</td>
+<td>public $adminAssets;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminFooter;</td>
+<td>admin_footer_</td>
+<td>public $adminFooter;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminInit;</td>
+<td>admin_init_</td>
+<td>public $adminInit;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminMenu;</td>
+<td>admin_menu_</td>
+<td>public $adminMenu;</td>
+</tr>
+ 
+<tr> 
+<td>use AdminSearchBox;</td>
+<td>get_search_fields_</td>
+<td>public $adminSearchBox;</td>
+</tr>
+ 
+<tr> 
+<td>use Ajax;</td>
+<td>admin_ajax_{$method_name}</td>
+<td>public $ajax;</td>
+</tr>
+ 
+<tr> 
+<td>use BulkActions;</td>
+<td>bulk_actions_ & handle_bulk_actions_</td>
+<td>public $bulkActions;</td>
+</tr>
+ 
+<tr> 
+<td>use FrontAssets;</td>
+<td>wp_enqueue_scripts_</td>
+<td>public $frontAssets;</td>
+</tr>
+ 
+<tr> 
+<td>use ImageSize;</td>
+<td>setup_image_size_</td>
+<td>public $imageSize;</td>
+</tr>
+ 
+<tr> 
+<td>use Notice;</td>
+<td>admin_notices_</td>
+<td>public $notice;</td>
+</tr>
+ 
+<tr> 
+<td>use PostTypeColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $postTypeColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use PreGetQuery;</td>
+<td>pre_get_posts_ & pre_get_users_ & pre_get_terms_</td>
+<td>public $preGetQuery;</td>
+</tr>
+ 
+<tr> 
+<td>use RestAPI;</td>
+<td>rest_api_init_</td>
+<td>public $restAPI;</td>
+</tr>
+ 
+<tr> 
+<td>use RowActions;</td>
+<td>row_actions_</td>
+<td>public $rowActions;</td>
+</tr>
+ 
+<tr> 
+<td>use Shortcode;</td>
+<td>add_shortcode_</td>
+<td>public $shortcode;</td>
+</tr>
+ 
+<tr> 
+<td>use SortableColumns;</td>
+<td>sortable_columns_</td>
+<td>public $sortableColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use TaxonomyColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $taxonomyColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use UserColumns;</td>
+<td>columns_ & content_columns_</td>
+<td>public $userColumns;</td>
+</tr>
+ 
+<tr> 
+<td>use UserProfileFields;</td>
+<td>admin_user_profile_fields_ & save_admin_user_profile_fields_</td>
+<td>public $userProfileFields;</td>
+</tr>
+ 
+  
+<tr> 
+<td>use ViewsSub;</td>
+<td>views_edit_sub_</td>
+<td>public $viewsSub;</td>
+</tr>
+ 
+</table>
+
+### Example Create Ajax Request with Trait
+
+```php
+use WPTrait\Hook\Ajax;
+
+class Admin extends Model
+{
+    use Ajax;
+
+    public $ajax = [
+        'methods' => ['signup_user']
+    ];
+
+    public function admin_ajax_signup_user()
+    {
+        # Check User is Auth
+        if ($this->user->auth()) {
+            $this->response->json(['message' => __('You are a user of the site', 'wp-plugin')], 400);
+        }
+
+        # Get Input Email
+        $email = $this->request->input('email');
+
+        # Create User
+        $user_id = $this->user->add([
+            'email' => $email,
+            'username' => $email
+        ]);
+        if ($this->error->has($user_id)) {
+            $this->response->json(['message' => $this->error->message($user_id)], 400);
+        }
+
+        # Return Success
+        $this->response->json(['user_id' => $user_id], 200);
+
+        # Need for End of WordPress Ajax request
+        exit;
+    }
+}
+```
+
+You can access top ajax request:
+
+```
+http://site.com/wp-admin/admin-ajax.php?action=signup_user&email=info@site.com
+```
 
 ## Starter Plugin
 
