@@ -27,16 +27,6 @@ if (!trait_exists('WPTrait\Hook\Shortcode')) {
         {
         }
 
-        public function do_shortcode($content, $ignore_html = false)
-        {
-            return do_shortcode($content, $ignore_html);
-        }
-
-        public function remove_shortcode($name)
-        {
-            return remove_shortcode($name);
-        }
-
         public function get_shortcode_tags()
         {
             return (isset($GLOBALS['shortcode_tags']) ? $GLOBALS['shortcode_tags'] : []);
