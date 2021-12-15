@@ -14,12 +14,13 @@ if (!trait_exists('WPTrait\Hook\Shortcode')) {
         public function bootShortcode($arg = [])
         {
             $defaults = [
-                'method' => 'add_shortcode',
-                'priority' => 10,
+                'method' => 'add_shortcode'
             ];
             $args = wp_parse_args($arg, $defaults);
 
-            $this->add_action('add_shortcode', $args['method'], $args['priority'], 2);
+            foreach ($this->search_methods($args['method']) as $method) {
+                add_shortcode(str_ireplace($args['method'] . "_", "", $method), [$this, $method]);
+            }
         }
 
         public function add_shortcode($atts, $content = null)
