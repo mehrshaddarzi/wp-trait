@@ -43,7 +43,10 @@ if (!class_exists('WPTrait\Collection\User')) {
             'color' => 'admin_color',
             'date' => 'user_registered',
             'created_at' => 'user_registered',
+            'registered' => 'user_registered',
             'admin_bar' => 'show_admin_bar_front',
+            'activation_key' => 'user_activation_key',
+            'status' => 'user_status',
             'ssl' => 'use_ssl'
         ];
 
@@ -52,22 +55,19 @@ if (!class_exists('WPTrait\Collection\User')) {
          */
         public $password;
 
-        /*
-         * Email Class
-         */
-        public $email = null;
-
         public function __construct($user_id = null)
         {
-            $this->user_id = $user_id;
+            $this->user_id = (is_null($user_id) ? get_current_user_id() : $user_id);
             $this->meta = new Meta('user', $this->user_id);
             $this->password = new Password($this->user_id);
         }
 
         public function __get($property)
         {
-            if (is_null($this->email) and !empty($this->user_id)) {
-                $this->email = $this->get($this->user_id)->user_email;
+            $arg = Arr::alias(array_combine($property, $property), $this->alias);
+            if (!in_array($property, ['user_id', 'meta', 'password'])) {
+                $user_data = $this->get($this->user_id);
+                return $user_data->{array_keys($arg)[0]} ?? $this->$property;
             }
 
             return $this->$property;
