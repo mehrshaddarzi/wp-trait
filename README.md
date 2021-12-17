@@ -339,6 +339,26 @@ echo $this->plugin->textdomain;
 var_dump($this->plugin);
 ```
 
+### Get Current User data
+
+for get Current User data use `$this->user` variable:
+
+```php
+// Get Current User ID
+// You Can Access All Object From WP_User Class
+$this->user->id;
+
+// Get Current User Email
+$this->user->email;
+
+// Get Current User Role
+$this->user->roles;
+
+// Get All User Meta
+// Check Meta Collection Class
+$this->user->meta->all();
+```
+
 ## Collection Class
 
 This package has list of wordpress helper class, that you can uses.
