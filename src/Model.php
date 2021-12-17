@@ -18,6 +18,7 @@ use WPTrait\Collection\{
     Log,
     Nonce,
     Option,
+    Password,
     Post,
     Request,
     Response,
@@ -40,7 +41,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public $db, $wp, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
             $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
-            $cookie, $file, $email;
+            $cookie, $file, $email, $password;
 
         protected $actions, $filters = [];
 
@@ -63,6 +64,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->term = new Term();
             $this->attachment = new Attachment();
             $this->user = new User();
+            $this->password = new Password();
             $this->option = new Option();
             $this->request = new Request();
             $this->response = new Response();

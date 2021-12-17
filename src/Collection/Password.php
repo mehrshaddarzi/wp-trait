@@ -22,9 +22,13 @@ if (!class_exists('WPTrait\Collection\Password')) {
             $this->user_id = $user_id;
         }
 
-        public function check($password, $hash, $user_id = '')
+        public function check($password, $hash = '')
         {
-            return wp_check_password($password, $hash, (empty($user_id) ? $this->user_id : $user_id));
+            if (empty($hash) and !empty($this->user_id)) {
+                $user_data = get_userdata($this->user_id);
+                $hash = $user_data->user_pass;
+            }
+            return wp_check_password($password, $hash);
         }
 
         public function set($password, $user_id = '')
