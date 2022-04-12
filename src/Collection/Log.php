@@ -34,7 +34,7 @@ if (!class_exists('WPTrait\Collection\Log')) {
         {
             $type = str_ireplace('.log', '', $type);
 
-            if (defined(WP_DEBUG_LOG) and is_string(WP_DEBUG_LOG)) {
+            if (defined('WP_DEBUG_LOG') and is_string(WP_DEBUG_LOG)) {
                 return str_replace(basename(WP_DEBUG_LOG), $type . '.log', WP_DEBUG_LOG);
             }
 
@@ -51,5 +51,4 @@ if (!class_exists('WPTrait\Collection\Log')) {
             return "[" . $date . "] $log\n";
         }
     }
-
 }
