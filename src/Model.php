@@ -45,7 +45,7 @@ if (!class_exists('WPTrait\Model')) {
 
         protected $actions, $filters = [];
 
-        public function __construct($plugin = [])
+        public function __construct(object $plugin)
         {
             global $wpdb, $wp, $pagenow, $wp_admin_bar, $current_screen;
 
@@ -200,5 +200,4 @@ if (!class_exists('WPTrait\Model')) {
             return $traits;
         }
     }
-
 }
