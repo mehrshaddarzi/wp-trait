@@ -8,21 +8,21 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
 
 ## Table of Contents
 
-  * [Installation](#installation)
+* [Installation](#installation)
     + [install with WP-CLI](#install-with-wp-cli)
     + [install with Composer](#install-with-composer)
-  * [Create New Model](#create-new-model)
+* [Create New Model](#create-new-model)
     + [Generate Model in Command Line](#generate-model-in-command-line)
-      - [Generate New Post-Type Model](#generate-new-post-type-model)
-      - [Generate New Taxonomy Model](#generate-new-taxonomy-model)
+        - [Generate New Post-Type Model](#generate-new-post-type-model)
+        - [Generate New Taxonomy Model](#generate-new-taxonomy-model)
     + [Generate Model manually](#generate-model-manually)
-  * [Global Function](#global-function)
+* [Global Function](#global-function)
     + [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
-  * [WordPress Hooks](#wordpress-hooks)
-  * [Model Property](#model-property)
+* [WordPress Hooks](#wordpress-hooks)
+* [Model Property](#model-property)
     + [Use WPDB](#use-wpdb)
     + [Current Plugin information](#current-plugin-information)
-  * [Collection Class](#collection-class)
+* [Collection Class](#collection-class)
     + [Post](#post)
     + [Attachment](#attachment)
     + [User](#user)
@@ -34,24 +34,25 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [Handle Error](#handle-error)
     + [Cache and Transient](#cache-and-transient)
     + [REST API](#rest-api)
+    + [Cookie](#cookie)
+    + [Session](#session)
     + [Event](#event)
+    + [Nonce](#nonce)
+    + [File System](#file-system)
     + [Log](#log)
-  * [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
+* [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
     + [How To Work Trait Hooks](#how-to-work-trait-hooks)
     + [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
     + [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
-  * [Starter Plugin](#starter-plugin)
-  * [Contributing](#contributing)
-  * [License](#license)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
+* [Starter Plugin](#starter-plugin)
+* [Contributing](#contributing)
+* [License](#license)
 
 ## Installation
 
 ### install with WP-CLI
 
-You Can Generate new plugin with `Wp-Trait` Structure:
+You Can Generate new plugin with `WP-Trait` Structure:
 
 ```console
 wp trait start
@@ -223,7 +224,7 @@ public function instantiate()
 
 ## Global Function
 
-You can access to all classes method with global template function by your plugin slug. 
+You can access to all classes method with global template function by your plugin slug.
 for example if your plugin slug is `wp-user-mobile`, you can call method from `Admin` class:
 
 ```php
@@ -362,7 +363,6 @@ $this->user->meta->all();
 ## Collection Class
 
 This package has list of wordpress helper class, that you can uses.
-
 
 ### Post
 
@@ -669,11 +669,10 @@ $this->comment(1)->meta->clean();
 ### Request
 
 ```php
-// Get Request (GET or POST) field
-# ?first_name=mehrshad&last_name=darzi&email=info@site.com&age=29
+// Get Request fields { GET + POST }
 $this->request->input('first_name');
 
-// Get Only `GET` fields
+// only `GET` fields
 $this->request->query('email');
 
 // Get Field with Custom filter e.g. trim value
@@ -682,17 +681,23 @@ $this->request->input('name', 'trim');
 // Get field with multiple filter
 $this->request->input('post_excerpt', ['trim', 'strip_tags']);
 
-// Check Has input
+// Check Has exists input
 $this->request->has('first_name');
-
-// Check Equal fields
-$this->request->equal('first_name', 'mehrshad');
 
 // Check Exist and Not Empty fields
 $this->request->filled('first_name');
 
 // Check Exist and is Numeric value
-$this->request->numeric('age');
+$this->request->numeric('year');
+
+// Check exists fields and Equal with value 
+$this->request->equal('first_name', 'mehrshad');
+
+// Check is Numeric value and is positive Number (x >0)
+$this->request->numeric('age', true);
+
+// Check value is Enum list
+$this->request->enum('post_status', ['publish', 'draft']);
 
 // Get Custom Fields From Request
 $this->request->only(['email', 'last_name']);
@@ -701,7 +706,8 @@ $this->request->only(['email', 'last_name']);
 $this->request->redirect('https://google.com', 302);
 
 // Get $_FILES by id
-$this->request->file('image'); //<input type="file" name="image" />
+// From Html Form Input: <input type="file" name="image" />
+$this->request->file('image'); 
 
 // Check Exists File
 $this->request->hasFile('image');
@@ -718,6 +724,12 @@ $this->request->is_rest();
 // Check is Ajax Request
 $this->request->is_ajax();
 
+// Get Method Of Request
+$this->request->get_method();
+
+// Check Method Of Request {boolean}
+$this->request->is_method('PUT');
+
 // New Request
 $request = $this->request->new(
     'https://jsonplaceholder.typicode.com/todos/1',
@@ -732,15 +744,16 @@ $request = $this->request->new(
 );
 
 if(!$this->error->has($request)) {
+    /**
+        [
+            'headers' => '', 
+            'body' => '', 
+            'response' => ['code' => '', 'message' => ''], 
+            'cookies' => '', 
+            'http_response' => ''
+        ]
+     */
     return $request;
-    # $request is an array:
-    [
-        'headers' => '', 
-        'body' => '', 
-        'response' => ['code' => '', 'message' => ''], 
-        'cookies' => '', 
-        'http_response' => ''
-    ]
 }
 
 // Return Json Response
@@ -748,6 +761,7 @@ $this->response->json(['data' => 'value'], 200);
 ```
 
 ### Handle Error
+
 ```php
 $input_email = $this->request->input('email');
 
@@ -770,6 +784,7 @@ if($this->error->has($error)){
 ```
 
 ### Cache and Transient
+
 ```php
 // Remember Cache last Post in One Hour
 $this->cache->remember('latest_post', function(){
@@ -801,6 +816,7 @@ $this->transient->get('name');
 ```
 
 ### REST API
+
 ```php
 // Get REST API prefix url
 $this->rest->prefix();
@@ -811,7 +827,18 @@ $this->rest->url('namespace/endpoint');
 // Making WordPress REST API Calls Internally
 $this->rest->request('GET', 'wp/v2/posts', [ 'per_page' => 12 ]);
 
-// Define new route in WordPress REST API with trait
+// Define New Custom EndPoint in WordPress REST API
+$this->route->add('form', 'contact', [
+    'method' => 'post',
+    'function' => 'send_form',
+    'arg' => [
+        'title' => [
+            'require' => true,
+        ]
+    ]
+]);
+        
+// Example new route in WordPress REST API with Trait
 class MY_REST_API extends Model
 {
     use RestAPI;
@@ -820,7 +847,7 @@ class MY_REST_API extends Model
     {
         $this->route->add('student', 'register', [
             'method' => 'post',
-            'function' => [$this, 'register'],
+            'function' => 'register',
             'arg' => [
                 'age' => [
                     'require' => true,
@@ -868,10 +895,49 @@ $list->namespaces;
 $list->routes;
 ```
 
+### Cookie
+
+```php
+// set new Cookie for One Hour
+$this->cookie->set('user_data', ['name' => 'Mehrshad', 'family' => 'Darzi'], $this->constant('hour'));
+
+// Check exist cookie {boolean}
+$this->cookie->has('user_data');
+
+// Remove Cookie
+$this->cookie->delete('user_data');
+
+// Get All Cookie in WordPress Site
+$this->cookie->all();
+```
+
+### Session
+
+```php
+// set new session
+$this->session->set('redirect_from', add_query_arg( 'type', 'error', $this->constant('home') ));
+
+// Check exist session {boolean}
+$this->session->has('redirect_from');
+
+// Remove Session
+$this->session->delete('redirect_from');
+
+// Get All Session in WordPress Site
+$this->session->all();
+
+// Get Session ID
+$this->session->id();
+
+// Destroy All Sessions
+$this->session->destroy();
+```
+
 ### Event
+
 ```php
 // Define single Event
-$this->event->single($this->constant('hour'), 'action_name');
+$this->event->single($this->constant('week'), 'action_name');
 
 // Define recurring Event
 $this->event->add(time(), 'hourly', 'action_name', []);
@@ -886,7 +952,121 @@ $this->event->schedules();
 $this->event->list();
 ```
 
+### Nonce
+
+```php
+// Create new Nonce
+$this->nonce->create('_my_nonce');
+
+// Verify Nonce Field {boolean}
+$this->nonce->verify('input_name', '_my_nonce');
+
+// Generate Html Input Hidden nonce Field for Using form
+$this->nonce->input('_my_nonce', 'nonce_input_name');
+```
+
+### File System
+
+Get WordPress Directories:
+
+```php
+// Get Root Path
+$this->constant('abspath');
+
+// Get WP-Content Dir Path
+$this->constant('content_dir');
+
+// Get WP-Content Dir Url
+$this->constant('content_url');
+
+// Get Plugins Dir Path
+$this->constant('plugin_dir');
+
+// Get Plugins Dir Url
+$this->constant('plugin_url');
+
+// Get Uploads Directory in WordPress {object}
+$this->constant('upload_dir');
+/**
+* basedir
+* baseurl
+* path
+* url
+*/
+
+// Get Base Uploads dir path
+$this->constant('upload_dir')->basedir;
+
+// Get Base Uploads dir url
+$this->constant('upload_dir')->baseurl;
+
+// Get Active Theme path
+$this->constant('template_path');
+
+// Get themes dir path
+$this->constant('theme_root');
+
+// Get Mu-Plugins dir path
+$this->constant('mu_plugin_dir');
+
+// Get Mu-Plugins dir url
+$this->constant('mu_plugin_url');
+```
+
+List of Methods File Systems
+{[See Collection](https://github.com/mehrshaddarzi/wp-trait/blob/master/src/Collection/File.php)}:
+
+```php
+// Get Example file Path
+$path = path_join($this->contant('content_dir'), 'object.php');
+
+// Check file exits
+$this->file($path)->exists();
+
+// Check file missing
+$this->file($path)->missing();
+
+// Get File Content
+$this->file($path)->get();
+
+// Delete File
+$this->file($path)->delete();
+
+// Create File with Content
+$content = '<?php echo "Hi"; ?>';
+$this->file($path)->create($content);
+
+// Create Directory
+$this->file->mkdir($this->contant('content_dir').'/excel');
+
+// Change Permission File
+$this->file($path)->chmod(0600);
+
+// Copy File
+$new_path = $this->contant('content_dir').'/backup/object.php';
+$this->file($path)->copy($new_path);
+
+// Move File
+$this->file($path)->move($new_path);
+
+// Get File Extension
+$this->file($path)->extension();
+
+// Get File BaseName
+$this->file($path)->basename();
+
+// Get file DirName
+$this->file($path)->dirname();
+
+// Get file last Modified
+$this->file($path)->lastModified();
+
+// Get file size (bytes)
+$this->file($path)->size();
+```
+
 ### Log
+
 ```php
 // Add text log
 # wp-content/debug.log
@@ -906,7 +1086,7 @@ $is_active_plugin_log = get_option('my_plugin_active_log');
 $this->log('text log', 'plugin-slug', $is_active_plugin_log);
 
 // Change Datetime in Log File
-# By default the dates are saved in the log file based on `UTC`, you can change it with the WordPress filter:
+# By default the dates are saved in the log file based on `UTC`
 add_filter('wp_trait_log_date', function ($date, $type) {
     if ($type == "my-plugin-slug") {
         return date_i18n(get_option( 'date_format' ), current_time('timestamp')) . ' UTC+3.5';
@@ -915,7 +1095,8 @@ add_filter('wp_trait_log_date', function ($date, $type) {
 });
 ```
 
-Collections Lists are available under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
+Collections Lists are available
+under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
 
 ## Trait For WordPress Hooks
 
@@ -949,140 +1130,140 @@ public function init_save_form_data() {
 ### List Of Trait With Prefix Method Name
 
 <table>
- 
+
  <tr>
  <td>Usage</td>
  <td>Method Prefix</td>
  <td>Variable option on your model</td>
  </tr>
- 
+
  <tr> 
  <td>use Init;</td>
  <td>init_</td>
  <td>public $init;</td>
  </tr>
- 
+
 <tr> 
 <td>use AdminAssets;</td>
 <td>admin_enqueue_scripts_</td>
 <td>public $adminAssets;</td>
 </tr>
- 
+
 <tr> 
 <td>use AdminFooter;</td>
 <td>admin_footer_</td>
 <td>public $adminFooter;</td>
 </tr>
- 
+
 <tr> 
 <td>use AdminInit;</td>
 <td>admin_init_</td>
 <td>public $adminInit;</td>
 </tr>
- 
+
 <tr> 
 <td>use AdminMenu;</td>
 <td>admin_menu_</td>
 <td>public $adminMenu;</td>
 </tr>
- 
+
 <tr> 
 <td>use AdminSearchBox;</td>
 <td>get_search_fields_</td>
 <td>public $adminSearchBox;</td>
 </tr>
- 
+
 <tr> 
 <td>use Ajax;</td>
 <td>admin_ajax_{$method_name}</td>
 <td>public $ajax;</td>
 </tr>
- 
+
 <tr> 
 <td>use BulkActions;</td>
 <td>bulk_actions_ & handle_bulk_actions_</td>
 <td>public $bulkActions;</td>
 </tr>
- 
+
 <tr> 
 <td>use FrontAssets;</td>
 <td>wp_enqueue_scripts_</td>
 <td>public $frontAssets;</td>
 </tr>
- 
+
 <tr> 
 <td>use ImageSize;</td>
 <td>setup_image_size_</td>
 <td>public $imageSize;</td>
 </tr>
- 
+
 <tr> 
 <td>use Notice;</td>
 <td>admin_notices_</td>
 <td>public $notice;</td>
 </tr>
- 
+
 <tr> 
 <td>use PostTypeColumns;</td>
 <td>columns_ & content_columns_</td>
 <td>public $postTypeColumns;</td>
 </tr>
- 
+
 <tr> 
 <td>use PreGetQuery;</td>
 <td>pre_get_posts_ & pre_get_users_ & pre_get_terms_</td>
 <td>public $preGetQuery;</td>
 </tr>
- 
+
 <tr> 
 <td>use RestAPI;</td>
 <td>rest_api_init_</td>
 <td>public $restAPI;</td>
 </tr>
- 
+
 <tr> 
 <td>use RowActions;</td>
 <td>row_actions_</td>
 <td>public $rowActions;</td>
 </tr>
- 
+
 <tr> 
 <td>use Shortcode;</td>
 <td>add_shortcode_</td>
 <td>public $shortcode;</td>
 </tr>
- 
+
 <tr> 
 <td>use SortableColumns;</td>
 <td>sortable_columns_</td>
 <td>public $sortableColumns;</td>
 </tr>
- 
+
 <tr> 
 <td>use TaxonomyColumns;</td>
 <td>columns_ & content_columns_</td>
 <td>public $taxonomyColumns;</td>
 </tr>
- 
+
 <tr> 
 <td>use UserColumns;</td>
 <td>columns_ & content_columns_</td>
 <td>public $userColumns;</td>
 </tr>
- 
+
 <tr> 
 <td>use UserProfileFields;</td>
 <td>admin_user_profile_fields_ & save_admin_user_profile_fields_</td>
 <td>public $userProfileFields;</td>
 </tr>
- 
-  
+
+
 <tr> 
 <td>use ViewsSub;</td>
 <td>views_edit_sub_</td>
 <td>public $viewsSub;</td>
 </tr>
- 
+
 </table>
 
 ### Example Create Ajax Request with Trait
@@ -1119,9 +1300,6 @@ class Admin extends Model
 
         # Return Success
         $this->response->json(['user_id' => $user_id], 200);
-
-        # Need for End of WordPress Ajax request
-        exit;
     }
 }
 ```
@@ -1134,14 +1312,17 @@ http://site.com/wp-admin/admin-ajax.php?action=signup_user&email=info@site.com
 
 ## Starter Plugin
 
-You Can read example folder ReadMe.md files [/example](https://github.com/mehrshaddarzi/wp-trait/tree/master/example). and start your project very fast.
+You Can read example folder ReadMe.md files [/example](https://github.com/mehrshaddarzi/wp-trait/tree/master/example).
+and start your project very fast.
 
 ## Contributing
 
 - [Mehrshad Darzi](https://www.linkedin.com/in/mehrshaddarzi/)
 
 We appreciate you taking the initiative to contribute to this project.
-Contributing isn’t limited to just code. We encourage you to contribute in the way that best fits your abilities, by writing tutorials, giving a demo at your local meetup, helping other users with their support questions, or revising our documentation.
+Contributing isn’t limited to just code. We encourage you to contribute in the way that best fits your abilities, by
+writing tutorials, giving a demo at your local meetup, helping other users with their support questions, or revising our
+documentation.
 
 ## License
 
