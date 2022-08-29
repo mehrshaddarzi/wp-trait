@@ -63,15 +63,27 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return (isset($inputs->{$name}) and !empty(trim($inputs->{$name})));
         }
 
-        public function numeric($name)
+        public function numeric($name, $positive = null)
         {
-            $inputs = $this->all();
-            return ($this->filled($name) and is_numeric(trim($inputs->{$name})));
+            $input = $this->input($name, ['trim']);
+            $numeric = ($this->filled($name) and is_numeric($input));
+            if ($positive === true) {
+                return ($numeric and $input > 0);
+            } elseif ($positive === false) {
+                return ($numeric and $input < 0);
+            }
+
+            return $numeric;
         }
 
         public function equal($name, $value)
         {
             return ($this->input($name) == $value);
+        }
+
+        public function enum($name, $array)
+        {
+            return (in_array($this->input($name), $array));
         }
 
         public function redirect($location, $status = 302)
@@ -119,6 +131,21 @@ if (!class_exists('WPTrait\Collection\Request')) {
             return wp_doing_ajax();
         }
 
+        public function get_method()
+        {
+            $method = strtoupper($this->server('REQUEST_METHOD'));
+            if (in_array($method, ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'PATCH', 'PURGE', 'TRACE'], true)) {
+                return $method;
+            }
+
+            return 'GET';
+        }
+
+        public function is_method($name)
+        {
+            return ($this->get_method($name) == strtoupper($name));
+        }
+
         public function new($url, $method = 'GET', $args = [])
         {
             # alias
@@ -154,23 +181,26 @@ if (!class_exists('WPTrait\Collection\Request')) {
         {
             switch (strtolower($name)) {
                 case "get":
-                    $return = (isset($_GET) ? $_GET : []);
+                    $return = ($_GET ?? []);
                     break;
                 case "post":
-                    $return = (isset($_POST) ? $_POST : []);
+                    $return = ($_POST ?? []);
                     break;
                 case "file":
                 case "files":
-                    $return = (isset($_FILES) ? $_FILES : []);
+                    $return = ($_FILES ?? []);
                     break;
                 case "cookie":
-                    $return = (isset($_COOKIE) ? $_COOKIE : []);
+                    $return = ($_COOKIE ?? []);
                     break;
                 case "server":
-                    $return = (isset($_SERVER) ? $_SERVER : []);
+                    $return = ($_SERVER ?? []);
+                    break;
+                case "session":
+                    $return = ($_SESSION ?? []);
                     break;
                 default:
-                    $return = (isset($_REQUEST) ? $_REQUEST : []);
+                    $return = ($_REQUEST ?? []);
             }
 
             return $return;
