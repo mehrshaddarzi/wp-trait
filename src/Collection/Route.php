@@ -33,6 +33,11 @@ if (!class_exists('WPTrait\Collection\Route')) {
             # Sanitize method name
             $args['methods'] = strtoupper($args['methods']);
 
+            # Sanitize Callback Method
+            if (is_string($args['callback'])) {
+                $args['callback'] = [$this, $args['callback']];
+            }
+
             # alias args
             if (isset($args['args']) and !empty($args['args'])) {
                 foreach ($args['args'] as $key => $params) {
