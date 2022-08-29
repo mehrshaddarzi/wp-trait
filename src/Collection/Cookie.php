@@ -24,7 +24,7 @@ if (!trait_exists('WPTrait\Collection\Cookie')) {
 
         public function all()
         {
-            return (isset($_COOKIE) ? $_COOKIE : []);
+            return ($_COOKIE ?? []);
         }
 
         public function get($default = null, $name = null)

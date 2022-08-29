@@ -3,8 +3,7 @@
 namespace WPTrait;
 
 use WPTrait\Hook\Constant;
-use WPTrait\Collection\{
-    Action,
+use WPTrait\Collection\{Action,
     Attachment,
     Cache,
     Comment,
@@ -24,6 +23,7 @@ use WPTrait\Collection\{
     Response,
     RestAPI,
     Route,
+    Session,
     Term,
     Transient,
     User
@@ -41,7 +41,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public $db, $wp, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
             $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
-            $cookie, $file, $email, $password;
+            $cookie, $session, $file, $email, $password;
 
         protected $actions, $filters = [];
 
@@ -81,6 +81,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->filter = new Filter();
             $this->action = new Action();
             $this->cookie = new Cookie();
+            $this->session = new Session();
             $this->file = new File();
 
             # Boot WordPress Hooks
@@ -126,6 +127,11 @@ if (!class_exists('WPTrait\Model')) {
         public function cookie($name)
         {
             return new Cookie($name);
+        }
+
+        public function session($name)
+        {
+            return new Session($name);
         }
 
         public function nonce($action)
