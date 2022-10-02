@@ -1099,16 +1099,16 @@ $this->file($path)->size();
 ### Email
 
 ```php
-// Send Html Body Mail With Attachment
-$attachment = [$this->constant('upload_dir')->basedir.'/file.zip']
-$this->email('email@site.com')->send('Subject', 'Message Body', '', $attachment);
+// Send Html Body Mail
+$this->email('email@site.com')->send('Subject', '<p>Message Body</p>');
 
-// Send to Multiple Email With Custom Header
+// Send to Multiple Email With Custom Header and Attachment
 $headers = [
     'Content-Type: text/html; charset=UTF-8',
     'From: Site name <info@sitename.com>'
 ];
-$this->email(['email@site.com', 'mail@domain.com'])->send('Subject', 'Message Body', $headers);
+$attachment = [$this->constant('upload_dir')->basedir.'/file.zip'];
+$this->email(['email@site.com', 'mail@domain.com'])->send('Subject', 'Message Body', $headers, $attachment);
 ```
 
 ### Log
