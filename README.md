@@ -311,10 +311,10 @@ class Post extends Model
     }
     
     public function disable_custom_api($preempt, $parsed_args, $url) {
-       if( strpos($url, 'https://any_domain.com') !==false ){
-		    return new \WP_Error( 'http_request_block', "This request is not allowed" );
-	   }
-	   return $preempt;
+        if( strpos($url, 'https://any_domain.com') !==false ){
+            return new \WP_Error( 'http_request_block', "This request is not allowed" );
+        }
+        return $preempt;
     }
 }
 ```
@@ -1108,7 +1108,8 @@ $headers = [
     'From: Site name <info@sitename.com>'
 ];
 $attachment = [$this->constant('upload_dir')->basedir.'/file.zip'];
-$this->email(['email@site.com', 'mail@domain.com'])->send('Subject', 'Message Body', $headers, $attachment);
+$this->email(['email@site.com', 'mail@domain.com'])
+     ->send('Subject', 'Message Body', $headers, $attachment);
 ```
 
 ### Log
