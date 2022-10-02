@@ -283,13 +283,18 @@ class Post extends Model
     public $actions = [
         'init' => 'init_check_user',
         'save_post' => ['save_post_view', 10, 3],
-        'pre_get_posts' => 'custom_query_action'
+        'pre_get_posts' => 'custom_query_action',
+        'admin_notices' => [
+            ['save_user_address', 12, 1],
+            ['disable_plugin_option', 10, 1]
+        ]
     ];
 
     public $filters = [
         'the_content' => 'add_custom_text',
         'show_admin_bar' => '__return_false',
-        'rest_enabled' => false
+        'rest_enabled' => false,
+        'pre_http_request' => ['disable_custom_api', 10, 3]
     ];
 
     public function add_custom_text($content)
@@ -302,6 +307,13 @@ class Post extends Model
         if (!$update) {
             $this->post($post_ID)->meta->save('views', 1);
         }
+    }
+    
+    public function disable_custom_api($preempt, $parsed_args, $url) {
+       if( strpos($url, 'https://any_domain.com') !==false ){
+		    return new \WP_Error( 'http_request_block', "This request is not allowed" );
+	   }
+	   return $preempt;
     }
 }
 ```

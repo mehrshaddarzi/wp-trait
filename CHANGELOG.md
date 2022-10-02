@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.36
+### Added
+- Support `Multidimensional Array` For $actions and $filters in Model
+
 ## v1.0.35
 ### Added
 - Add `Session` Collection Class

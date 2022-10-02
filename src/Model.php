@@ -178,9 +178,16 @@ if (!class_exists('WPTrait\Model')) {
         private function bootVariableHooks()
         {
             foreach (['filters', 'actions'] as $hooks) {
+                $hook = substr($hooks, 0, -1);
                 if (is_array($this->{$hooks})) {
                     foreach ((array)$this->{$hooks} as $name => $args) {
-                        $this->runVariableHooks(substr($hooks, 0, -1), $name, $args);
+                        if (is_array($args) and !is_numeric($args[1])) {
+                            foreach ($args as $method) {
+                                $this->runVariableHooks($hook, $name, $method);
+                            }
+                        } else {
+                            $this->runVariableHooks($hook, $name, $args);
+                        }
                     }
                 }
             }
