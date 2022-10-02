@@ -39,6 +39,7 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [Event](#event)
     + [Nonce](#nonce)
     + [File System](#file-system)
+    + [Email](#email)
     + [Log](#log)
 * [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
     + [How To Work Trait Hooks](#how-to-work-trait-hooks)
@@ -1093,6 +1094,21 @@ $this->file($path)->lastModified();
 
 // Get file size (bytes)
 $this->file($path)->size();
+```
+
+### Email
+
+```php
+// Send Html Body Mail With Attachment
+$attachment = [$this->constant('upload_dir')->basedir.'/file.zip']
+$this->email('email@site.com')->send('Subject', 'Message Body', '', $attachment);
+
+// Send to Multiple Email With Custom Header
+$headers = [
+    'Content-Type: text/html; charset=UTF-8',
+    'From: Site name <info@sitename.com>'
+];
+$this->email(['email@site.com', 'mail@domain.com'])->send('Subject', 'Message Body', $headers);
 ```
 
 ### Log
