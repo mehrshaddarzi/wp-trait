@@ -54,7 +54,7 @@ if (!class_exists('WPTrait\Collection\View')) {
 			$output = '';
 
 			if (!is_file($view) && !is_readable($view)) {
-				return $output;
+				throw new \Exception('Invalid view file: ' . $view);
 			}
 
 			$view = $this->resolvePath($view);
@@ -73,7 +73,7 @@ if (!class_exists('WPTrait\Collection\View')) {
 				$output = ob_get_clean();
 			} catch (\Exception $e) {
 				ob_end_clean();
-				$output = '';
+				throw $e;
 			}
 
 			return $output;
