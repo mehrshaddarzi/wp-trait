@@ -916,6 +916,9 @@ $this->cookie->set('user_data', ['name' => 'Mehrshad', 'family' => 'Darzi'], $th
 // Check exist cookie {boolean}
 $this->cookie->has('user_data');
 
+// Get cookie Value { auto convert json to Array }
+$this->cookie->get('user_data');
+
 // Remove Cookie
 $this->cookie->delete('user_data');
 
@@ -932,6 +935,9 @@ $this->session->set('redirect_from', add_query_arg( 'type', 'error', $this->cons
 // Check exist session {boolean}
 $this->session->has('redirect_from');
 
+// Get session Value
+$this->session->get('redirect_from');
+
 // Remove Session
 $this->session->delete('redirect_from');
 
@@ -943,6 +949,18 @@ $this->session->id();
 
 // Destroy All Sessions
 $this->session->destroy();
+```
+
+##### How to start session in WordPress?
+
+```php
+add_action('init', 'register_session');
+public function register_session()
+{
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+}
 ```
 
 ### Event
