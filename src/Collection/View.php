@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Hook\Constant;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -9,6 +11,8 @@ if (!defined('ABSPATH')) {
 if (!class_exists('WPTrait\Collection\View')) {
 	class View
 	{
+		use Constant;
+
 		/**
 		 * Attributes
 		 * 
