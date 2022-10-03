@@ -45,6 +45,8 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [How To Work Trait Hooks](#how-to-work-trait-hooks)
     + [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
     + [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
+* [Utility](#utility)
+  + [Singleton Design Pattern](#singleton-design-pattern)
 * [Starter Plugin](#starter-plugin)
 * [Contributing](#contributing)
 * [License](#license)
@@ -1355,6 +1357,22 @@ You can access top ajax request:
 
 ```
 http://site.com/wp-admin/admin-ajax.php?action=signup_user&email=info@site.com
+```
+
+## Utility
+
+### Singleton Design Pattern
+
+For Create a Singleton Design Pattern, use `Singleton` trait in your Class:
+
+```php
+// Class which uses singleton trait.
+class MyClass {
+    use Singleton;
+}
+
+// To get the instance of the class.
+$instance = MyClass::instance();
 ```
 
 ## Starter Plugin

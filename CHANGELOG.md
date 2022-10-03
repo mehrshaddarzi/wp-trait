@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.37
+### Added
+- Add `Singleton Design Pattern` Utility
+- Add `View Template` Collection
+
 ## v1.0.36
 ### Added
 - Support `Multidimensional Array` For $actions and $filters in Model

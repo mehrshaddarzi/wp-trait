@@ -25,7 +25,6 @@ trait Singleton
         // Intentionally empty
     }
 
-   
     private function __clone()
     {
         // Intentionally empty
