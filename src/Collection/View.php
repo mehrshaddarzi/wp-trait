@@ -119,13 +119,13 @@ if (!class_exists('WPTrait\Collection\View')) {
             $paths = [
                 get_stylesheet_directory() . '/' . $this->plugin->slug . '/templates',
                 get_template_directory() . '/' . $this->plugin->slug . '/templates',
-                $this->path,
             ];
 
             foreach (explode('.', $path) as $path) {
                 $viewPath .= '/' . $path;
             }
 
+            $viewPath = $this->path . $viewPath . '.php';
             foreach ($paths as $path) {
                 $view = $path . $viewPath . '.php';
 
