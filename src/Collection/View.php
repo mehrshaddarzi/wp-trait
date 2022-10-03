@@ -125,7 +125,7 @@ if (!class_exists('WPTrait\Collection\View')) {
                 $viewPath .= '/' . $path;
             }
 
-            $viewPath = $this->path . $viewPath . '.php';
+            $defaultView = $this->path . $viewPath . '.php';
             foreach ($paths as $path) {
                 $view = $path . $viewPath . '.php';
 
@@ -133,6 +133,8 @@ if (!class_exists('WPTrait\Collection\View')) {
                     $viewPath = $view;
                     break;
                 }
+
+                $viewPath = $defaultView; # Fallback to default view path
             }
 
             return $viewPath;
