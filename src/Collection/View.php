@@ -33,7 +33,7 @@ if (!class_exists('WPTrait\Collection\View')) {
         public function __construct($path = '', $plugin = null)
         {
             $this->attributes = [];
-            $this->set_path($path, $plugin);
+            $this->setPath($path, $plugin);
         }
 
         /**
@@ -42,7 +42,7 @@ if (!class_exists('WPTrait\Collection\View')) {
          * 
          * @return void
          */
-        protected function set_path($path = '', $plugin = null)
+        protected function setPath($path = '', $plugin = null)
         {
             if (!$path && $plugin) {
                 $path = $plugin->path . 'templates';
@@ -52,17 +52,17 @@ if (!class_exists('WPTrait\Collection\View')) {
         }
 
         /**
-         * @param string|array $key_or_array
+         * @param string|array $keyOrArray
          * @param mixed $value
          * 
          * @return self
          */
-        public function attribute($key_or_array, $value = null)
+        public function attribute($keyOrArray, $value = null)
         {
-            if (is_array($key_or_array)) {
-                $this->attributes = array_merge($this->attributes, $key_or_array);
+            if (is_array($keyOrArray)) {
+                $this->attributes = array_merge($this->attributes, $keyOrArray);
             } else {
-                $this->attributes[$key_or_array] = $value;
+                $this->attributes[$keyOrArray] = $value;
             }
 
             return $this;
@@ -71,11 +71,11 @@ if (!class_exists('WPTrait\Collection\View')) {
         /**
          * @param string $view
          * @param array $data
-         * @param array $merge_data
+         * @param array $mergeData
          * 
          * @return string
          */
-        public function render($view = null, $data = [], $merge_data = [])
+        public function render($view = null, $data = [], $mergeData = [])
         {
             $view = $this->resolvePath($view);
             $output = '';
@@ -84,7 +84,7 @@ if (!class_exists('WPTrait\Collection\View')) {
                 throw new \Exception('Invalid view file: ' . $view);
             }
 
-            $data = array_merge($data, $merge_data);
+            $data = array_merge($data, $mergeData);
             $data = array_merge($this->attributes, $data);
 
             try {
