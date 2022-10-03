@@ -119,8 +119,8 @@ if (!class_exists('WPTrait\Collection\View')) {
         {
             $viewPath = '';
             $paths = [
-                get_stylesheet_directory() . '/' . $this->plugin->slug . '/templates',
-                get_template_directory() . '/' . $this->plugin->slug . '/templates',
+                get_stylesheet_directory() . '/' . $this->plugin->slug,
+                get_template_directory() . '/' . $this->plugin->slug,
             ];
 
             foreach (explode('.', $path) as $path) {
