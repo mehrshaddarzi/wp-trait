@@ -75,12 +75,13 @@ if (!class_exists('WPTrait\Collection\View')) {
          * @param string $view
          * @param array $data
          * @param array $mergeData
+         * @param bool $canOverride
          * 
          * @return string
          */
-        public function render($view = null, $data = [], $mergeData = [])
+        public function render($view = null, $data = [], $mergeData = [], $canOverride = true)
         {
-            $view = $this->resolvePath($view);
+            $view = $this->resolvePath($view, $canOverride);
             $output = '';
 
             if (!is_file($view) && !is_readable($view)) {
@@ -110,10 +111,11 @@ if (!class_exists('WPTrait\Collection\View')) {
 
         /**
          * @param string $path
+         * @param bool $canOverride
          * 
          * @return string
          */
-        protected function resolvePath($path)
+        protected function resolvePath($path, $canOverride = true)
         {
             $viewPath = '';
             $paths = [
@@ -126,6 +128,11 @@ if (!class_exists('WPTrait\Collection\View')) {
             }
 
             $defaultView = $this->path . $viewPath . '.php';
+
+            if (!$canOverride) {
+                return $defaultView;
+            }
+            
             foreach ($paths as $path) {
                 $view = $path . $viewPath . '.php';
 
@@ -145,9 +152,9 @@ if (!class_exists('WPTrait\Collection\View')) {
             $this->attributes[$name] = $value;
         }
 
-        public function __invoke($view = null, $data = [], $mergeData = [])
+        public function __invoke($view = null, $data = [], $mergeData = [], $canOverride = true)
         {
-            return $this->render($view, $data, $mergeData);
+            return $this->render($view, $data, $mergeData, $canOverride);
         }
     }
 }
