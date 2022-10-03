@@ -12,18 +12,21 @@ if (!class_exists('WPTrait\Collection\View')) {
     class View
     {
         /**
-         * Attributes
-         * 
-         * @var array
-         */
-        public array $attributes;
-
-        /**
          * View Path
          * 
          * @var string
          */
-        public string $path;
+        public $path;
+
+        /** @var object|Plugin */
+        private $plugin;
+        
+        /**
+         * View Attributes
+         * 
+         * @var array
+         */
+        public $attributes = [];
 
         /**
          * @param string $view
@@ -32,8 +35,8 @@ if (!class_exists('WPTrait\Collection\View')) {
          */
         public function __construct($path = '', $plugin = null)
         {
-            $this->attributes = [];
             $this->setPath($path, $plugin);
+            $this->plugin = $plugin;
         }
 
         /**
@@ -112,13 +115,27 @@ if (!class_exists('WPTrait\Collection\View')) {
          */
         protected function resolvePath($path)
         {
-            $view_path = '';
+            $viewPath = '';
+            $paths = [
+                get_stylesheet_directory() . '/' . $this->plugin->slug . '/templates',
+                get_template_directory() . '/' . $this->plugin->slug . '/templates',
+                $this->path,
+            ];
 
             foreach (explode('.', $path) as $path) {
-                $view_path .= '/' . $path;
+                $viewPath .= '/' . $path;
             }
 
-            return $this->path . $view_path . '.php';
+            foreach ($paths as $path) {
+                $view = $path . $viewPath . '.php';
+
+                if (is_file($view) && is_readable($view)) {
+                    $viewPath = $view;
+                    break;
+                }
+            }
+
+            return $viewPath;
         }
 
         public function __set($name, $value)
