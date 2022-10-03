@@ -85,7 +85,7 @@ if (!class_exists('WPTrait\Collection\View')) {
             $output = '';
 
             if (!is_file($view) && !is_readable($view)) {
-                throw new \Exception('Invalid view file: ' . $view);
+                wp_die(sprintf('View file "%s" does not exist or is not a readable file.', $view));
             }
 
             $data = array_merge($data, $mergeData);
