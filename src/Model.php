@@ -154,11 +154,11 @@ if (!class_exists('WPTrait\Model')) {
         {
             return new File($file);
         }
-		
-		public function view($path = null)
-		{
-			return new View($path, $this->plugin);
-		}
+
+        public function view($path = null)
+        {
+            return new View($path, $this->plugin);
+        }
 
         public function log($log = '', $type = 'debug', $condition = null)
         {
