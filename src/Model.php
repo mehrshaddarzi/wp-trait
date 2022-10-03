@@ -26,7 +26,8 @@ use WPTrait\Collection\{Action,
     Session,
     Term,
     Transient,
-    User
+    User,
+    View
 };
 
 if (!defined('ABSPATH')) {
@@ -41,7 +42,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public $db, $wp, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
             $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
-            $cookie, $session, $file, $email, $password;
+            $cookie, $session, $file, $email, $password, $view;
 
         protected $actions, $filters = [];
 
@@ -83,6 +84,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->cookie = new Cookie();
             $this->session = new Session();
             $this->file = new File();
+            $this->view = new View(null, $plugin);
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -152,6 +154,11 @@ if (!class_exists('WPTrait\Model')) {
         public function file($file)
         {
             return new File($file);
+        }
+
+        public function view($path = null)
+        {
+            return new View($path, $this->plugin);
         }
 
         public function log($log = '', $type = 'debug', $condition = null)
