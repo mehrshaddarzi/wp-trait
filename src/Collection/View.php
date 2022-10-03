@@ -2,7 +2,7 @@
 
 namespace WPTrait\Collection;
 
-use WPTrait\Hook\Constant;
+use WPTrait\Plugin;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -11,8 +11,6 @@ if (!defined('ABSPATH')) {
 if (!class_exists('WPTrait\Collection\View')) {
 	class View
 	{
-		use Constant;
-
 		/**
 		 * Attributes
 		 * 
@@ -28,22 +26,42 @@ if (!class_exists('WPTrait\Collection\View')) {
 		public string $path;
 
 		/**
+		 * @param string $view
 		 * @param string $path
+		 * @param object|Plugin $plugin
 		 */
-		public function __construct($path = '')
+		public function __construct($path = '', $plugin = null)
 		{
 			$this->attributes = [];
-			$this->set_path($path);
+			$this->set_path($path, $plugin);
 		}
 
 		/**
 		 * @param string $path
+		 * @param object|Plugin $plugin
 		 * 
 		 * @return void
 		 */
-		protected function set_path($path)
+		protected function set_path($path, $plugin)
 		{
-			$this->path = $path ?: $this->constant('plugin_dir') . '/templates';
+			$this->path = $path ?: $plugin->path . 'templates';
+		}
+
+		/**
+		 * @param string|array $key_or_array
+		 * @param mixed $value
+		 * 
+		 * @return self
+		 */
+		public function attribute($key_or_array, $value = null)
+		{
+			if (is_array($key_or_array)) {
+				$this->attributes = array_merge($this->attributes, $key_or_array);
+			} else {
+				$this->attributes[$key_or_array] = $value;
+			}
+
+			return $this;
 		}
 
 		/**
@@ -55,15 +73,15 @@ if (!class_exists('WPTrait\Collection\View')) {
 		 */
 		public function render($view = null, $data = [], $merge_data = [])
 		{
+			$view = $this->resolvePath($view);
 			$output = '';
 
 			if (!is_file($view) && !is_readable($view)) {
 				throw new \Exception('Invalid view file: ' . $view);
 			}
 
-			$view = $this->resolvePath($view);
 			$data = array_merge($data, $merge_data);
-			$data = array_merge($data, $this->attributes);
+			$data = array_merge($this->attributes, $data);
 
 			try {
 				ob_start();
@@ -72,7 +90,7 @@ if (!class_exists('WPTrait\Collection\View')) {
 					extract($data);
 				}
 
-				include $this->path . '/' . $view . '.php';
+				include $view;
 
 				$output = ob_get_clean();
 			} catch (\Exception $e) {
@@ -96,7 +114,7 @@ if (!class_exists('WPTrait\Collection\View')) {
 				$view_path .= '/' . $path;
 			}
 
-			return $view_path;
+			return $this->path . $view_path . '.php';
 		}
 
 		public function __set($name, $value)
@@ -104,9 +122,9 @@ if (!class_exists('WPTrait\Collection\View')) {
 			$this->attributes[$name] = $value;
 		}
 
-		public function __invoke($view = null, $data = [], $merge_data = [])
+		public function __invoke($view = null)
 		{
-			return $this->render($view, $data, $merge_data);
+			return $this->render($view, $this->attributes);
 		}
 	}
 }
