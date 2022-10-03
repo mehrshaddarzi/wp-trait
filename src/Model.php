@@ -27,7 +27,7 @@ use WPTrait\Collection\{Action,
     Term,
     Transient,
     User,
-	View
+    View
 };
 
 if (!defined('ABSPATH')) {
