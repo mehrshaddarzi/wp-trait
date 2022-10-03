@@ -41,6 +41,9 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [File System](#file-system)
     + [Email](#email)
     + [Log](#log)
+* [Views Templates](#views-templates)
+  + [Overriding templates via a theme](#overriding-templates-via-a-theme)
+  + [Set template attribute](#set-template-attribute)
 * [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
     + [How To Work Trait Hooks](#how-to-work-trait-hooks)
     + [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
@@ -1146,6 +1149,107 @@ add_filter('wp_trait_log_date', function ($date, $type) {
 
 Collections Lists are available
 under [/Collection](https://github.com/mehrshaddarzi/wp-trait/tree/master/src/Collection).
+
+## Views Templates
+
+For use template engine in this package, use `Views` Collection.
+Create a folder with name `templates` in your plugin and put your php file, for example:
+
+```php
+# ~/wp-content/plugins/{plugin-slug}/templates/students/table.php
+<p><?= $title; ?></p>
+<table>
+<tr>
+<td><?php _e('Name'); ?></td>
+<td><?php _e('Family'); ?></td>
+</tr>
+  <?php
+    foreach($students as $student) {
+  ?>
+      <tr>
+      <td><?php $student['name']; ?></td>
+      <td><?php $student['family']; ?></td>
+      </tr>
+  <?php
+    }
+  ?>
+</table>
+```
+
+For Load `students/table.php` files in your Model, use `render` Method:
+
+```php
+$data = [
+    'title' => 'Students List',
+    'students' => [
+        ['name' => 'Mehrshad', 'family' => 'Darzi'],
+        ['name' => 'John', 'family' => 'Smith'],
+    ]
+];
+
+echo $this->view->render('students.table', $data);
+```
+
+### Overriding templates via a theme
+
+By default, Users who use your plugin can change plugin templates in your active WordPress theme.
+
+```php
+# ~/wp-content/themes/twentyeleven/{plugin-slug}/students/table.php
+<div class="text-right bg-black text-white"><?= $title; ?></div>
+<?php
+  foreach($students as $student) {
+?>
+  <div class="card">
+    <div class="card-body">
+      <p><?php $student['name']; ?></p>
+      <p><?php $student['family']; ?></p>
+    </div>
+  </div>
+<?php
+}
+?>
+```
+
+For disable Overriding templates in custom file, set `false` in render method:
+
+```php
+$this->view->render('students.table', $data, [], $canOverride = false);
+```
+
+### Set template attribute
+
+There is several Ways for set attribute:
+
+```php
+// First Way
+$content = $this->view()
+  ->attribute('text', $text)
+  ->attribute([
+      'description' => __('This is the description', $this->plugin->textdomain)
+  ])
+  ->render('notice');
+echo $this->add_alert($content, 'info');
+
+// Second Way
+$content = $this->view()->render('notice', [
+  'text' => $text
+], [
+  'text' => __('This is the description', $this->plugin->textdomain)
+]);
+echo $this->add_alert($content, 'info');
+
+// Third Way
+$content = $this->view();
+$content->text = $text;
+echo $this->add_alert($content('notice'), 'info');
+
+// Property Way
+$view = $this->view->render('notice', [
+  'text' => $text . ' with property way'
+]);
+echo $this->add_alert($view, 'info');
+```
 
 ## Trait For WordPress Hooks
 

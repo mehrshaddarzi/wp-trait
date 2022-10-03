@@ -9,21 +9,22 @@ if (!defined('ABSPATH')) {
 }
 
 if (!class_exists('WPTrait\Collection\View')) {
+
     class View
     {
         /**
          * View Path
-         * 
+         *
          * @var string
          */
         public $path;
 
         /** @var object|Plugin */
         private $plugin;
-        
+
         /**
          * View Attributes
-         * 
+         *
          * @var array
          */
         public $attributes = [];
@@ -42,7 +43,7 @@ if (!class_exists('WPTrait\Collection\View')) {
         /**
          * @param string $path
          * @param object|Plugin $plugin
-         * 
+         *
          * @return void
          */
         protected function setPath($path = '', $plugin = null)
@@ -57,7 +58,7 @@ if (!class_exists('WPTrait\Collection\View')) {
         /**
          * @param string|array $keyOrArray
          * @param mixed $value
-         * 
+         *
          * @return self
          */
         public function attribute($keyOrArray, $value = null)
@@ -76,7 +77,7 @@ if (!class_exists('WPTrait\Collection\View')) {
          * @param array $data
          * @param array $mergeData
          * @param bool $canOverride
-         * 
+         *
          * @return string
          */
         public function render($view = null, $data = [], $mergeData = [], $canOverride = true)
@@ -112,7 +113,7 @@ if (!class_exists('WPTrait\Collection\View')) {
         /**
          * @param string $path
          * @param bool $canOverride
-         * 
+         *
          * @return string
          */
         protected function resolvePath($path, $canOverride = true)
@@ -132,7 +133,7 @@ if (!class_exists('WPTrait\Collection\View')) {
             if (!$canOverride) {
                 return $defaultView;
             }
-            
+
             foreach ($paths as $path) {
                 $view = $path . $viewPath . '.php';
 
