@@ -143,9 +143,9 @@ if (!class_exists('WPTrait\Collection\View')) {
             $this->attributes[$name] = $value;
         }
 
-        public function __invoke($view = null)
+        public function __invoke($view = null, $data = [], $mergeData = [])
         {
-            return $this->render($view, $this->attributes);
+            return $this->render($view, $data, $mergeData);
         }
     }
 }
