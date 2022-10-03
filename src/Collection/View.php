@@ -42,9 +42,13 @@ if (!class_exists('WPTrait\Collection\View')) {
          * 
          * @return void
          */
-        protected function set_path($path, $plugin)
+        protected function set_path($path = '', $plugin = null)
         {
-            $this->path = $path ?: $plugin->path . 'templates';
+            if (!$path && $plugin) {
+                $path = $plugin->path . 'templates';
+            }
+
+            $this->path = $path;
         }
 
         /**
