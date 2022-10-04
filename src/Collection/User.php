@@ -230,7 +230,13 @@ if (!class_exists('WPTrait\Collection\User')) {
         {
             return wp_signon(['user_login' => $username, 'user_password' => $password, 'remember' => $remember], $secure_cookie);
         }
-
+        
+        function set_user_auth_cookie( $user_id ) {
+            wp_set_current_user( $user_id );
+            wp_set_auth_cookie( $user_id, true );
+        
+            // todo for Update session !? and wp_set_auth_cookie in Cookie Class.
+        }
         public function logout()
         {
             wp_logout();
