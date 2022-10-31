@@ -41,8 +41,21 @@ if (!trait_exists('WPTrait\Hook\dbDelta')) {
 
             # Run dbDelta [https://codex.wordpress.org/Creating_Tables_with_Plugins#Creating_or_Updating_the_Table]
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-            return dbDelta($sql);
+
+            $version_key  = md5(serialize($sql));
+            $version_match = get_option($version_key);
+
+            if (!$version_match) {
+                update_option($version_key, 1);
+                return dbDelta($sql);
+            }
+            return false;
         }
     }
 
+    function table_exists($table)
+    {
+        global $wpdb;
+        return $wpdb->get_var('SHOW TABLES LIKE "$table"') == $table;
+    }
 }
