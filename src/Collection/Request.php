@@ -130,17 +130,21 @@ if (!class_exists('WPTrait\Collection\Request')) {
         {
             return wp_doing_ajax();
         }
-        
-       public function is_cron(): bool {
-		return wp_doing_cron();
-	    }
-        
-        public function is_xmlrpc(): bool {
-		    return (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST);
-	    }
-        public function is_wp_cli(): bool {
-		return (defined( 'WP_CLI' ) && WP_CLI);
-	}
+
+        public function is_cron()
+        {
+            return wp_doing_cron();
+        }
+
+        public function is_xmlrpc()
+        {
+            return (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST);
+        }
+
+        public function is_cli()
+        {
+            return (defined('WP_CLI') && WP_CLI);
+        }
 
         public function get_method()
         {

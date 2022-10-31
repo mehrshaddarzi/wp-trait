@@ -742,6 +742,15 @@ $this->request->is_rest();
 // Check is Ajax Request
 $this->request->is_ajax();
 
+// Check is CronJob Request
+$this->request->is_cron();
+
+// Check is XML-RPC Request
+$this->request->is_xmlrpc();
+
+// Check is WP-CLI Request
+$this->request->is_cli();
+
 // Get Method Of Request
 $this->request->get_method();
 
