@@ -40,7 +40,7 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
+        public $db, $wp, $query, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
             $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
             $cookie, $session, $file, $email, $password, $view;
 
@@ -48,11 +48,12 @@ if (!class_exists('WPTrait\Model')) {
 
         public function __construct(object $plugin)
         {
-            global $wpdb, $wp, $pagenow, $wp_admin_bar, $current_screen;
+            global $wpdb, $wp, $wp_query, $pagenow, $wp_admin_bar, $current_screen;
 
             # @see https://codex.wordpress.org/Global_Variables
             $this->db = $wpdb;
             $this->wp = $wp;
+            $this->query = $wp_query;
             $this->pagenow = $pagenow;
             $this->admin_bar = $wp_admin_bar;
             $this->screen = $current_screen;
