@@ -48,7 +48,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             'type' => 'post_type',
             'name' => 'post_name',
             'modified' => 'post_modified',
-            'modified_gmt' => 'modified_gmt',
+            'modified_gmt' => 'post_modified_gmt',
             'parent' => 'post_parent',
             'parent_id' => 'post_parent',
             'mime' => 'post_mime_type',
