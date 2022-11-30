@@ -232,9 +232,9 @@ if (!class_exists('WPTrait\Collection\User')) {
         }
 
         /**
-         * Auth user by id or user_login
+         * Auth as user
          * 
-         * @param string|int|\WP_User $user
+         * @param \WP_User|int|string $user
          * @param bool $remember
          * @param string $secure_cookie
          * 
