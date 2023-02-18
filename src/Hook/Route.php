@@ -24,29 +24,37 @@ trait Route
         
     }
 
-    public function addRoute()
+     public function addRoute()
     {
         foreach ($this->Route as $routeName => $RouteArg) {
-            $this->addRewriteRule($routeName, $RouteArg[0]);
-            if (!empty($RouteArg[1]) && method_exists($this, $RouteArg[1])) {
-                add_filter('template_include', [$this, $RouteArg[1]]);
+            $this->addRewriteRule($routeName, $RouteArg['tags']);
+            if (!empty($RouteArg['template']) && method_exists($this, $RouteArg['template'])) {
+                add_filter('template_include', [$this, $RouteArg['template']]);
+            }
+            if (!empty($RouteArg['title']) && method_exists($this, $RouteArg['title'])) {
+                add_filter('pre_get_document_title', [$this, $RouteArg['title']]);
             }
         }
         
     }
-
-    public function addRewriteRule($routeName, $queryNames, $routeCallBack)
+  public function addRewriteRule($routeName, $queryNames)
     {
         $query = '';
-        $keys = 1;
-        foreach ($queryNames  as $value) {
-            $query .= $value . '=$matches[' . $keys . ']&';
-            $keys++;
-            add_rewrite_tag('%' . $value . '%', '([^&/]+)');
+        $key = 1;
+        foreach ($queryNames  as $keyName => $value) {
+            if(is_numeric($keyName)){
+                $query .= $value . '=$matches[' . $key . ']&';
+                $key++;
+                add_rewrite_tag('%' . $value . '%', '([^&/]+)');
+            }else{
+                $query .= $keyName . '='.$value.'&';
+                add_rewrite_tag('%' . $keyName . '%', '([^&/]+)');
+            }
+
+            
         }
 
         add_rewrite_rule($routeName, 'index.php?' . $query, 'top');
-
 
     }
 }
