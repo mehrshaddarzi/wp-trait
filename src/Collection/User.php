@@ -235,5 +235,10 @@ if (!class_exists('WPTrait\Collection\User')) {
         {
             wp_logout();
         }
+
+        public function edit_user_link($user_id = null)
+        {
+            return get_edit_user_link((is_null($user_id) ? $this->user_id : $user_id));
+        }
     }
 }
