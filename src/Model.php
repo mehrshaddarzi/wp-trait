@@ -41,7 +41,7 @@ if (!class_exists('WPTrait\Model')) {
         use Hooks, Constant;
 
         public $db, $wp, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
-            $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
+            $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $restRoute, $filter, $action,
             $cookie, $session, $file, $email, $password, $view;
 
         protected $actions, $filters = [];
@@ -78,7 +78,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->email = new Email();
             $this->rest = new RestAPI();
             $this->log = new Log();
-            $this->route = new Route();
+            $this->restRoute = new Route();
             $this->filter = new Filter();
             $this->action = new Action();
             $this->cookie = new Cookie();
