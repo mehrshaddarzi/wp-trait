@@ -69,8 +69,6 @@ trait Route
 
         add_rewrite_rule($routeName, 'index.php?' . rtrim($query, '&'), 'top');
 
-        //add_filter('generate_rewrite_rules', function($i){db($i->rules);}, 10);
-
 
     }
 
