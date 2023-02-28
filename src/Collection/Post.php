@@ -136,7 +136,7 @@ if (!class_exists('WPTrait\Collection\Post')) {
             if (absint($post_id) < 1) {
                 return false;
             }
-            return !is_null($this->get($post_id));
+            return !is_null($this->get($post_id, 'raw'));
         }
 
         public function terms($taxonomy = 'post_tag', $args = ['fields' => 'all'], $post_id = null)
