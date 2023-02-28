@@ -132,7 +132,11 @@ if (!class_exists('WPTrait\Collection\Post')) {
 
         public function exists($post_id = null)
         {
-            return is_string(get_post_status((is_null($post_id) ? $this->post_id : $post_id)));
+            $post_id = (is_null($post_id) ? $this->post_id : $post_id);
+            if (absint($post_id) < 1) {
+                return false;
+            }
+            return !is_null($this->get($post_id));
         }
 
         public function terms($taxonomy = 'post_tag', $args = ['fields' => 'all'], $post_id = null)
