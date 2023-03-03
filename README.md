@@ -378,6 +378,14 @@ $this->plugin->requiresPHP
 // Whether the plugin can only be activated network-wide. (boolean)
 $this->plugin->network
 
+// Get file url from plugin
+// https://site.com/wp-contents/plugins/my-plugin/images/logo.png
+$this->plugin->url('images/logo.png')
+
+// Get file path from plugin
+// ~ wp-contents/plugins/my-plugins/templates/email.php
+$this->plugin->path('templates/email.php')
+
 // Get All plugins data as Object
 $this->plugin->data
 ```
