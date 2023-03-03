@@ -5,6 +5,7 @@ namespace PLUGIN_SLUG;
 use WPTrait\Hook\Ajax;
 use WPTrait\Hook\Notice;
 use WPTrait\Hook\RowActions;
+use WPTrait\Information;
 use WPTrait\Model;
 
 class Admin extends Model
@@ -24,7 +25,7 @@ class Admin extends Model
         'methods' => ['signup_user']
     ];
 
-    public function __construct($plugin)
+    public function __construct(Information $plugin)
     {
         parent::__construct($plugin);
     }

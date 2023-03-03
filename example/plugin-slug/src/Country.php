@@ -4,6 +4,7 @@ namespace PLUGIN_SLUG;
 
 use WPTrait\Admin\Taxonomy;
 use WPTrait\Hook\RowActions;
+use WPTrait\Information;
 
 class Country extends Taxonomy
 {
@@ -11,9 +12,9 @@ class Country extends Taxonomy
 
     public $rowActions = ['type' => 'country'];
 
-    public function __construct($slug, $name, $post_types, $args, $plugin)
+    public function __construct(Information $plugin, $slug, $name, $post_types, $args)
     {
-        parent::__construct($slug, $name, $post_types, $args, $plugin);
+        parent::__construct($plugin, $slug, $name, $post_types, $args);
     }
 
     public function row_actions($action, $object)
