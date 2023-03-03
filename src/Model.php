@@ -63,12 +63,27 @@ if (!class_exists('WPTrait\Model')) {
 
         /**
          * List Of WordPress Filters
-         * @var
+         *
+         * @var array
          */
         protected $filters = [];
 
-        public $db, $wp, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
-            $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
+        /**
+         * Get REQUEST data
+         *
+         * @var Request
+         */
+        public $request;
+
+        /**
+         * HTTP Response
+         *
+         * @var Response
+         */
+        public $response;
+
+        public $db, $wp, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option,
+            $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
             $cookie, $session, $file, $email, $password;
 
         public function __construct(Information $plugin)
@@ -92,8 +107,6 @@ if (!class_exists('WPTrait\Model')) {
             $this->user = new User();
             $this->password = new Password();
             $this->option = new Option();
-            $this->request = new Request();
-            $this->response = new Response();
             $this->comment = new Comment();
             $this->nonce = new Nonce();
             $this->transient = new Transient();
@@ -109,10 +122,26 @@ if (!class_exists('WPTrait\Model')) {
             $this->cookie = new Cookie();
             $this->session = new Session();
             $this->file = new File();
-            $this->view = new View($this->plugin);
 
             # Boot WordPress Hooks
             $this->bootHooks();
+        }
+
+        public function __get($name)
+        {
+            switch ($name) {
+                case "view":
+                    $this->{$name} = new View($this->plugin);
+                    break;
+                case "request":
+                    $this->{$name} = new Request();
+                    break;
+                case "response":
+                    $this->{$name} = new Response();
+                    break;
+            }
+
+            return $this->{$name};
         }
 
         public function bootHooks()
@@ -179,11 +208,6 @@ if (!class_exists('WPTrait\Model')) {
         public function file($file)
         {
             return new File($file);
-        }
-
-        public function view($path = null)
-        {
-            return new View($this->plugin, $path);
         }
 
         public function log($log = '', $type = 'debug', $condition = null)
