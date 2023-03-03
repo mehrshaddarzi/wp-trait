@@ -25,7 +25,26 @@ if (!class_exists('WPTrait\Admin\PostType')) {
     {
         use Notice, BulkActions, RowActions, AdminInit, AdminFooter, PostTypeColumns, SortableColumns, ViewsSub;
 
-        public $slug, $name, $args = [];
+        /**
+         * post type slug
+         *
+         * @var string
+         */
+        public $slug;
+
+        /**
+         * post type name
+         *
+         * @var string
+         */
+        public $name;
+
+        /**
+         * post type argument
+         *
+         * @var array
+         */
+        public $args = [];
 
         public function __construct($slug, $name, $args = [], $plugin = [])
         {
@@ -39,15 +58,13 @@ if (!class_exists('WPTrait\Admin\PostType')) {
             parent::__construct($plugin);
 
             // Register Post Type
-            // @see https://developer.wordpress.org/reference/functions/register_post_type/
-            add_action('init', [$this, 'register_post_type']);
+            $this->add_action('init', [$this, 'register_post_type']);
 
             // Change Post Type Argument
             $this->add_filter('register_post_type_args', 'post_type_args', 10, 2);
 
             // Post Type Update Message
-            // @see https://developer.wordpress.org/reference/hooks/post_updated_messages/
-            $this->add_filter('post_updated_messages', 'post_updated_messages', 10, 1);
+            $this->add_filter('post_updated_messages', 'post_updated_messages');
         }
 
         public function __get($name)
@@ -72,7 +89,7 @@ if (!class_exists('WPTrait\Admin\PostType')) {
                 'show_in_menu' => true,
                 'query_var' => true,
                 'has_archive' => false,
-                'hierarchical' => false, #action_rows not work when is true
+                'hierarchical' => false, // `action_rows` not work when is true
                 'capability_type' => 'post',
                 'map_meta_cap' => true,
                 'rewrite' => [

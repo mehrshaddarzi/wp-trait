@@ -1,4 +1,5 @@
 <?php
+
 namespace WPTrait\Collection;
 
 if (!defined('ABSPATH')) {
@@ -17,7 +18,7 @@ if (!trait_exists('WPTrait\Collection\Hooks')) {
 
         public function search_methods($prefix)
         {
-            return array_filter((array)$this->get_methods(), function ($method_name) use ($prefix) {
+            return array_filter($this->get_methods(), function ($method_name) use ($prefix) {
                 return substr($method_name, 0, strlen($prefix)) == $prefix;
             });
         }
