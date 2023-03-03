@@ -26,14 +26,9 @@ if (!trait_exists('WPTrait\Hook\Ajax')) {
             }
         }
 
-        public function is_ajax_request()
-        {
-            return wp_doing_ajax();
-        }
-
         public function ajax_url($action = '', $args = [])
         {
-            return add_query_arg(array_merge(array('action' => $action), $args), admin_url('admin-ajax.php'));
+            return add_query_arg(array_merge(['action' => $action], $args), admin_url('admin-ajax.php'));
         }
 
     }
