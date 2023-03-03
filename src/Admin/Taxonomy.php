@@ -47,13 +47,13 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
             parent::__construct($plugin);
 
             // Register Taxonomy
-            $this->add_action('init', [$this, 'register_taxonomy']);
+            add_action('init', [$this, 'register_taxonomy']);
 
             // Change Taxonomy Argument
-            $this->add_filter('register_taxonomy_args', 'taxonomy_args', 10, 2);
+            add_filter('register_taxonomy_args', 'taxonomy_args', 10, 2);
 
             // Taxonomy Update Message
-            $this->add_filter('term_updated_messages', 'term_updated_messages', 10, 1);
+            add_filter('term_updated_messages', 'term_updated_messages', 10, 1);
         }
 
         public function __get($name)
@@ -87,7 +87,7 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
 
         public function taxonomy_args($args, $taxonomy)
         {
-            // if($taxonomy == $this->slug) {}
+            # if($taxonomy == $this->slug) {}
             return $args;
         }
 

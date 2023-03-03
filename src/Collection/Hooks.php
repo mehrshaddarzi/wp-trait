@@ -11,12 +11,12 @@ if (!trait_exists('WPTrait\Collection\Hooks')) {
     trait Hooks
     {
 
-        public function get_methods()
+        public function get_methods(): array
         {
             return get_class_methods($this);
         }
 
-        public function search_methods($prefix)
+        public function search_methods($prefix): array
         {
             return array_filter($this->get_methods(), function ($method_name) use ($prefix) {
                 return substr($method_name, 0, strlen($prefix)) == $prefix;

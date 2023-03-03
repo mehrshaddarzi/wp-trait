@@ -66,13 +66,13 @@ if (!class_exists('WPTrait\Admin\PostType')) {
             parent::__construct($plugin);
 
             // Register Post Type
-            $this->add_action('init', [$this, 'register_post_type']);
+            add_action('init', [$this, 'register_post_type']);
 
             // Change Post Type Argument
-            $this->add_filter('register_post_type_args', 'post_type_args', 10, 2);
+            add_filter('register_post_type_args', 'post_type_args', 10, 2);
 
             // Post Type Update Message
-            $this->add_filter('post_updated_messages', 'post_updated_messages');
+            add_filter('post_updated_messages', 'post_updated_messages');
         }
 
         public function __get($name)
