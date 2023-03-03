@@ -245,7 +245,7 @@ if (!class_exists('WPTrait\Model')) {
                 if (method_exists($trait, $method) && !in_array($method, $booted)) {
                     $booted[] = $method;
                     $variable = lcfirst($basename);
-                    $this->{$method}((isset($this->{$variable}) ? $this->{$variable} : $args));
+                    $this->{$method}(($this->{$variable} ?? $args));
                 }
             }
         }
@@ -271,8 +271,8 @@ if (!class_exists('WPTrait\Model')) {
         private function runVariableHooks($type, $name, $args)
         {
             $function = (is_array($args) ? $args[0] : ((is_bool($args) ? ($args === true ? '__return_true' : '__return_false') : $args)));
-            $priority = (is_array($args) ? (isset($args[1]) ? $args[1] : 10) : 10);
-            $accepted_args = (is_array($args) ? (isset($args[2]) ? $args[2] : 1) : 1);
+            $priority = (is_array($args) ? ($args[1] ?? 10) : 10);
+            $accepted_args = (is_array($args) ? ($args[2] ?? 1) : 1);
             $this->{$type}->add($name, (in_array($function, array('__return_false', '__return_true')) ? $function : [$this, $function]), $priority, $accepted_args);
         }
 
