@@ -19,11 +19,27 @@
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 # Use Trait
+use PLUGIN_SLUG\Admin;
+use PLUGIN_SLUG\Country;
 use WPTrait\Plugin;
 
 # Define Class
 class PLUGIN_SLUG extends Plugin
 {
+
+    /**
+     * Admin Area
+     *
+     * @var Admin
+     */
+    public $Admin;
+
+    /**
+     * Country Taxonomy
+     *
+     * @var Country
+     */
+    public $Country;
 
     public function __construct($slug, $args = [])
     {
@@ -32,8 +48,8 @@ class PLUGIN_SLUG extends Plugin
 
     public function instantiate()
     {
-        $this->Admin = new \PLUGIN_SLUG\Admin($this->plugin);
-        $this->Country = new \PLUGIN_SLUG\Country('country', __('Country', $this->plugin->textdomain), ['post'], [], $this->plugin);
+        $this->Admin = new Admin($this->plugin);
+        $this->Country = new Country($this->plugin, 'country', __('Country', $this->plugin->textDomain), ['post'], []);
     }
 
     public function register_activation_hook()

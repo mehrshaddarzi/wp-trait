@@ -31,10 +31,10 @@ class Admin extends Model
 
     public function admin_notices()
     {
-        $text = __('This Notice is a example from your plugin', $this->plugin->textdomain);
+        $text = __('This Notice is a example from your plugin', $this->plugin->textDomain);
         $text .= '<br />';
-        $text .= __('You Can Call Method From all classes by plugin_slug() function.', $this->plugin->textdomain);
-        $text .= __('For Example `plugin_slug()->Admin->method_name()` is: ', $this->plugin->textdomain);
+        $text .= __('You Can Call Method From all classes by plugin_slug() function.', $this->plugin->textDomain);
+        $text .= __('For Example `plugin_slug()->Admin->method_name()` is: ', $this->plugin->textDomain);
         $text .= $this->method_name();
 
         echo $this->add_alert($text, 'info');
@@ -90,7 +90,7 @@ class Admin extends Model
 
     public function add_prefix_content($content)
     {
-        return __('This text is from wp-trait example plugin', $this->plugin->textdomain) . '<br/>' . $content;
+        return __('This text is from wp-trait example plugin', $this->plugin->textDomain) . '<br/>' . $content;
     }
 
     public function save_author($post_ID, $post, $update)

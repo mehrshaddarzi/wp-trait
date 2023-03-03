@@ -18,6 +18,7 @@ use WPTrait\Hook\
     SortableColumns,
     ViewsSub
 };
+use WPTrait\Information;
 
 if (!class_exists('WPTrait\Admin\PostType')) {
 
@@ -46,7 +47,14 @@ if (!class_exists('WPTrait\Admin\PostType')) {
          */
         public $args = [];
 
-        public function __construct($slug, $name, $args = [], $plugin = [])
+        /**
+         * Get Plugin Data
+         *
+         * @var Information
+         */
+        public $plugin;
+
+        public function __construct(Information $plugin, $slug, $name, $args = [])
         {
             // Define Post Type in WordPress
             $this->plugin = $plugin;

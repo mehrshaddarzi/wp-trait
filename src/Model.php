@@ -40,13 +40,38 @@ if (!class_exists('WPTrait\Model')) {
     {
         use Hooks, Constant;
 
-        public $db, $wp, $plugin, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
+        /**
+         * Get Plugin Data
+         *
+         * @var Information
+         */
+        public $plugin;
+
+        /**
+         * View and templates system
+         *
+         * @var View
+         */
+        public $view;
+
+        /**
+         * List Of WordPress Actions
+         *
+         * @var array
+         */
+        protected $actions = [];
+
+        /**
+         * List Of WordPress Filters
+         * @var
+         */
+        protected $filters = [];
+
+        public $db, $wp, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option, $request,
             $response, $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
-            $cookie, $session, $file, $email, $password, $view;
+            $cookie, $session, $file, $email, $password;
 
-        protected $actions, $filters = [];
-
-        public function __construct(object $plugin)
+        public function __construct(Information $plugin)
         {
             global $wpdb, $wp, $pagenow, $wp_admin_bar, $current_screen;
 
@@ -84,7 +109,7 @@ if (!class_exists('WPTrait\Model')) {
             $this->cookie = new Cookie();
             $this->session = new Session();
             $this->file = new File();
-            $this->view = new View(null, $plugin);
+            $this->view = new View($this->plugin);
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -158,7 +183,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public function view($path = null)
         {
-            return new View($path, $this->plugin);
+            return new View($this->plugin, $path);
         }
 
         public function log($log = '', $type = 'debug', $condition = null)
@@ -169,7 +194,7 @@ if (!class_exists('WPTrait\Model')) {
         private function bootTraitHooks()
         {
             $booted = [];
-            $Trait = (array)array_keys($this->getUsedTraits($this));
+            $Trait = array_keys($this->getUsedTraits($this));
             foreach ($Trait as $trait) {
                 $basename = basename(str_replace('\\', '/', $trait));
                 $method = 'boot' . $basename;

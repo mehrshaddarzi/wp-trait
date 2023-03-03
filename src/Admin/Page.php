@@ -2,6 +2,7 @@
 
 namespace WPTrait\Admin;
 
+use WPTrait\Information;
 use WPTrait\Model;
 
 if (!defined('ABSPATH')) {
@@ -13,7 +14,14 @@ if (!class_exists('WPTrait\Admin\Page')) {
     abstract class Page extends Model
     {
 
-        public function __construct($plugin = [])
+        /**
+         * Get Plugin Data
+         *
+         * @var Information
+         */
+        public $plugin;
+
+        public function __construct(Information $plugin)
         {
             parent::__construct($plugin);
         }

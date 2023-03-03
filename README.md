@@ -42,14 +42,14 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [Email](#email)
     + [Log](#log)
 * [Views Templates](#views-templates)
-  + [Overriding templates via a theme](#overriding-templates-via-a-theme)
-  + [Set template attribute](#set-template-attribute)
+    + [Overriding templates via a theme](#overriding-templates-via-a-theme)
+    + [Set template attribute](#set-template-attribute)
 * [Trait For WordPress Hooks](#trait-for-wordpress-hooks)
     + [How To Work Trait Hooks](#how-to-work-trait-hooks)
     + [List Of Trait With Prefix Method Name](#list-of-trait-with-prefix-method-name)
     + [Example Create Ajax Request with Trait](#example-create-ajax-request-with-trait)
 * [Utility](#utility)
-  + [Singleton Design Pattern](#singleton-design-pattern)
+    + [Singleton Design Pattern](#singleton-design-pattern)
 * [Starter Plugin](#starter-plugin)
 * [Contributing](#contributing)
 * [License](#license)
@@ -208,7 +208,7 @@ class Admin extends Model
 
     public function admin_notices()
     {
-        $text = __('This Notice is a example from your plugin', $this->plugin->textdomain);
+        $text = __('This Notice is a example from your plugin', $this->plugin->textDomain);
         echo $this->add_alert($text, 'info');
     }
     
@@ -342,20 +342,44 @@ public function get_student_list()
 
 ### Current Plugin information
 
-for get Current plugin information use `$this->plugin` variable:
+For get Current plugin information use `$this->plugin` variable:
 
 ```php
 // Get Plugin Base Url
-echo $this->plugin->url;
+$this->plugin->url
 
 // Get Plugin Base Path
-echo $this->plugin->path;
+$this->plugin->path
 
 // Get Plugin TextDomain
-echo $this->plugin->textdomain;
+$this->plugin->textDomain
 
-// Show All Variable
-var_dump($this->plugin);
+// Get Plugin Main PHP File path
+$this->plugin->mainFile
+
+// Get Plugin Name
+$this->plugin->name
+
+// Get Plugin version
+$this->plugin->version
+
+// Get Plugin description
+$this->plugin->description
+
+// Get Plugin author name
+$this->plugin->author
+
+// Get Plugin Minimum required version of WordPress
+$this->plugin->requiresWP
+
+// Get Plugin Minimum required version of PHP
+$this->plugin->requiresPHP
+
+// Whether the plugin can only be activated network-wide. (boolean)
+$this->plugin->network
+
+// Get All plugins data as Object
+$this->plugin->data
 ```
 
 ### Get Current User data
@@ -1235,7 +1259,7 @@ There is several Ways for set attribute:
 $content = $this->view()
   ->attribute('text', $text)
   ->attribute([
-      'description' => __('This is the description', $this->plugin->textdomain)
+      'description' => __('This is the description', $this->plugin->textDomain)
   ])
   ->render('notice');
 echo $this->add_alert($content, 'info');
@@ -1244,7 +1268,7 @@ echo $this->add_alert($content, 'info');
 $content = $this->view()->render('notice', [
   'text' => $text
 ], [
-  'text' => __('This is the description', $this->plugin->textdomain)
+  'text' => __('This is the description', $this->plugin->textDomain)
 ]);
 echo $this->add_alert($content, 'info');
 

@@ -16,6 +16,7 @@ use WPTrait\Hook\
     SortableColumns,
     TaxonomyColumns
 };
+use WPTrait\Information;
 
 if (!class_exists('WPTrait\Admin\Taxonomy')) {
 
@@ -23,10 +24,17 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
     {
         use Notice, BulkActions, AdminInit, AdminFooter, TaxonomyColumns, SortableColumns;
 
+        /**
+         * Get Plugin Data
+         *
+         * @var Information
+         */
+        public $plugin;
+
         public $slug, $name;
         public $post_types, $args = [];
 
-        public function __construct($slug, $name, $post_types = [], $args = [], $plugin = [])
+        public function __construct(Information $plugin, $slug, $name, $post_types = [], $args = [])
         {
             // Define Taxonomy in WordPress
             $this->plugin = $plugin;
@@ -39,8 +47,7 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
             parent::__construct($plugin);
 
             // Register Taxonomy
-            // @see https://developer.wordpress.org/reference/functions/register_taxonomy/
-            add_action('init', [$this, 'register_taxonomy']);
+            $this->add_action('init', [$this, 'register_taxonomy']);
 
             // Change Taxonomy Argument
             $this->add_filter('register_taxonomy_args', 'taxonomy_args', 10, 2);

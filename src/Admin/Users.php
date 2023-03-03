@@ -19,6 +19,7 @@ use WPTrait\Hook\
     UserProfileFields,
     AdminSearchBox
 };
+use WPTrait\Information;
 
 if (!class_exists('WPTrait\Admin\Users')) {
 
@@ -28,7 +29,14 @@ if (!class_exists('WPTrait\Admin\Users')) {
 
         public $rowActions = ['type' => 'user'];
 
-        public function __construct($plugin = [])
+        /**
+         * Get Plugin Data
+         *
+         * @var Information
+         */
+        public $plugin;
+
+        public function __construct(Information $plugin)
         {
             parent::__construct($plugin);
         }
