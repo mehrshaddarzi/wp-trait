@@ -2,6 +2,7 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Information;
 use WPTrait\Plugin;
 
 if (!defined('ABSPATH')) {
@@ -19,7 +20,11 @@ if (!class_exists('WPTrait\Collection\View')) {
          */
         public $path;
 
-        /** @var object|Plugin */
+        /**
+         * Plugin Data
+         *
+         * @var Information
+         */
         private $plugin;
 
         /**
@@ -29,26 +34,22 @@ if (!class_exists('WPTrait\Collection\View')) {
          */
         public $attributes = [];
 
-        /**
-         * @param string $view
-         * @param string $path
-         * @param object|Plugin $plugin
-         */
-        public function __construct($path = '', $plugin = null)
+        public function __construct(Information $plugin, string $path = '')
         {
-            $this->setPath($path, $plugin);
+            $this->setPath($plugin, $path);
             $this->plugin = $plugin;
         }
 
         /**
-         * @param string $path
-         * @param object|Plugin $plugin
+         * Set Path
          *
+         * @param Information $plugin
+         * @param string $path
          * @return void
          */
-        protected function setPath($path = '', $plugin = null)
+        protected function setPath(Information $plugin, string $path = '')
         {
-            if (!$path && $plugin) {
+            if (!$path) {
                 $path = $plugin->path . 'templates';
             }
 
@@ -56,9 +57,10 @@ if (!class_exists('WPTrait\Collection\View')) {
         }
 
         /**
+         * Setup Attribute
+         *
          * @param string|array $keyOrArray
          * @param mixed $value
-         *
          * @return self
          */
         public function attribute($keyOrArray, $value = null)
@@ -73,11 +75,12 @@ if (!class_exists('WPTrait\Collection\View')) {
         }
 
         /**
+         * Render View
+         *
          * @param string $view
          * @param array $data
          * @param array $mergeData
          * @param bool $canOverride
-         *
          * @return string
          */
         public function render($view = null, $data = [], $mergeData = [], $canOverride = true)
@@ -92,28 +95,22 @@ if (!class_exists('WPTrait\Collection\View')) {
             $data = array_merge($data, $mergeData);
             $data = array_merge($this->attributes, $data);
 
-            try {
-                ob_start();
-
-                if ($data) {
-                    extract($data);
-                }
-
-                include $view;
-
-                $output = ob_get_clean();
-            } catch (\Exception $e) {
-                ob_end_clean();
-                throw $e;
+            ob_start();
+            if ($data) {
+                extract($data);
             }
+            include $view;
+            $output = ob_get_clean();
+            ob_end_clean();
 
             return $output;
         }
 
         /**
+         * resolvePath
+         *
          * @param string $path
          * @param bool $canOverride
-         *
          * @return string
          */
         protected function resolvePath($path, $canOverride = true)
