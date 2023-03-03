@@ -3,6 +3,7 @@
 namespace WPTrait;
 
 use WPTrait\Collection\Hooks;
+use WPTrait\Utils\Singleton;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -12,7 +13,7 @@ if (!class_exists('WPTrait\Plugin')) {
 
     abstract class Plugin
     {
-        use Hooks;
+        use Hooks, Singleton;
 
         /**
          * Get Plugin Data
