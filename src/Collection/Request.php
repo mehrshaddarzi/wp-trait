@@ -158,7 +158,7 @@ if (!class_exists('WPTrait\Collection\Request')) {
 
         public function is_method($name)
         {
-            return ($this->get_method($name) == strtoupper($name));
+            return ($this->get_method() == strtoupper($name));
         }
 
         public function new($url, $method = 'GET', $args = [])

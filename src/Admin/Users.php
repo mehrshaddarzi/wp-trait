@@ -43,8 +43,7 @@ if (!class_exists('WPTrait\Admin\Users')) {
 
         public function in_page()
         {
-            global $pagenow;
-            return ($pagenow == "users.php");
+            return ($this->global->page_now == "users.php");
         }
 
         public function admin_url($args = [], $paged = false, $search = false)

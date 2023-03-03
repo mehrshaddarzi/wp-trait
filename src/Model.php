@@ -85,23 +85,33 @@ if (!class_exists('WPTrait\Model')) {
          */
         public $constant;
 
-        public $db, $wp, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option,
+        /**
+         * WordPress Global Variables
+         *
+         * @var Globals
+         */
+        public $global;
+
+        /**
+         * WordPress Database Class
+         *
+         * @var \WPDB
+         */
+        public $db;
+
+        public $post, $term, $attachment, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
             $cookie, $session, $file, $email, $password;
 
         public function __construct(Information $plugin)
         {
-            global $wpdb, $wp, $pagenow, $wp_admin_bar, $current_screen;
+            global $wpdb;
 
-            # @see https://codex.wordpress.org/Global_Variables
-            $this->db = $wpdb;
-            $this->wp = $wp;
-            $this->pagenow = $pagenow;
-            $this->admin_bar = $wp_admin_bar;
-            $this->screen = $current_screen;
-
-            # Set Plugin information
+            // Set Plugin information
             $this->plugin = $plugin;
+
+            // Set WordPress Database Class
+            $this->db = $wpdb;
 
             # Setup Collection
             $this->post = new Post();
@@ -144,6 +154,9 @@ if (!class_exists('WPTrait\Model')) {
                     break;
                 case "constant":
                     $this->{$name} = new Constant();
+                    break;
+                case "global":
+                    $this->{$name} = new Globals();
                     break;
             }
 

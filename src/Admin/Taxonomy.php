@@ -98,8 +98,7 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
 
         public function in_page()
         {
-            global $pagenow;
-            return ($pagenow == "edit-tags.php" and isset($_GET['taxonomy']) and $_GET['taxonomy'] == $this->slug);
+            return ($this->global->page_now == "edit-tags.php" and isset($_GET['taxonomy']) and $_GET['taxonomy'] == $this->slug);
         }
 
         public function admin_url($args = [], $paged = false, $search = false)

@@ -122,8 +122,7 @@ if (!class_exists('WPTrait\Admin\PostType')) {
 
         public function in_page()
         {
-            global $pagenow;
-            return ($pagenow == "edit.php" and isset($_GET['post_type']) and $_GET['post_type'] == $this->slug);
+            return ($this->global->page_now == "edit.php" and isset($_GET['post_type']) and $_GET['post_type'] == $this->slug);
         }
 
         public function admin_url($args = [], $paged = false, $search = false)
