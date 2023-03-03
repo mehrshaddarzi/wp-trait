@@ -2,8 +2,6 @@
 
 namespace WPTrait;
 
-use WPTrait\Hook\Constant;
-
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -12,7 +10,6 @@ if (!class_exists('WPTrait\Information')) {
 
     class Information
     {
-        use Constant;
 
         /**
          * Plugin Slug
@@ -117,9 +114,9 @@ if (!class_exists('WPTrait\Information')) {
             // Set Plugin Slug
             $this->slug = $slug;
 
-            // Check Custom argument
+            // Setup Argument
             $default = [
-                'main_file' => $this->constant('plugin_dir') . '/' . $slug . '/' . $slug . '.php',
+                'main_file' => (new Constant())->plugin_dir . '/' . $slug . '/' . $slug . '.php',
                 'global' => $this->sanitize_plugin_slug($slug),
                 'prefix' => $this->sanitize_plugin_slug($slug),
                 'when_load' => ['action' => 'plugins_loaded', 'priority' => 10]

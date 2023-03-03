@@ -18,10 +18,13 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [Generate Model manually](#generate-model-manually)
 * [Global Function](#global-function)
     + [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
-* [WordPress Hooks](#wordpress-hooks)
-* [Model Property](#model-property)
+* [Model Properties](#model-properties)
+    + [WordPress Hooks](#wordpress-hooks)
     + [Use WPDB](#use-wpdb)
     + [Current Plugin information](#current-plugin-information)
+    + [Get WordPress default Constants](#get-wordpress-default-constants)
+        + [Get WordPress urls and path](#get-wordpress-urls-and-path)
+    + [Get Current User data](#get-current-user-data)
 * [Collection Class](#collection-class)
     + [Post](#post)
     + [Attachment](#attachment)
@@ -277,9 +280,11 @@ $default = [
 ];
 ```
 
-## WordPress Hooks
+## Model Properties
 
-You can use `$actions` and `$filters` property in All Class, for example:
+### WordPress Hooks
+
+You can use `$actions` and `$filters` property in all class, for example:
 
 ```php
 use WPTrait\Model;
@@ -324,25 +329,28 @@ class Post extends Model
 }
 ```
 
-## Model Property
-
 ### Use WPDB
 
 use `$this->db` for run Query in WordPress Database:
 
 ```php
-public function get_student_list()
-{
-    $lists = $this->db->get_results("SELECT ID, first_name FROM {$this->db->prefix}students ORDER BY ID");
-    foreach ($lists as $student) {
-        // Do Stuff
-    }
+// Get List of students from custom WordPress table
+$lists = $this->db->get_results("SELECT ID, first_name FROM {$this->db->prefix}students ORDER BY ID");
+foreach ($lists as $student) {
+    echo $student->ID;
 }
+
+// Insert new item in Database
+$this->db->insert($this->db->prefix.'students', [
+'name' => 'Mehrshad',
+'family' => Darzi
+]);
+echo $this->db->insert_id;
 ```
 
 ### Current Plugin information
 
-For get Current plugin information use `$this->plugin` variable:
+For get current plugin information use `$this->plugin` variable:
 
 ```php
 // Get Plugin Base Url
@@ -388,6 +396,84 @@ $this->plugin->path('templates/email.php')
 
 // Get All plugins data as Object
 $this->plugin->data
+```
+
+### Get WordPress default Constants
+
+For get WordPress default Constants use `$this->constant` variable:
+
+#### Get WordPress urls and path:
+
+```php
+// Get ABSPATH (WordPress Root Directory)
+$this->constant->root
+
+// Get Site Url
+$this->constant->site_url
+
+// Get Site Home Url
+$this->constant->home
+
+// Get WP-Content Dir Path
+$this->constant->content_dir
+
+// Get WP-Content Dir Url
+$this->constant->content_url
+
+// Get Plugins Dir Path
+$this->constant->plugin_dir
+
+// Get Plugins Dir Url
+$this->constant->plugin_url
+
+// Get Uploads Directory in WordPress
+// Object {basedir|baseurl|subdir|path|url}
+$this->constant->uploads
+
+// Get Base Uploads dir path
+$this->constant->uploads->basedir;
+
+// Get Base Uploads dir url
+$this->constant->uploads->baseurl;
+
+// Get Active Theme path
+$this->constant->template_path;
+
+// Get Active Theme url
+$this->constant->template_url;
+
+// Get themes dir path
+$this->constant->theme_root;
+
+// Get Mu-Plugins dir path
+$this->constant->mu_plugin_dir;
+
+// Get Mu-Plugins dir url
+$this->constant->mu_plugin_url;
+```
+
+#### Time in Seconds and Debug Constants:
+
+```php
+// Check WP_DEBUG is true (boolean)
+$this->constant->debug
+
+// Get WordPress environment type
+$this->constant->environment
+
+// Check SCRIPT_DEBUG is true (boolean)
+$this->constant->script_debug
+
+// Check WP_CACHE is true (boolean)
+$this->constant->cache
+
+// Get Time in seconds
+$this->constant->minute #60
+$this->constant->hour #3600
+$this->constant->day
+$this->constant->week
+$this->constant->month
+$this->constant->year
 ```
 
 ### Get Current User data
@@ -848,13 +934,13 @@ if($this->error->has($error)){
 // Remember Cache last Post in One Hour
 $this->cache->remember('latest_post', function(){
     return $this->post->list(['type' => 'product', 'return' => 'id'])
-}, 'cache_group_name', $this->constant('hour'));
+}, 'cache_group_name', $this->constant->hour);
 
 // Delete Cache
 $this->cache->delete('cache_name', 'group');
 
 // Add Cache
-$this->cache->add('cache_name', $value, 'group_name', 5 * $this->constant('minute'));
+$this->cache->add('cache_name', $value, 'group_name', 5 * $this->constant->minute);
 
 // Get Cache
 $this->cache->get('name', 'group');
@@ -862,13 +948,13 @@ $this->cache->get('name', 'group');
 // Remember Transient
 $this->transient->remember('latest_users', function(){
     return $this->user->list(['role' => 'subscriber', 'return' => 'id'])
-}, $this->constant('hour'));
+}, $this->constant->hour);
 
 // Delete transient
 $this->transient->delete('name');
 
 // Add Transient
-$this->transient->add('name', $value, $this->constant('day'));
+$this->transient->add('name', $value, $this->constant->day);
 
 // Get Transient
 $this->transient->get('name');
@@ -958,7 +1044,7 @@ $list->routes;
 
 ```php
 // set new Cookie for One Hour
-$this->cookie->set('user_data', ['name' => 'Mehrshad', 'family' => 'Darzi'], $this->constant('hour'));
+$this->cookie->set('user_data', ['name' => 'Mehrshad', 'family' => 'Darzi'], $this->constant->hour);
 
 // Check exist cookie {boolean}
 $this->cookie->has('user_data');
@@ -977,7 +1063,7 @@ $this->cookie->all();
 
 ```php
 // set new session
-$this->session->set('redirect_from', add_query_arg( 'type', 'error', $this->constant('home') ));
+$this->session->set('redirect_from', add_query_arg( 'type', 'error', $this->constant->home ));
 
 // Check exist session {boolean}
 $this->session->has('redirect_from');
@@ -1014,7 +1100,7 @@ public function register_session()
 
 ```php
 // Define single Event
-$this->event->single($this->constant('week'), 'action_name');
+$this->event->single($this->constant->week, 'action_name');
 
 // Define recurring Event
 $this->event->add(time(), 'hourly', 'action_name', []);
@@ -1044,58 +1130,9 @@ $this->nonce->input('_my_nonce', 'nonce_input_name');
 
 ### File System
 
-Get WordPress Directories:
-
-```php
-// Get Root Path
-$this->constant('abspath');
-
-// Get WP-Content Dir Path
-$this->constant('content_dir');
-
-// Get WP-Content Dir Url
-$this->constant('content_url');
-
-// Get Plugins Dir Path
-$this->constant('plugin_dir');
-
-// Get Plugins Dir Url
-$this->constant('plugin_url');
-
-// Get Uploads Directory in WordPress {object}
-$this->constant('upload_dir');
-/**
-* basedir
-* baseurl
-* path
-* url
-*/
-
-// Get Base Uploads dir path
-$this->constant('upload_dir')->basedir;
-
-// Get Base Uploads dir url
-$this->constant('upload_dir')->baseurl;
-
-// Get Active Theme path
-$this->constant('template_path');
-
-// Get themes dir path
-$this->constant('theme_root');
-
-// Get Mu-Plugins dir path
-$this->constant('mu_plugin_dir');
-
-// Get Mu-Plugins dir url
-$this->constant('mu_plugin_url');
-```
-
-List of Methods File Systems
-{[See Collection](https://github.com/mehrshaddarzi/wp-trait/blob/master/src/Collection/File.php)}:
-
 ```php
 // Get Example file Path
-$path = path_join($this->contant('content_dir'), 'object.php');
+$path = path_join($this->constant->content_dir, 'object.php');
 
 // Check file exits
 $this->file($path)->exists();
@@ -1114,13 +1151,13 @@ $content = '<?php echo "Hi"; ?>';
 $this->file($path)->create($content);
 
 // Create Directory
-$this->file->mkdir($this->contant('content_dir').'/excel');
+$this->file->mkdir($this->constant->content_dir.'/excel');
 
 // Change Permission File
 $this->file($path)->chmod(0600);
 
 // Copy File
-$new_path = $this->contant('content_dir').'/backup/object.php';
+$new_path = $this->constant->content_dir.'/backup/object.php';
 $this->file($path)->copy($new_path);
 
 // Move File
@@ -1142,6 +1179,10 @@ $this->file($path)->lastModified();
 $this->file($path)->size();
 ```
 
+List of Methods File Systems
+{[See Collection](https://github.com/mehrshaddarzi/wp-trait/blob/master/src/Collection/File.php)}:
+
+
 ### Email
 
 ```php
@@ -1153,7 +1194,7 @@ $headers = [
     'Content-Type: text/html; charset=UTF-8',
     'From: Site name <info@sitename.com>'
 ];
-$attachment = [$this->constant('upload_dir')->basedir.'/file.zip'];
+$attachment = [$this->constant->uploads->basedir.'/file.zip'];
 $this->email(['email@site.com', 'mail@domain.com'])
      ->send('Subject', 'Message Body', $headers, $attachment);
 ```

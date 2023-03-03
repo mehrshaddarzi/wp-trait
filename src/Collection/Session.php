@@ -2,7 +2,6 @@
 
 namespace WPTrait\Collection;
 
-use WPTrait\Hook\Constant;
 use WPTrait\Utils\Arr;
 
 if (!defined('ABSPATH')) {
@@ -13,8 +12,6 @@ if (!trait_exists('WPTrait\Collection\Session')) {
 
     class Session
     {
-        use Constant;
-
         public $name;
 
         public function __construct($name = null)

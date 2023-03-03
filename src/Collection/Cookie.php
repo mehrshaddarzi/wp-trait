@@ -2,7 +2,6 @@
 
 namespace WPTrait\Collection;
 
-use WPTrait\Hook\Constant;
 use WPTrait\Utils\Arr;
 
 if (!defined('ABSPATH')) {
@@ -13,8 +12,6 @@ if (!trait_exists('WPTrait\Collection\Cookie')) {
 
     class Cookie
     {
-        use Constant;
-
         public $name;
 
         public function __construct($name = null)
@@ -42,9 +39,9 @@ if (!trait_exists('WPTrait\Collection\Cookie')) {
             return Arr::has($this->all(), (is_null($name) ? $this->name : $name));
         }
 
-        public function set($name, $value, $expire = '', $sanitize = true)
+        public function set($name, $value, $expire = 3600, $sanitize = true)
         {
-            return setcookie($name, ($sanitize === true ? $this->sanitizeCookieValue($value) : $value), time() + ($expire == "" ? $this->constant('hour') : $expire), COOKIEPATH, COOKIE_DOMAIN);
+            return setcookie($name, ($sanitize === true ? $this->sanitizeCookieValue($value) : $value), (time() + (int)$expire), COOKIEPATH, COOKIE_DOMAIN);
         }
 
         public function save($value, $expire = '', $sanitize = true, $name = null)

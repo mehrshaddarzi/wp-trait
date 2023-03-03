@@ -2,8 +2,8 @@
 
 namespace WPTrait;
 
-use WPTrait\Hook\Constant;
-use WPTrait\Collection\{Action,
+use WPTrait\Collection\{
+    Action,
     Attachment,
     Cache,
     Comment,
@@ -30,15 +30,11 @@ use WPTrait\Collection\{Action,
     View
 };
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
-}
-
 if (!class_exists('WPTrait\Model')) {
 
     class Model
     {
-        use Hooks, Constant;
+        use Hooks;
 
         /**
          * Get Plugin Data
@@ -81,6 +77,13 @@ if (!class_exists('WPTrait\Model')) {
          * @var Response
          */
         public $response;
+
+        /**
+         * WordPress Constant List
+         *
+         * @var Constant
+         */
+        public $constant;
 
         public $db, $wp, $pagenow, $admin_bar, $screen, $post, $term, $attachment, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
@@ -138,6 +141,9 @@ if (!class_exists('WPTrait\Model')) {
                     break;
                 case "response":
                     $this->{$name} = new Response();
+                    break;
+                case "constant":
+                    $this->{$name} = new Constant();
                     break;
             }
 
