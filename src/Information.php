@@ -182,6 +182,16 @@ if (!class_exists('WPTrait\Information')) {
         {
             return $this->data;
         }
+
+        public function url($path): string
+        {
+            return rtrim($this->url, "/") . "/" . ltrim($path, "/");
+        }
+
+        public function path($path): string
+        {
+            return rtrim($this->path, "/") . "/" . ltrim($path, "/");
+        }
     }
 
 }
