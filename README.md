@@ -24,6 +24,8 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [Current Plugin information](#current-plugin-information)
     + [Get WordPress default Constants](#get-wordpress-default-constants)
         + [Get WordPress urls and path](#get-wordpress-urls-and-path)
+        + [Time in Seconds and Debug Constants](#time-in-seconds-and-debug-constants)
+    + [Get WordPress Global Variable](#get-wordpress-global-variable)
     + [Get Current User data](#get-current-user-data)
 * [Collection Class](#collection-class)
     + [Post](#post)
@@ -476,6 +478,57 @@ $this->constant->month
 $this->constant->year
 ```
 
+### Get WordPress Global Variable
+
+For get WordPress global variables use `$this->global` variable:
+
+```php
+// WordPress Current global $post data
+$this->global->post
+
+// WordPress Current global $wp_query data
+$this->global->query
+
+// WordPress Current Version
+$this->global->version
+
+// WordPress Current db Version
+$this->global->db_version
+
+// WordPress WP Request Object
+$this->global->wp
+
+// WordPress Rewrite Object Request
+$this->global->rewrite
+
+// WordPress User Roles list
+$this->global->roles
+
+// WordPress Locale
+$this->global->locale
+
+// WordPress AdminBar Object
+$this->global->admin_bar
+
+// WordPress Current Admin Page Now
+$this->global->page_now
+
+// Get Current Admin Screen detail
+$this->global->screen
+
+// Get List Of Admin Menu
+$this->global->menu
+
+// Get List Of Submenus in Admin
+$this->global->submenu
+
+// Get List Of registered Sidebars
+$this->global->sidebars
+
+// Get List of Registered Meta Boxes by current Screen
+$this->global->meta_boxes
+```
+
 ### Get Current User data
 
 for get Current User data use `$this->user` variable:
@@ -498,7 +551,7 @@ $this->user->meta->all();
 
 ## Collection Class
 
-This package has list of wordpress helper class, that you can uses.
+This package has list of WordPress helper class, that you can use it.
 
 ### Post
 

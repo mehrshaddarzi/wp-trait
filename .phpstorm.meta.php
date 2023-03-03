@@ -11,3 +11,11 @@
 class WP_Uploads_Dir_meta
 {
 }
+
+/**
+ * @property string $action
+ * @property string $priority
+ */
+class Trait_Plugin_When_Load_meta
+{
+}

@@ -30,20 +30,16 @@ if (!class_exists('WPTrait\Plugin')) {
             // include PHP files
             $this->includes();
 
-            // setup WordPress hook
+            // setup WordPress hooks
             $this->init_hooks();
 
-            // Set Global Function
-            if (!empty($arg['global'])) {
-                $GLOBALS[$arg['global']] = $this;
-
-                // Create global function for backwards compatibility.
-                $function = 'if(!function_exists(\'' . $arg['global'] . '\')) { function ' . $arg['global'] . '() { return $GLOBALS[\'' . $arg['global'] . '\']; }}';
-                eval($function);
-            }
-
             // Instantiate Object Class
-            add_action($arg['when_load']['action'], [$this, 'instantiate'], $arg['when_load']['priority']);
+            add_action($this->plugin->when_load->action, [$this, 'instantiate'], $this->plugin->when_load->priority);
+
+            // Set global function
+            if (!empty($this->plugin->function)) {
+                $this->setup_global_function();
+            }
 
             // Plugin Loaded Action
             do_action($this->plugin->prefix . '_loaded');
@@ -90,6 +86,15 @@ if (!class_exists('WPTrait\Plugin')) {
 
         public static function register_uninstall_hook()
         {
+        }
+
+        private function setup_global_function()
+        {
+            $GLOBALS[$this->plugin->function] = $this;
+
+            // Create global function for backwards compatibility.
+            $function = 'if(!function_exists(\'' . $this->plugin->function . '\')) { function ' . $this->plugin->function . '() { return $GLOBALS[\'' . $this->plugin->function . '\']; }}';
+            eval($function);
         }
     }
 

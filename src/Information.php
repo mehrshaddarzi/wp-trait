@@ -109,6 +109,20 @@ if (!class_exists('WPTrait\Information')) {
          */
         public $data;
 
+        /**
+         * Get WordPress action name for load this plugin
+         *
+         * @var \Trait_Plugin_When_Load_meta
+         */
+        public $when_load;
+
+        /**
+         * Get Global function name for this plugin
+         *
+         * @var string
+         */
+        public $function;
+
         public function __construct($slug, $args = [])
         {
             // Set Plugin Slug
@@ -128,6 +142,12 @@ if (!class_exists('WPTrait\Information')) {
 
             // Set Prefix
             $this->prefix = $arg['prefix'];
+
+            // Set When Load
+            $this->when_load = (object)$arg['when_load'];
+
+            // Set global function
+            $this->function = $arg['global'];
 
             // Define Variable
             $this->get_plugin_data();
