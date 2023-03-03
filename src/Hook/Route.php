@@ -13,8 +13,6 @@ trait Route
 {
 
 
-
-
     public function bootRoute($arg = [])
     {
         if (empty($arg)) return;
@@ -39,7 +37,7 @@ trait Route
                     });
                 } else {
                     add_filter('template_redirect', function () use ($RouteArg) {
-                        $this->ajaxHeader();
+                        $this->header();
                         $this->{$RouteArg['cb']}();
                         exit;
                     });
@@ -73,7 +71,7 @@ trait Route
     }
 
 
-    public function ajaxHeader()
+    public function header()
     {
 
 
