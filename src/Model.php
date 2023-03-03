@@ -116,7 +116,6 @@ if (!class_exists('WPTrait\Model')) {
             # Setup Collection
             $this->post = new Post();
             $this->term = new Term();
-            $this->attachment = new Attachment();
             $this->user = new User();
             $this->password = new Password();
             $this->option = new Option();
@@ -157,6 +156,9 @@ if (!class_exists('WPTrait\Model')) {
                     break;
                 case "global":
                     $this->{$name} = new Globals();
+                    break;
+                case "attachment":
+                    $this->{$name} = new Attachment();
                     break;
             }
 

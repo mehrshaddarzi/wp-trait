@@ -19,6 +19,8 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
 
         /**
          * Meta Class
+         *
+         * @var Meta
          */
         public $meta;
 
@@ -33,12 +35,6 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
         {
             $this->attachment_id = $attachment_id;
             $this->meta = new Meta('attachment', $this->attachment_id);
-        }
-
-        public function upload_dir()
-        {
-            # https://developer.wordpress.org/reference/functions/wp_upload_dir/
-            return (object)wp_get_upload_dir();
         }
 
         public function url($attachment_id = null)
@@ -178,12 +174,9 @@ if (!class_exists('WPTrait\Collection\Attachment')) {
 
             // Get only 1 size if found
             if ($size) {
-                if (isset($sizes[$size])) {
-                    return $sizes[$size];
-                } else {
-                    return false;
-                }
+                return $sizes[$size] ?? false;
             }
+
             return $sizes;
         }
 

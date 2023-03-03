@@ -26,6 +26,7 @@ if (!class_exists('WPTrait\Collection\Meta')) {
 
         /**
          * Object id
+         *
          * @var int
          */
         public $object_id;
@@ -105,12 +106,12 @@ if (!class_exists('WPTrait\Collection\Meta')) {
             return $type;
         }
 
-        private function sanitizeArg($object_id, $type)
+        private function sanitizeArg($object_id, $type): object
         {
-            $return = new \stdClass();
-            $return->object_id = (is_null($object_id) ? $this->object_id : $object_id);
-            $return->type = (is_null($type) ? $this->type : $type);
-            return $return;
+            return (object)[
+                'object_id' => (is_null($object_id) ? $this->object_id : $object_id),
+                'type' => (is_null($type) ? $this->type : $type)
+            ];
         }
     }
 }
