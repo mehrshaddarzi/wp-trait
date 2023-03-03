@@ -25,7 +25,7 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
     + [Get WordPress default Constants](#get-wordpress-default-constants)
         + [Get WordPress urls and path](#get-wordpress-urls-and-path)
         + [Time in Seconds and Debug Constants](#time-in-seconds-and-debug-constants)
-    + [Get WordPress Global Variable](#get-wordpress-global-variable)
+    + [Get WordPress Global Variables](#get-wordpress-global-variables)
     + [Get Current User data](#get-current-user-data)
 * [Collection Class](#collection-class)
     + [Post](#post)
@@ -478,7 +478,7 @@ $this->constant->month
 $this->constant->year
 ```
 
-### Get WordPress Global Variable
+### Get WordPress Global Variables
 
 For get WordPress global variables use `$this->global` variable:
 
