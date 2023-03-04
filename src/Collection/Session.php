@@ -39,7 +39,7 @@ if (!trait_exists('WPTrait\Collection\Session')) {
             return $_SESSION[$name] = $value;
         }
 
-        public function save($value, $expire = '', $sanitize = true, $name = null)
+        public function save($value, $name = null)
         {
             return $this->set((is_null($name) ? $this->name : $name), $value);
         }
