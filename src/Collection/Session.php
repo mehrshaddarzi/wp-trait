@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('WPTrait\Collection\Session')) {
+if (!class_exists('WPTrait\Collection\Session')) {
 
     class Session
     {
