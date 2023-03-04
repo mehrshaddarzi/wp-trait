@@ -16,8 +16,7 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
         - [Generate New Post-Type Model](#generate-new-post-type-model)
         - [Generate New Taxonomy Model](#generate-new-taxonomy-model)
     + [Generate Model manually](#generate-model-manually)
-* [Access to class methods and Properties](#access-to-class-methods-and-properties)
-  * [Global Function](#global-function)
+* [Global Function](#global-function)
     + [How to Change Global variable and function name](#how-to-change-global-variable-and-function-name)
 * [Model Properties](#model-properties)
     + [WordPress Hooks](#wordpress-hooks)
@@ -232,14 +231,6 @@ public function instantiate()
 {
     $this->Admin = new \WP_User_Mobile\Admin($this->plugin);
 }
-```
-
-## Access to class methods and Properties
-
-WP-Trait use Singleton Design Pattern, for get methods between all classes in your project:
-
-```php
-echo \WP_User_Mobile::instance()->Admin->method_name();
 ```
 
 ## Global Function

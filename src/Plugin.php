@@ -3,7 +3,6 @@
 namespace WPTrait;
 
 use WPTrait\Collection\Hooks;
-use WPTrait\Utils\Singleton;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -13,7 +12,7 @@ if (!class_exists('WPTrait\Plugin')) {
 
     abstract class Plugin
     {
-        use Hooks, Singleton;
+        use Hooks;
 
         /**
          * Get Plugin Data
@@ -58,7 +57,7 @@ if (!class_exists('WPTrait\Plugin')) {
         {
             // Load Text Domain
             if (isset($this->plugin->textDomain) and !empty($this->plugin->textDomain)) {
-                load_plugin_textdomain($this->plugin->textdomain, false, wp_normalize_path($this->plugin->path . '/languages'));
+                load_plugin_textdomain($this->plugin->textDomain, false, wp_normalize_path($this->plugin->path . '/languages'));
             }
 
             // register_activation_hook

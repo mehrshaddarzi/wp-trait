@@ -168,14 +168,11 @@ if (!class_exists('WPTrait\Constant')) {
          */
         public $theme_root;
 
-        public function __get($name)
+        public function __construct()
         {
-            $method = 'get_' . ($name);
-            if (method_exists($this, $method)) {
-                return $method();
+            foreach (array_keys(get_object_vars($this)) as $property) {
+                $this->{$property} = $this->{'get_' . $property}();
             }
-
-            return null;
         }
 
         private function get_root(): string

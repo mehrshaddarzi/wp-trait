@@ -50,10 +50,10 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
             add_action('init', [$this, 'register_taxonomy']);
 
             // Change Taxonomy Argument
-            add_filter('register_taxonomy_args', 'taxonomy_args', 10, 2);
+            $this->add_filter('register_taxonomy_args', 'taxonomy_args', 10, 2);
 
             // Taxonomy Update Message
-            add_filter('term_updated_messages', 'term_updated_messages', 10, 1);
+            $this->add_filter('term_updated_messages', 'term_updated_messages', 10, 1);
         }
 
         public function __get($name)
