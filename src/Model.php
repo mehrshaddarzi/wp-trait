@@ -32,6 +32,14 @@ use WPTrait\Collection\{
 
 if (!class_exists('WPTrait\Model')) {
 
+    /**
+     * @property Request $request { HTTP Request }
+     * @property Response $response { HTTP Response }
+     * @property Constant $constant { WordPress Constant List }
+     * @property Globals $global { WordPress Global Variables }
+     * @property View $view { View and templates system }
+     * @property Attachment $attachment { WordPress Attachment }
+     */
     class Model
     {
         use Hooks;
@@ -42,13 +50,6 @@ if (!class_exists('WPTrait\Model')) {
          * @var Information
          */
         public $plugin;
-
-        /**
-         * View and templates system
-         *
-         * @var View
-         */
-        public $view;
 
         /**
          * List Of WordPress Actions
@@ -63,34 +64,6 @@ if (!class_exists('WPTrait\Model')) {
          * @var array
          */
         protected $filters = [];
-
-        /**
-         * Get REQUEST data
-         *
-         * @var Request
-         */
-        public $request;
-
-        /**
-         * HTTP Response
-         *
-         * @var Response
-         */
-        public $response;
-
-        /**
-         * WordPress Constant List
-         *
-         * @var Constant
-         */
-        public $constant;
-
-        /**
-         * WordPress Global Variables
-         *
-         * @var Globals
-         */
-        public $global;
 
         /**
          * WordPress Database Class
@@ -141,25 +114,23 @@ if (!class_exists('WPTrait\Model')) {
 
         public function __get($name)
         {
-            switch ($name) {
-                case "view":
-                    $this->{$name} = new View($this->plugin);
-                    break;
-                case "request":
-                    $this->{$name} = new Request();
-                    break;
-                case "response":
-                    $this->{$name} = new Response();
-                    break;
-                case "constant":
-                    $this->{$name} = new Constant();
-                    break;
-                case "global":
-                    $this->{$name} = new Globals();
-                    break;
-                case "attachment":
-                    $this->{$name} = new Attachment();
-                    break;
+            $class = [
+                'request' => 'Request',
+                'response' => 'Response',
+                'constant' => 'Constant',
+                'global' => 'Globals',
+                'attachment' => 'Attachment'
+            ];
+
+            // Setup view
+            if ($name == "view") {
+                $this->{$name} = new View($this->plugin);
+            }
+
+            // Check in Class
+            if (array_key_exists($name, $class)) {
+                $class_name = '\WPTrait\\Collection\\' . $class[$name];
+                $this->{$name} = new $class_name();
             }
 
             return $this->{$name};
