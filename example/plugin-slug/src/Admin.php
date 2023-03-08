@@ -18,7 +18,7 @@ class Admin extends Model
 
     public $filters = [
         'the_content' => 'add_prefix_content',
-        'show_admin_bar' => 'return__false'
+        'show_admin_bar' => '__return_false'
     ];
 
     public $ajax = [
