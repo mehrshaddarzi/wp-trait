@@ -39,6 +39,8 @@ if (!class_exists('WPTrait\Model')) {
      * @property Globals $global { WordPress Global Variables }
      * @property View $view { View and templates system }
      * @property Attachment $attachment { WordPress Attachment }
+     * @property Filter $filter { WordPress Filter Hooks }
+     * @property Action $action { WordPress Action Hooks }
      */
     class Model
     {
@@ -73,7 +75,7 @@ if (!class_exists('WPTrait\Model')) {
         public $db;
 
         public $post, $term, $attachment, $user, $option,
-            $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route, $filter, $action,
+            $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
             $cookie, $session, $file, $email, $password;
 
         public function __construct(Information $plugin)
@@ -102,8 +104,6 @@ if (!class_exists('WPTrait\Model')) {
             $this->rest = new RestAPI();
             $this->log = new Log();
             $this->route = new Route();
-            $this->filter = new Filter();
-            $this->action = new Action();
             $this->cookie = new Cookie();
             $this->session = new Session();
             $this->file = new File();
@@ -119,7 +119,9 @@ if (!class_exists('WPTrait\Model')) {
                 'response' => 'Response',
                 'constant' => 'Constant',
                 'global' => 'Globals',
-                'attachment' => 'Attachment'
+                'attachment' => 'Attachment',
+                'filter' => 'Filter',
+                'action' => 'Action'
             ];
 
             // Setup view

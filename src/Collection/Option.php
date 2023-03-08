@@ -50,7 +50,7 @@ if (!class_exists('WPTrait\Collection\Option')) {
 
         public function add($name, $value = '', $autoload = 'yes')
         {
-            return add_option($name, $value, $deprecated = '', $autoload);
+            return add_option($name, $value, $autoload);
         }
     }
 }

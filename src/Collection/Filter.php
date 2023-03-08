@@ -2,13 +2,11 @@
 
 namespace WPTrait\Collection;
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
-}
+use \WPTrait\Interfaces\Hooks;
 
-if (!trait_exists('WPTrait\Collection\Filter')) {
+if (!class_exists('WPTrait\Collection\Filter')) {
 
-    class Filter
+    class Filter implements Hooks
     {
 
         public function add($hook_name, $callback, $priority = 10, $accepted_args = 1)

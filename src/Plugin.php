@@ -49,9 +49,7 @@ if (!class_exists('WPTrait\Plugin')) {
         {
         }
 
-        public function instantiate()
-        {
-        }
+        abstract function instantiate();
 
         public function init_hooks()
         {
