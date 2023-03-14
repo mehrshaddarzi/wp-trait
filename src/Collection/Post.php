@@ -28,6 +28,8 @@ if (!class_exists('WPTrait\Collection\Post')) {
 
         /**
          * Meta Class
+         *
+         * @var Meta
          */
         public $meta;
 
@@ -64,7 +66,15 @@ if (!class_exists('WPTrait\Collection\Post')) {
         {
             $this->post_id = $post_id;
             $this->slug = $slug;
-            $this->meta = new Meta('post', $this->post_id);
+        }
+
+        public function __get($name)
+        {
+            if ($name == "meta") {
+                return new Meta('post', $this->post_id);
+            }
+
+            return $this->{$name};
         }
 
         public function get($post_id = null, $output = OBJECT)

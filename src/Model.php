@@ -11,7 +11,6 @@ use WPTrait\Collection\{
     Error,
     Event,
     Email,
-    File,
     Filter,
     Hooks,
     Log,
@@ -76,7 +75,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public $post, $term, $attachment, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
-            $cookie, $session, $file, $email, $password;
+            $cookie, $session, $email, $password;
 
         public function __construct(Information $plugin)
         {
@@ -106,7 +105,6 @@ if (!class_exists('WPTrait\Model')) {
             $this->route = new Route();
             $this->cookie = new Cookie();
             $this->session = new Session();
-            $this->file = new File();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -138,7 +136,7 @@ if (!class_exists('WPTrait\Model')) {
             return $this->{$name};
         }
 
-        public function bootHooks()
+        private function bootHooks()
         {
             $this->bootTraitHooks();
             $this->bootVariableHooks();
@@ -197,11 +195,6 @@ if (!class_exists('WPTrait\Model')) {
         public function email($email)
         {
             return new Email($email);
-        }
-
-        public function file($file)
-        {
-            return new File($file);
         }
 
         public function log($log = '', $type = 'debug', $condition = null)

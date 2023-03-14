@@ -22,6 +22,8 @@ if (!class_exists('WPTrait\Collection\User')) {
 
         /**
          * Meta Class
+         *
+         * @var Meta
          */
         public $meta;
 
@@ -52,12 +54,14 @@ if (!class_exists('WPTrait\Collection\User')) {
 
         /**
          * Password Utility Class
+         *
+         * @var Password
          */
         public $password;
 
         public function __construct($user_id = null)
         {
-            $this->user_id = (is_null($user_id) ? get_current_user_id() : $user_id);
+            $this->user_id = (is_null($user_id) ? $this->id() : $user_id);
             $this->meta = new Meta('user', $this->user_id);
             $this->password = new Password($this->user_id);
         }
@@ -67,28 +71,18 @@ if (!class_exists('WPTrait\Collection\User')) {
             $arg = Arr::alias(array_combine($property, $property), $this->alias);
             if (!in_array($property, ['user_id', 'meta', 'password'])) {
                 $user_data = $this->get($this->user_id);
-                return $user_data->{array_keys($arg)[0]} ?? $this->$property;
+                return $user_data->{array_keys($arg)[0]} ?? $this->{$property};
             }
 
-            return $this->$property;
+            return $this->{$property};
         }
 
+        /**
+         * @param $user_id
+         * @return \WP_User
+         */
         public function get($user_id = null)
         {
-            /**
-             * @see https://core.trac.wordpress.org/browser/tags/5.8/src/wp-includes/class-wp-user.php
-             * List Of Methods:
-             *
-             * add_role
-             * remove_role
-             * set_role
-             * add_cap
-             * remove_cap
-             * remove_all_caps
-             * has_cap
-             * exists
-             *
-             */
             return new \WP_User((is_null($user_id) ? $this->user_id : $user_id));
         }
 
