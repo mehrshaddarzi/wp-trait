@@ -225,6 +225,36 @@ if (!class_exists('WPTrait\Collection\User')) {
             return wp_signon(['user_login' => $username, 'user_password' => $password, 'remember' => $remember], $secure_cookie);
         }
 
+        /**
+         * Auth as user
+         * 
+         * @param \WP_User|int|string $user
+         * @param bool $remember
+         * @param string $secure_cookie
+         * 
+         * @return void
+         */
+        public function authAs($user, $remember = false, $secure_cookie = '')
+        {
+            if ($user instanceof \WP_User) {
+                $user = $user->ID;
+            }
+
+            # Retrieve user id
+            if (is_string($user) && !is_numeric($user)) {
+                $user = get_user_by('login', $user);
+                $user = $user->ID;
+            }
+
+            # Switching to the user
+            wp_clear_auth_cookie();
+            wp_set_auth_cookie($user, $remember, $secure_cookie);
+            $user = wp_set_current_user($user);
+
+            # Let other third-party plugins play
+            do_action('wp_login', $user->user_login, $user);
+        }
+
         public function logout()
         {
             wp_logout();
