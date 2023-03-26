@@ -37,8 +37,7 @@ if (!class_exists('WPTrait\Model')) {
      * @property Attachment $attachment { WordPress Attachment }
      * @property Filter $filter { WordPress Filter Hooks }
      * @property Action $action { WordPress Action Hooks }
-     * @property Session $session { PHP Session }
-     * @property Cookie $cookie { PHP Cookie }
+     *
      */
     class Model
     {
@@ -112,8 +111,6 @@ if (!class_exists('WPTrait\Model')) {
             $class = [
                 'request' => 'Http\Request',
                 'response' => 'Http\Response',
-                'session' => 'Http\Session',
-                'cookie' => 'Http\Cookie',
                 'constant' => 'Constant',
                 'global' => 'Globals',
                 'filter' => 'Filter',
