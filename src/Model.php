@@ -2,13 +2,9 @@
 
 namespace WPTrait;
 
-use WPTrait\Http\Request;
-use WPTrait\Http\Response;
-use WPTrait\Collection\{
-    Attachment,
+use WPTrait\Collection\{Attachment,
     Cache,
     Comment,
-    Cookie,
     Email,
     Error,
     Event,
@@ -20,12 +16,15 @@ use WPTrait\Collection\{
     Post,
     RestAPI,
     Route,
-    Session,
     Term,
     Transient,
     User,
     View
 };
+use WPTrait\Http\Cookie;
+use WPTrait\Http\Request;
+use WPTrait\Http\Response;
+use WPTrait\Http\Session;
 
 if (!class_exists('WPTrait\Model')) {
 
@@ -38,6 +37,8 @@ if (!class_exists('WPTrait\Model')) {
      * @property Attachment $attachment { WordPress Attachment }
      * @property Filter $filter { WordPress Filter Hooks }
      * @property Action $action { WordPress Action Hooks }
+     * @property Session $session { PHP Session }
+     * @property Cookie $cookie { PHP Cookie }
      */
     class Model
     {
@@ -73,7 +74,7 @@ if (!class_exists('WPTrait\Model')) {
 
         public $post, $term, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
-            $cookie, $session, $email, $password;
+            $email, $password;
 
         public function __construct(Information $plugin)
         {
@@ -101,8 +102,6 @@ if (!class_exists('WPTrait\Model')) {
             $this->rest = new RestAPI();
             $this->log = new Log();
             $this->route = new Route();
-            $this->cookie = new Cookie();
-            $this->session = new Session();
 
             # Boot WordPress Hooks
             $this->bootHooks();
@@ -113,6 +112,8 @@ if (!class_exists('WPTrait\Model')) {
             $class = [
                 'request' => 'Http\Request',
                 'response' => 'Http\Response',
+                'session' => 'Http\Session',
+                'cookie' => 'Http\Cookie',
                 'constant' => 'Constant',
                 'global' => 'Globals',
                 'filter' => 'Filter',
@@ -168,16 +169,6 @@ if (!class_exists('WPTrait\Model')) {
         public function option($name)
         {
             return new Option($name);
-        }
-
-        public function cookie($name)
-        {
-            return new Cookie($name);
-        }
-
-        public function session($name)
-        {
-            return new Session($name);
         }
 
         public function nonce($action)

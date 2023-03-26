@@ -1,6 +1,6 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait\Http;
 
 use WPTrait\Utils\Arr;
 
@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!trait_exists('WPTrait\Collection\Cookie')) {
+if (!trait_exists('WPTrait\Http\Cookie')) {
 
     class Cookie
     {

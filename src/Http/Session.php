@@ -1,6 +1,6 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait\Http;
 
 use WPTrait\Utils\Arr;
 
@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('WPTrait\Collection\Session')) {
+if (!class_exists('WPTrait\Http\Session')) {
 
     class Session
     {
