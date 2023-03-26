@@ -1,10 +1,10 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait;
 
 use WPTrait\Interfaces\Hooks;
 
-if (!class_exists('WPTrait\Collection\Action')) {
+if (!class_exists('WPTrait\Action')) {
 
     class Action implements Hooks
     {

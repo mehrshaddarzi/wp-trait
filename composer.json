@@ -3,7 +3,7 @@
   "description": "Easy framework for fast and standard development of WordPress plugins",
   "type": "package",
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.1",
     "ext-json": "*"
   },
   "authors": [

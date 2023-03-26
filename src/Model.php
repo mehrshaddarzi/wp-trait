@@ -2,24 +2,22 @@
 
 namespace WPTrait;
 
+use WPTrait\Http\Request;
+use WPTrait\Http\Response;
 use WPTrait\Collection\{
-    Action,
     Attachment,
     Cache,
     Comment,
     Cookie,
+    Email,
     Error,
     Event,
-    Email,
-    Filter,
     Hooks,
     Log,
     Nonce,
     Option,
     Password,
     Post,
-    Request,
-    Response,
     RestAPI,
     Route,
     Session,
@@ -73,7 +71,7 @@ if (!class_exists('WPTrait\Model')) {
          */
         public $db;
 
-        public $post, $term, $attachment, $user, $option,
+        public $post, $term, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
             $cookie, $session, $email, $password;
 
@@ -113,13 +111,13 @@ if (!class_exists('WPTrait\Model')) {
         public function __get($name)
         {
             $class = [
-                'request' => 'Request',
-                'response' => 'Response',
+                'request' => 'Http\Request',
+                'response' => 'Http\Response',
                 'constant' => 'Constant',
                 'global' => 'Globals',
-                'attachment' => 'Attachment',
                 'filter' => 'Filter',
-                'action' => 'Action'
+                'action' => 'Action',
+                'attachment' => '\Collection\Attachment',
             ];
 
             // Setup view
@@ -129,7 +127,7 @@ if (!class_exists('WPTrait\Model')) {
 
             // Check in Class
             if (array_key_exists($name, $class)) {
-                $class_name = '\WPTrait\\Collection\\' . $class[$name];
+                $class_name = '\WPTrait\\' . $class[$name];
                 $this->{$name} = new $class_name();
             }
 

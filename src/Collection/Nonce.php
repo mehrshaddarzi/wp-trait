@@ -2,6 +2,8 @@
 
 namespace WPTrait\Collection;
 
+use WPTrait\Http\Request;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }

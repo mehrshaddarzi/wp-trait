@@ -1,10 +1,10 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait;
 
-use \WPTrait\Interfaces\Hooks;
+use WPTrait\Interfaces\Hooks;
 
-if (!class_exists('WPTrait\Collection\Filter')) {
+if (!class_exists('WPTrait\Filter')) {
 
     class Filter implements Hooks
     {

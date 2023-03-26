@@ -1,12 +1,12 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait\Http;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('WPTrait\Collection\Response')) {
+if (!class_exists('WPTrait\HTTP\Response')) {
 
     class Response
     {
