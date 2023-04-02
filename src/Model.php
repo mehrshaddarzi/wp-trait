@@ -33,6 +33,7 @@ if (!class_exists('WPTrait\Model')) {
      * @property Response $response { HTTP Response }
      * @property Constant $constant { WordPress Constant List }
      * @property Globals $global { WordPress Global Variables }
+     * @property Url $url { WordPress Url Helper }
      * @property View $view { View and templates system }
      * @property Attachment $attachment { WordPress Attachment }
      * @property Filter $filter { WordPress Filter Hooks }
@@ -113,6 +114,7 @@ if (!class_exists('WPTrait\Model')) {
                 'response' => 'Http\Response',
                 'constant' => 'Constant',
                 'global' => 'Globals',
+                'url' => 'Url',
                 'filter' => 'Filter',
                 'action' => 'Action',
                 'attachment' => '\Collection\Attachment',

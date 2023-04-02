@@ -26,6 +26,7 @@ WP-Trait is an easy framework for Standard and Fast development of WordPress plu
         + [Get WordPress urls and path](#get-wordpress-urls-and-path)
         + [Time in Seconds and Debug Constants](#time-in-seconds-and-debug-constants)
     + [Get WordPress Global Variables](#get-wordpress-global-variables)
+    + [WordPress URL Generation](#wordpress-url-generation)
     + [Get Current User data](#get-current-user-data)
 * [Collection Class](#collection-class)
     + [Post](#post)
@@ -404,17 +405,11 @@ $this->plugin->data
 
 For get WordPress default Constants use `$this->constant` variable:
 
-#### Get WordPress urls and path:
+#### Get WordPress default urls and path:
 
 ```php
 // Get ABSPATH (WordPress Root Directory)
 $this->constant->root
-
-// Get Site Url
-$this->constant->site_url
-
-// Get Site Home Url
-$this->constant->home
 
 // Get WP-Content Dir Path
 $this->constant->content_dir
@@ -447,6 +442,9 @@ $this->constant->template_url;
 // Get themes dir path
 $this->constant->theme_root;
 
+// Get themes directory url
+$this->constant->theme_root_url;
+
 // Get Mu-Plugins dir path
 $this->constant->mu_plugin_dir;
 
@@ -469,10 +467,10 @@ $this->constant->script_debug
 // Check WP_CACHE is true (boolean)
 $this->constant->cache
 
-// Get Time in seconds
-$this->constant->minute #60
-$this->constant->hour #3600
-$this->constant->day
+// Get Time in Seconds
+$this->constant->minute
+$this->constant->hour
+$this->constant->day 
 $this->constant->week
 $this->constant->month
 $this->constant->year
@@ -528,6 +526,60 @@ $this->global->sidebars
 // Get List of Registered Meta Boxes by current Screen
 $this->global->meta_boxes
 ```
+
+### WordPress URL Generation
+
+Use `$this->url` variable:
+
+```php
+// WordPress Home Url
+$this->url->home
+
+// WordPress Site Url
+$this->url->site
+
+// WordPress Site Url with Custom Path and queries
+// Site.Com/blog?filter=category&ids=3,4
+$this->url->get('/blog', ['filter' => 'category', 'ids' => '3,4'])
+
+// WordPress Admin Url
+// Site.com/wp-admin/users.php?sort=ID
+$this->url->admin('users.php', ['sort' => 'ID'])
+
+// WordPress Admin Ajax Url
+// Site.com/wp-admin/admin-ajax.php?action=new_user&cache=no
+$this->url->ajax('new_user', ['cache' => 'no'])
+
+// WordPress REST API Url
+// Site.com/wp-json/wp/v2/search?filter=name&s=Mehrshad
+$this->url->rest('wp/v2/search', ['filter' => 'name', 's' => 'Mehrshad'])
+
+// WordPress REST API Prefix
+// Default is: wp-json
+$this->url->restPrefix()
+
+// WordPress CronJob Url
+// Site.com/wp-cron.php?doing_wp_cron
+$this->url->cron()
+
+// Generate Url
+// https://site.com?query=value
+$this->url->generate('https://site.com', ['query' => 'value']);
+
+// Parse URl
+// @see https://www.php.net/manual/en/function.parse-url.php
+$this->url->parse('https://site.com?query=value');
+
+// Sanitize Url
+$this->url->sanitize('https://site.com?query=value');
+
+// Validate Url
+$this->url->isValidate('https://site.com?query=value');
+
+// Escape Url
+$this->url->esc('https://site.com?query=value');
+```
+
 
 ### Get Current User data
 

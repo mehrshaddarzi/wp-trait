@@ -15,20 +15,6 @@ if (!class_exists('WPTrait\Constant')) {
         public $root;
 
         /**
-         * Site Url
-         *
-         * @var string
-         */
-        public $site_url;
-
-        /**
-         * Home Url
-         *
-         * @var string
-         */
-        public $home;
-
-        /**
          * WP_DEBUG
          *
          * @var bool
@@ -168,6 +154,13 @@ if (!class_exists('WPTrait\Constant')) {
          */
         public $theme_root;
 
+        /**
+         * Themes directory url
+         *
+         * @var string
+         */
+        public $theme_root_url;
+
         public function __construct()
         {
             foreach (array_keys(get_object_vars($this)) as $property) {
@@ -178,16 +171,6 @@ if (!class_exists('WPTrait\Constant')) {
         private function get_root(): string
         {
             return ABSPATH;
-        }
-
-        private function get_home(): string
-        {
-            return get_home_url();
-        }
-
-        private function get_site_url(): string
-        {
-            return get_site_url();
         }
 
         private function get_debug(): bool
@@ -293,6 +276,12 @@ if (!class_exists('WPTrait\Constant')) {
         {
             return get_theme_root();
         }
+
+        private function get_theme_root_url(): string
+        {
+            return get_theme_root_uri();
+        }
+
     }
 
 }

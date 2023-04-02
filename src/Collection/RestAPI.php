@@ -61,16 +61,6 @@ if (!class_exists('WPTrait\Collection\RestAPI')) {
             return $do->to_array();
         }
 
-        public function url($path = '/', $blog_id = null, $scheme = 'rest')
-        {
-            return get_rest_url($blog_id, $path, $scheme);
-        }
-
-        public function prefix()
-        {
-            return rest_get_url_prefix();
-        }
-
     }
 
 }
