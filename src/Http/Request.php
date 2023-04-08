@@ -62,7 +62,41 @@ if (!class_exists('WPTrait\HTTP\Request')) {
             $inputs = $this->all();
             return (isset($inputs->{$name}) and !empty(trim($inputs->{$name})));
         }
+    	
+          /**
+         * Get input item value if the request contains a non-empty value.
+         *
+         * @param  string  $name
+         * @param  string|array|null  $filter
+         * @param  mixed  $default
+         * @return mixed
+         */
+        public function whenFilled($name, $filter = null, $default = false)
+        {
+            return $this->filled($name) ? $this->input($name, $filter) : $default;
+        }
 
+        /**
+         * Determine if the request contains a non-empty value for any of the given inputs.
+         *
+         * @param  string|array  $names
+         * @return bool
+         */
+        public function anyFilled($names)
+        {
+            $names = is_array($names) ? $names : func_get_args();
+
+            foreach ($names as $name) {
+                if ($this->filled($name)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        
+        
         public function numeric($name, $positive = null)
         {
             $input = $this->input($name, ['trim']);
