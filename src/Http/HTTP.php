@@ -54,35 +54,35 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
          *
          * @var string
          */
-        public string $useragent;
+        public string $useragent = '';
 
         /**
          * Request Headers
          *
          * @var array
          */
-        public array $headers;
+        public array $headers = [];
 
         /**
          * Request Cookies
          *
          * @var array
          */
-        public array $cookies;
+        public array $cookies = [];
 
         /**
          * Request Body
          *
          * @var string|array
          */
-        public string|array $body;
+        public string|array $body = '';
 
         /**
          * Check SSL Verify
          *
          * @var bool
          */
-        public bool $ssl;
+        public bool $ssl = true;
 
         /**
          * HTTP API Curl
@@ -129,7 +129,7 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
 
         public function useragent($agent): static
         {
-            $this->version = $agent;
+            $this->useragent = $agent;
             return $this;
         }
 
@@ -148,6 +148,14 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
         public function body($body): static
         {
             $this->body = $body;
+            return $this;
+        }
+
+        public function bodyAsJson($array = [], $options = 0): static
+        {
+            if (is_array($array)) {
+                $this->body = wp_json_encode($array, $options);
+            }
             return $this;
         }
 
@@ -189,7 +197,7 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
 
         public function http_api_curl($handle)
         {
-            call_user_func_array($this->curl, $handle);
+            call_user_func($this->curl, $handle);
         }
 
         public function setParams(): static
@@ -199,12 +207,18 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
                 'timeout' => $this->timeout,
                 'redirection' => $this->redirection,
                 'httpversion' => $this->version,
-                'user-agent' => $this->useragent,
                 'headers' => $this->headers,
                 'cookies' => $this->cookies,
-                'body' => $this->body,
                 'sslverify' => $this->ssl
             ];
+
+            if (!empty($this->useragent)) {
+                $this->params['user-agent'] = $this->useragent;
+            }
+
+            if (!empty($this->body)) {
+                $this->params['body'] = $this->body;
+            }
 
             return $this;
         }
@@ -214,7 +228,7 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return is_wp_error($this->response);
         }
 
-        public function getErrorMessage(): bool
+        public function getError(): bool
         {
             if ($this->hasError()) {
                 return $this->response->get_error_message();
@@ -311,7 +325,7 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
         {
             $this->url = $url;
             $this->method = $method;
-            return $this->send();
+            return $this;
         }
 
         public function get($url)
@@ -349,9 +363,10 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return $this->request($url, 'put');
         }
 
-        public function download($url): Download
+        public function download($url, $timeout = 300, $signature_verification = false): Download
         {
-            return new Download($url);
+            $download = new Download($url, $timeout, $signature_verification);
+            return $download->execute();
         }
     }
 }

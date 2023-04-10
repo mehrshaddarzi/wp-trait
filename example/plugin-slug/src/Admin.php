@@ -21,7 +21,7 @@ class Admin extends Model
         'show_admin_bar' => '__return_false'
     ];
 
-    public $ajax = [
+    public array $ajax = [
         'methods' => ['signup_user']
     ];
 

@@ -36,9 +36,11 @@ if (!class_exists('WPTrait\HTTP\Download')) {
          */
         public string|\WP_Error $response;
 
-        public function __construct($url = '')
+        public function __construct($url, $timeout = 300, $signature_verification = false)
         {
             $this->url = $url;
+            $this->timeout = $timeout;
+            $this->signature_verification = $signature_verification;
         }
 
         public function timeout($timeout): static
@@ -53,7 +55,7 @@ if (!class_exists('WPTrait\HTTP\Download')) {
             return $this;
         }
 
-        public function send()
+        public function execute()
         {
             // Check Url
             if (empty($this->url)) {
