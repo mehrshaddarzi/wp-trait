@@ -1,12 +1,15 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait\Data;
+
+use function WPTrait\Collection\get_option;
+use const WPTrait\Collection\ABSPATH;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('WPTrait\Collection\Attachment')) {
+if (!class_exists('WPTrait\Data\Attachment')) {
 
     class Attachment
     {

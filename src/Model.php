@@ -2,9 +2,7 @@
 
 namespace WPTrait;
 
-use WPTrait\Collection\{Attachment,
-    Cache,
-    Comment,
+use WPTrait\Collection\{Cache,
     Email,
     Error,
     Event,
@@ -13,14 +11,15 @@ use WPTrait\Collection\{Attachment,
     Nonce,
     Option,
     Password,
-    Post,
     RestAPI,
     Route,
-    Term,
     Transient,
-    User,
-    View
-};
+    View};
+use WPTrait\Data\Attachment;
+use WPTrait\Data\Comment;
+use WPTrait\Data\Post;
+use WPTrait\Data\Term;
+use WPTrait\Data\User;
 use WPTrait\Http\HTTP;
 use WPTrait\Http\Request;
 use WPTrait\Http\Response;

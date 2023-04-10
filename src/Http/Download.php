@@ -79,7 +79,7 @@ if (!class_exists('WPTrait\HTTP\Download')) {
             return is_wp_error($this->response);
         }
 
-        public function getErrorMessage(): bool
+        public function getError(): bool
         {
             if ($this->hasError()) {
                 return $this->response->get_error_message();
@@ -97,7 +97,7 @@ if (!class_exists('WPTrait\HTTP\Download')) {
             return '';
         }
 
-        public function copyTo($path): bool
+        public function copy($path): bool
         {
             if ($this->hasError()) {
                 return false;

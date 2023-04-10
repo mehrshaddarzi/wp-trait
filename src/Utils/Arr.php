@@ -5,14 +5,14 @@ namespace WPTrait\Utils;
 class Arr
 {
 
-    public static function alias($array = [], $alias = [])
+    public static function alias($arr = [], $alias = [])
     {
-        $_array = [];
-        foreach ($array as $key => $value) {
-            $_array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
+        $array = [];
+        foreach ($arr as $key => $value) {
+            $array[(isset($alias[$key]) ? $alias[$key] : $key)] = $value;
         }
 
-        return $_array;
+        return $array;
     }
 
     public static function has(array $array, string $key): bool
@@ -49,6 +49,17 @@ class Arr
     public static function only(array $array, $keys)
     {
         return array_intersect_key($array, array_flip((array)$keys));
+    }
+
+    public static function join($separator, $array): string
+    {
+        return implode($separator, $array);
+    }
+
+    public static function isAssoc($arr): bool
+    {
+        if (!is_array($arr) || array() === $arr) return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
 }

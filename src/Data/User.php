@@ -1,14 +1,15 @@
 <?php
 
-namespace WPTrait\Collection;
+namespace WPTrait\Data;
 
+use WPTrait\Collection\Password;
 use WPTrait\Utils\Arr;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-if (!class_exists('WPTrait\Collection\User')) {
+if (!class_exists('WPTrait\Data\User')) {
 
     class User
     {
