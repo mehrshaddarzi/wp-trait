@@ -151,7 +151,7 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return $this;
         }
 
-        public function bodyAsJson($array = [], $options = 0): static
+        public function json($array = [], $options = 0): static
         {
             if (is_array($array)) {
                 $this->body = wp_json_encode($array, $options);
