@@ -85,6 +85,13 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
         public bool $ssl;
 
         /**
+         * HTTP API Curl
+         *
+         * @var mixed
+         */
+        public mixed $curl = null;
+
+        /**
          * HTTP Response
          *
          * @var array|\WP_Error
@@ -144,6 +151,15 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return $this;
         }
 
+        public function curl($func): static
+        {
+            if (is_callable($func)) {
+                $this->curl = $func;
+            }
+
+            return $this;
+        }
+
         public function send(): bool|static
         {
             // Check Url
@@ -154,11 +170,26 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             // Setup Params
             $this->setParams();
 
+            // Add http_api_curl action
+            if (is_callable($this->curl)) {
+                add_action('http_api_curl', [$this, 'http_api_curl']);
+            }
+
             // Send request
             $this->response = wp_remote_request($this->url, $this->params);
 
+            // Remove http_api_curl action
+            if (is_callable($this->curl)) {
+                remove_action('http_api_curl', [$this, 'http_api_curl']);
+            }
+
             // Return
             return $this;
+        }
+
+        public function http_api_curl($handle)
+        {
+            call_user_func_array($this->curl, $handle);
         }
 
         public function setParams(): static

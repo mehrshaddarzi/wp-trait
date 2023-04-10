@@ -980,32 +980,6 @@ $this->request->get_method();
 // Check Method Of Request {boolean}
 $this->request->is_method('PUT');
 
-// New Request
-$request = $this->request->new(
-    'https://jsonplaceholder.typicode.com/todos/1',
-    'GET',
-    [
-        'timeout' => 30,
-        'ssl' => false,
-        'headers' => [
-            'Content-Type' => 'application/json',
-        ]
-    ]
-);
-
-if(!$this->error->has($request)) {
-    /**
-        [
-            'headers' => '', 
-            'body' => '', 
-            'response' => ['code' => '', 'message' => ''], 
-            'cookies' => '', 
-            'http_response' => ''
-        ]
-     */
-    return $request;
-}
-
 // Return Json Response
 $this->response->json(['data' => 'value'], 200);
 ```
