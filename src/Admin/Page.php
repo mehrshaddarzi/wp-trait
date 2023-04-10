@@ -19,7 +19,7 @@ if (!class_exists('WPTrait\Admin\Page')) {
          *
          * @var Information
          */
-        public $plugin;
+        public Information $plugin;
 
         public function __construct(Information $plugin)
         {

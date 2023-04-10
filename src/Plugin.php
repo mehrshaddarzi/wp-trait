@@ -19,7 +19,7 @@ if (!class_exists('WPTrait\Plugin')) {
          *
          * @var Information
          */
-        public $plugin;
+        public Information $plugin;
 
         public function __construct($slug, $args = [])
         {

@@ -574,7 +574,7 @@ $this->url->parse('https://site.com?query=value');
 $this->url->sanitize('https://site.com?query=value');
 
 // Validate Url
-$this->url->isValidate('https://site.com?query=value');
+$this->url->isValidate('https://site.com<script>alert("xss")<script>?query=value');
 
 // Escape Url
 $this->url->esc('https://site.com?query=value');
@@ -1196,7 +1196,9 @@ add_action('init', 'register_session');
 public function register_session()
 {
     if (session_status() == PHP_SESSION_NONE) {
-        session_start();
+        session_start([
+            'read_and_close' => true
+        ]);
     }
 }
 ```

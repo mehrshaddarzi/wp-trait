@@ -12,11 +12,11 @@ class Admin extends Model
 {
     use Notice, RowActions, Ajax;
 
-    public $actions = [
+    public array $actions = [
         'save_post' => ['save_author', 11, 3]
     ];
 
-    public $filters = [
+    public array $filters = [
         'the_content' => 'add_prefix_content',
         'show_admin_bar' => '__return_false'
     ];

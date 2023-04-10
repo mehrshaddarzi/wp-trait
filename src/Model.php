@@ -21,16 +21,16 @@ use WPTrait\Collection\{Attachment,
     User,
     View
 };
-use WPTrait\Http\Cookie;
+use WPTrait\Http\HTTP;
 use WPTrait\Http\Request;
 use WPTrait\Http\Response;
-use WPTrait\Http\Session;
 
 if (!class_exists('WPTrait\Model')) {
 
     /**
      * @property Request $request { HTTP Request }
      * @property Response $response { HTTP Response }
+     * @property HTTP $http { HTTP Client Request }
      * @property Constant $constant { WordPress Constant List }
      * @property Globals $global { WordPress Global Variables }
      * @property Url $url { WordPress Url Helper }
@@ -40,6 +40,7 @@ if (!class_exists('WPTrait\Model')) {
      * @property Action $action { WordPress Action Hooks }
      *
      */
+    #[AllowDynamicProperties]
     class Model
     {
         use Hooks;
@@ -49,28 +50,28 @@ if (!class_exists('WPTrait\Model')) {
          *
          * @var Information
          */
-        public $plugin;
+        public Information $plugin;
 
         /**
          * List Of WordPress Actions
          *
          * @var array
          */
-        protected $actions = [];
+        protected array $actions = [];
 
         /**
          * List Of WordPress Filters
          *
          * @var array
          */
-        protected $filters = [];
+        protected array $filters = [];
 
         /**
          * WordPress Database Class
          *
          * @var \WPDB
          */
-        public $db;
+        public \wpdb $db;
 
         public $post, $term, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
@@ -112,6 +113,7 @@ if (!class_exists('WPTrait\Model')) {
             $class = [
                 'request' => 'Http\Request',
                 'response' => 'Http\Response',
+                'http' => 'Http\HTTP',
                 'constant' => 'Constant',
                 'global' => 'Globals',
                 'url' => 'Url',

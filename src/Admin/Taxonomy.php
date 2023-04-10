@@ -29,7 +29,7 @@ if (!class_exists('WPTrait\Admin\Taxonomy')) {
          *
          * @var Information
          */
-        public $plugin;
+        public Information $plugin;
 
         public $slug, $name;
         public $post_types, $args = [];

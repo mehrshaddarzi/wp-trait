@@ -52,7 +52,7 @@ if (!class_exists('WPTrait\Admin\PostType')) {
          *
          * @var Information
          */
-        public $plugin;
+        public Information $plugin;
 
         public function __construct(Information $plugin, $slug, $name, $args = [])
         {

@@ -34,7 +34,7 @@ if (!class_exists('WPTrait\Admin\Users')) {
          *
          * @var Information
          */
-        public $plugin;
+        public Information $plugin;
 
         public function __construct(Information $plugin)
         {
