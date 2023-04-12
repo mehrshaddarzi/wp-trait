@@ -431,11 +431,6 @@ if (!class_exists('WPTrait\Data\Post')) {
             $this->original = $this->toArray();
         }
 
-        public function toArray(): array
-        {
-            return get_object_vars($this);
-        }
-
         public function delete(): bool|array|\WP_Post|null
         {
             return wp_delete_post($this->id, true);

@@ -99,4 +99,14 @@ abstract class Data extends Result implements toArray
     {
         $this->changed[] = $key;
     }
+
+    public function toArray(): array
+    {
+        $obj = Arr::except(get_object_vars($this), ['original', 'changed', 'meta_type']);
+        if (func_num_args() > 0) {
+            return Arr::only($obj, func_get_args());
+        }
+
+        return $obj;
+    }
 }
