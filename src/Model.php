@@ -14,7 +14,8 @@ use WPTrait\Collection\{Cache,
     RestAPI,
     Route,
     Transient,
-    View};
+    View
+};
 use WPTrait\Data\Attachment;
 use WPTrait\Data\Comment;
 use WPTrait\Data\Post;
@@ -70,9 +71,9 @@ if (!class_exists('WPTrait\Model')) {
          *
          * @var \WPDB
          */
-        public \wpdb $db;
+        protected \wpdb $db;
 
-        public $post, $term, $user, $option,
+        public $term, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
             $email, $password;
 
@@ -139,11 +140,6 @@ if (!class_exists('WPTrait\Model')) {
         {
             $this->bootTraitHooks();
             $this->bootVariableHooks();
-        }
-
-        public function post($post_id)
-        {
-            return new Post($post_id);
         }
 
         public function comment($comment_id)
