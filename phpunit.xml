@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<phpunit
+        bootstrap="./tests/bootstrap.php"
+        backupGlobals="false"
+        colors="true"
+        stopOnFailure="true"
+>
+
+    <testsuites>
+        <testsuite name="unit">
+            <directory suffix=".php">tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <!--<const name="WP_DEBUG" value="true"/>-->
+    </php>
+
+</phpunit>

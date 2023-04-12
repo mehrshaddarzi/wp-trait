@@ -1,5 +1,6 @@
 vendor/
-wordpress/
+.wordpress-core/
 composer.lock
 *.log
 .idea
+/.phpunit.result.cache
