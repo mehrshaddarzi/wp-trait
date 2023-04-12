@@ -147,6 +147,13 @@ if (!class_exists('WPTrait\Data\Post')) {
         public string $guid = '';
 
         /**
+         * Number of comments on post
+         *
+         * @var int
+         */
+        public int $comment_count = 0;
+
+        /**
          * Page template to use.
          *
          * @var string
@@ -156,9 +163,6 @@ if (!class_exists('WPTrait\Data\Post')) {
         public function __construct($id = 0)
         {
             parent::__construct($id, 'post');
-            if ($this->id > 0) {
-                $this->get();
-            }
         }
 
         public function author($author_id): static
@@ -380,8 +384,11 @@ if (!class_exists('WPTrait\Data\Post')) {
                 $this->response = wp_update_post($this->params, true, $fire_after_hooks);
             }
 
-            // reset changed
-            $this->changed = [];
+            // boot data
+            if (!$this->hasError()) {
+                $this->id = $this->response;
+                $this->refresh();
+            }
 
             // return static
             return $this;
@@ -392,9 +399,19 @@ if (!class_exists('WPTrait\Data\Post')) {
             return self::instance(0, 'post');
         }
 
-        public static function find($id)
+        public static function find($id): static|null
         {
-            return self::instance($id, 'post');
+            return self::instance($id, 'post')->get();
+        }
+
+        public static function findOr($id, $func): mixed
+        {
+            $post = self::find($id);
+            if (is_null($post) and is_callable($func)) {
+                return $func($id);
+            }
+
+            return $post;
         }
 
         public function get()
@@ -426,25 +443,48 @@ if (!class_exists('WPTrait\Data\Post')) {
             $this->mime_type = $post->post_mime_type;
             $this->guid = $post->guid;
             $this->template = $post->page_template;
+            $this->comment_count = $post->comment_count;
 
             // setup original
             $this->original = $this->toArray();
         }
 
-        public function delete(): bool|array|\WP_Post|null
+        public function delete(): bool
         {
-            return wp_delete_post($this->id, true);
+            return (wp_delete_post($this->id, true) instanceof \WP_Post);
         }
 
-        public function trash(): bool|array|\WP_Post|null
+        public function trash(): bool
         {
-            return wp_delete_post($this->id, false);
+            return (wp_delete_post($this->id, false) instanceof \WP_Post);
         }
 
-        public function restore($status = 'draft'): static
+        public function restore(): bool
         {
-            $this->status = $status;
-            return $this->save();
+            return (wp_untrash_post($this->id) instanceof \WP_Post);
+        }
+
+        public function rendered($property)
+        {
+            if ($property == "title") {
+                return get_the_title($this->id);
+            }
+
+            if ($property == "content") {
+                return apply_filters('the_content', $this->content);
+            }
+
+            if ($property == "excerpt") {
+                return apply_filters('the_excerpt', $this->excerpt);
+            }
+
+            return null;
+        }
+
+        public function format(): string
+        {
+            $format = get_post_format($this->id);
+            return (empty($format) ? 'standard' : $format);
         }
 
         public function permalink($leave_name = false): bool|string
@@ -516,7 +556,6 @@ if (!class_exists('WPTrait\Data\Post')) {
             $comment = new Comment();
             return $comment->list(array_merge(array('post_id' => $this->id, $args)));
         }
-
     }
 
 }

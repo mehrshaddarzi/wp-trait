@@ -56,7 +56,15 @@ abstract class Data extends Result implements toArray
 
     abstract public static function find($id);
 
+    abstract public static function findOr($id, $func);
+
     abstract public function get();
+
+    public function refresh()
+    {
+        $this->get();
+        $this->changed = [];
+    }
 
     abstract public static function query();
 
