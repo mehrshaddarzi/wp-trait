@@ -162,6 +162,21 @@ if (!class_exists('WPTrait\Data\Term')) {
             return $into;
         }
 
+        public function attach()
+        {
+            // TODO
+        }
+
+        public function detach()
+        {
+            // TODO
+        }
+
+        public function sync()
+        {
+            // TODO
+        }
+
     }
 
 }
