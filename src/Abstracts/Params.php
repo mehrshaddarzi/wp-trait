@@ -33,4 +33,12 @@ abstract class Params
     {
         return $this;
     }
+
+    /**
+     * Get parameters array list
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
 }

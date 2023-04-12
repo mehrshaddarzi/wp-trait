@@ -4,6 +4,7 @@
         backupGlobals="false"
         colors="true"
         stopOnFailure="true"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
 >
 
     <testsuites>

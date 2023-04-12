@@ -305,7 +305,7 @@ if (!class_exists('WPTrait\Data\Post')) {
                 'post_content_filtered' => $this->content_filtered,
                 'post_title' => $this->title,
                 'post_excerpt' => $this->excerpt,
-                'status' => $this->status,
+                'post_status' => $this->status,
                 'post_password' => $this->password,
                 'post_name' => $this->slug,
                 'post_parent' => $this->parent,
@@ -414,7 +414,7 @@ if (!class_exists('WPTrait\Data\Post')) {
             return $post;
         }
 
-        public function get()
+        public function get(): null|static
         {
             // Get Post
             $post = get_post($this->id);
@@ -447,6 +447,9 @@ if (!class_exists('WPTrait\Data\Post')) {
 
             // setup original
             $this->original = $this->toArray();
+
+            // return
+            return $this;
         }
 
         public function delete(): bool
@@ -454,14 +457,18 @@ if (!class_exists('WPTrait\Data\Post')) {
             return (wp_delete_post($this->id, true) instanceof \WP_Post);
         }
 
-        public function trash(): bool
+        public function trash(): static
         {
-            return (wp_delete_post($this->id, false) instanceof \WP_Post);
+            wp_delete_post($this->id, false);
+            $this->refresh();
+            return $this;
         }
 
-        public function restore(): bool
+        public function restore(): static
         {
-            return (wp_untrash_post($this->id) instanceof \WP_Post);
+            wp_untrash_post($this->id);
+            $this->refresh();
+            return $this;
         }
 
         public function rendered($property)

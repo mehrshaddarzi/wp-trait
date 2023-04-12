@@ -100,7 +100,7 @@ abstract class Data extends Result implements toArray
 
     public function wasChanged($key): bool
     {
-        return (in_array($this->changed, $key));
+        return (in_array($key, $this->changed));
     }
 
     public function changed($key): void
@@ -110,7 +110,7 @@ abstract class Data extends Result implements toArray
 
     public function toArray(): array
     {
-        $obj = Arr::except(get_object_vars($this), ['original', 'changed', 'meta_type']);
+        $obj = Arr::except(get_object_vars($this), ['original', 'changed', 'meta_type', 'params', 'meta']);
         if (func_num_args() > 0) {
             return Arr::only($obj, func_get_args());
         }
