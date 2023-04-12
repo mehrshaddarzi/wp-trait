@@ -2,7 +2,7 @@
 
 namespace WPTrait\Http;
 
-use WPTrait\Abstracts\Params;
+use WPTrait\Abstracts\Result;
 use WPTrait\Exceptions\Json\UnableDecodeJsonException;
 use WPTrait\Utils\Json;
 
@@ -12,91 +12,84 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('WPTrait\HTTP\HTTP')) {
 
-    class HTTP extends Params
+    class HTTP extends Result
     {
         /**
          * Request Url
          *
          * @var string
          */
-        public string $url = '';
+        protected string $url = '';
 
         /**
          * Request Method
          *
          * @var string
          */
-        public string $method = 'GET';
+        protected string $method = 'GET';
 
         /**
          * Request TimeOut
          *
          * @var float
          */
-        public float $timeout = 5;
+        protected float $timeout = 5;
 
         /**
          * Number of allowed redirects
          *
          * @var int
          */
-        public int $redirection = 5;
+        protected int $redirection = 5;
 
         /**
          * Version of the HTTP protocol to use
          *
          * @var string
          */
-        public string $version = '1.0';
+        protected string $version = '1.0';
 
         /**
          * User Agent
          *
          * @var string
          */
-        public string $useragent = '';
+        protected string $useragent = '';
 
         /**
          * Request Headers
          *
          * @var array
          */
-        public array $headers = [];
+        protected array $headers = [];
 
         /**
          * Request Cookies
          *
          * @var array
          */
-        public array $cookies = [];
+        protected array $cookies = [];
 
         /**
          * Request Body
          *
          * @var string|array
          */
-        public string|array $body = '';
+        protected string|array $body = '';
 
         /**
          * Check SSL Verify
          *
          * @var bool
          */
-        public bool $ssl = true;
+        protected bool $ssl = true;
 
         /**
          * HTTP API Curl
          *
          * @var mixed
          */
-        public mixed $curl = null;
-
-        /**
-         * HTTP Response
-         *
-         * @var array|\WP_Error
-         */
-        protected array|\WP_Error $response = [];
+        protected mixed $curl = null;
 
         public function __construct($url = '')
         {
@@ -221,20 +214,6 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             }
 
             return $this;
-        }
-
-        public function hasError(): bool
-        {
-            return is_wp_error($this->response);
-        }
-
-        public function getError(): bool
-        {
-            if ($this->hasError()) {
-                return $this->response->get_error_message();
-            }
-
-            return '';
         }
 
         public function getStatusCode()

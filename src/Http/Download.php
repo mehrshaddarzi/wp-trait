@@ -2,27 +2,29 @@
 
 namespace WPTrait\Http;
 
+use WPTrait\Abstracts\Result;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
 if (!class_exists('WPTrait\HTTP\Download')) {
 
-    class Download
+    class Download extends Result
     {
         /**
          * File Url
          *
          * @var string
          */
-        public string $url = '';
+        protected string $url = '';
 
         /**
          * Request TimeOut
          *
          * @var float
          */
-        public float $timeout = 300;
+        protected float $timeout = 300;
 
         /**
          * Whether to perform Signature Verification.
@@ -30,11 +32,6 @@ if (!class_exists('WPTrait\HTTP\Download')) {
          * @var bool
          */
         protected bool $signature_verification = false;
-
-        /**
-         * HTTP Response
-         */
-        public string|\WP_Error $response;
 
         public function __construct($url, $timeout = 300, $signature_verification = false)
         {
@@ -55,7 +52,7 @@ if (!class_exists('WPTrait\HTTP\Download')) {
             return $this;
         }
 
-        public function execute()
+        public function execute(): bool|static
         {
             // Check Url
             if (empty($this->url)) {
@@ -72,20 +69,6 @@ if (!class_exists('WPTrait\HTTP\Download')) {
 
             // Return
             return $this;
-        }
-
-        public function hasError(): bool
-        {
-            return is_wp_error($this->response);
-        }
-
-        public function getError(): bool
-        {
-            if ($this->hasError()) {
-                return $this->response->get_error_message();
-            }
-
-            return '';
         }
 
         public function getFilename(): \WP_Error|string

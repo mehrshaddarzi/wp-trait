@@ -2,7 +2,7 @@
 
 namespace WPTrait\Data;
 
-use WPTrait\Utils\Arr;
+use WPTrait\Abstracts\Data;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -10,277 +10,518 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('WPTrait\Data\Post')) {
 
-    class Post
+    class Post extends Data
     {
+
+        /**
+         * Post Author ID
+         *
+         * @var int|null
+         */
+        public int|null $author = null;
+
+        /**
+         * Post Date
+         *
+         * @var string
+         */
+        public string $date = '';
+
+        /**
+         * Post Date GMT
+         *
+         * @var string
+         */
+        public string $date_gmt = '';
+
+        /**
+         * Post Modified Date
+         *
+         * @var string
+         */
+        public string $modified = '';
+
+        /**
+         * Post Modified Date GMT
+         *
+         * @var string
+         */
+        public string $modified_gmt = '';
+
+        /**
+         * Post Content
+         *
+         * @var string
+         */
+        public string $content = '';
+
+        /**
+         * Post Content Filtered
+         *
+         * @var string
+         */
+        public string $content_filtered = '';
+
+        /**
+         * Post Title
+         *
+         * @var string
+         */
+        public string $title = '';
+
+        /**
+         * Post Excerpt
+         *
+         * @var string
+         */
+        public string $excerpt = '';
+
+        /**
+         * Post Status
+         *
+         * @var string
+         */
+        public string $status = 'draft';
+
         /**
          * Post Type
          *
          * @var string
          */
-        public $slug;
+        public string $type = 'post';
 
         /**
-         * Post ID
+         * Post Comment Status
+         *
+         * @var string
+         */
+        public string $comment_status = '';
+
+        /**
+         * Post Ping Status
+         *
+         * @var string
+         */
+        public string $ping_status = '';
+
+        /**
+         * Post Password
+         *
+         * @var string
+         */
+        public string $password = '';
+
+        /**
+         * Post Name
+         *
+         * @var string
+         */
+        public string $slug = '';
+
+        /**
+         * Post Parent ID
          *
          * @var int
          */
-        public $post_id;
+        public int $parent = 0;
 
         /**
-         * Meta Class
+         * Post Menu Order
          *
-         * @var Meta
+         * @var int
          */
-        public $meta;
+        public int $menu_order = 0;
 
         /**
-         * Alias Argument in insert/update Post
+         * Post MIME Type
+         *
+         * @var string
          */
-        public $alias = [
-            'id' => 'ID',
-            'user' => 'post_author',
-            'author' => 'post_author',
-            'title' => 'post_title',
-            'date' => 'post_date',
-            'date_gmt' => 'post_date_gmt',
-            'content' => 'post_content',
-            'content_filtered' => 'post_content_filtered',
-            'excerpt' => 'post_excerpt',
-            'status' => 'post_status',
-            'type' => 'post_type',
-            'name' => 'post_name',
-            'modified' => 'post_modified',
-            'modified_gmt' => 'post_modified_gmt',
-            'parent' => 'post_parent',
-            'parent_id' => 'post_parent',
-            'mime' => 'post_mime_type',
-            'mime_type' => 'post_mime_type',
-            'category' => 'post_category',
-            'tags' => 'tags_input',
-            'tag' => 'tags_input',
-            'tax' => 'tax_input',
-            'meta' => 'meta_input'
-        ];
+        public string $mime_type = '';
 
-        public function __construct($post_id = null, $slug = 'post')
+        /**
+         * Global Unique ID for referencing the post
+         *
+         * @var string
+         */
+        public string $guid = '';
+
+        /**
+         * Page template to use.
+         *
+         * @var string
+         */
+        public string $template = '';
+
+        public function __construct($id = 0)
         {
-            $this->post_id = $post_id;
-            $this->slug = $slug;
+            parent::__construct($id, 'post');
+            if ($this->id > 0) {
+                $this->get();
+            }
         }
 
-        public function __get($name)
+        public function author($author_id): static
         {
-            if ($name == "meta") {
-                return new Meta('post', $this->post_id);
+            $this->author = $author_id;
+            return $this;
+        }
+
+        public function date($date): static
+        {
+            $this->date = $date;
+            $this->changed('date');
+            return $this;
+        }
+
+        public function date_gmt($date_gmt): static
+        {
+            $this->date_gmt = $date_gmt;
+            $this->changed('date_gmt');
+            return $this;
+        }
+
+        public function modified($modified): static
+        {
+            $this->modified = $modified;
+            $this->changed('modified');
+            return $this;
+        }
+
+        public function modified_gmt($modified_gmt): static
+        {
+            $this->modified_gmt = $modified_gmt;
+            $this->changed('modified_gmt');
+            return $this;
+        }
+
+        public function content($content): static
+        {
+            $this->content = $content;
+            return $this;
+        }
+
+        public function content_filtered($content_filtered): static
+        {
+            $this->content_filtered = $content_filtered;
+            return $this;
+        }
+
+        public function title($title): static
+        {
+            $this->title = $title;
+            return $this;
+        }
+
+        public function excerpt($excerpt): static
+        {
+            $this->excerpt = $excerpt;
+            return $this;
+        }
+
+        public function status($status): static
+        {
+            $this->status = $status;
+            return $this;
+        }
+
+        public function type($type): static
+        {
+            $this->type = $type;
+            return $this;
+        }
+
+        public function comment_status($comment_status): static
+        {
+            if (is_bool($comment_status)) {
+                $comment_status = ($comment_status === true ? 'open' : 'closed');
+            }
+            $this->comment_status = $comment_status;
+            $this->changed('comment_status');
+            return $this;
+        }
+
+        public function ping_status($ping_status): static
+        {
+            if (is_bool($ping_status)) {
+                $ping_status = ($ping_status === true ? 'open' : 'closed');
+            }
+            $this->ping_status = $ping_status;
+            $this->changed('ping_status');
+            return $this;
+        }
+
+        public function password($password): static
+        {
+            $this->password = $password;
+            return $this;
+        }
+
+        public function slug($slug): static
+        {
+            $this->slug = $slug;
+            return $this;
+        }
+
+        public function parent($parent): static
+        {
+            $this->parent = $parent;
+            return $this;
+        }
+
+        public function menu_order($menu_order): static
+        {
+            $this->menu_order = $menu_order;
+            return $this;
+        }
+
+        public function mime_type($mime): static
+        {
+            $this->mime_type = $mime;
+            return $this;
+        }
+
+        public function guid($guid): static
+        {
+            $this->guid = $guid;
+            return $this;
+        }
+
+        public function template($page_template): static
+        {
+            $this->template = $page_template;
+            return $this;
+        }
+
+        public function setParams(): static
+        {
+            // Init
+            $this->params = [
+                'post_content' => $this->content,
+                'post_content_filtered' => $this->content_filtered,
+                'post_title' => $this->title,
+                'post_excerpt' => $this->excerpt,
+                'status' => $this->status,
+                'post_password' => $this->password,
+                'post_name' => $this->slug,
+                'post_parent' => $this->parent,
+                'menu_order' => $this->menu_order,
+                'post_mime_type' => $this->mime_type,
+                'guid' => $this->guid,
+                'post_type' => $this->type
+            ];
+
+            // ID
+            if ($this->id > 0) {
+                $this->params['ID'] = $this->id;
             }
 
-            return $this->{$name};
+            // post_author
+            if (is_int($this->author) and $this->author > 0) {
+                $this->params['post_author'] = $this->author;
+            }
+
+            // post_date
+            if (!empty($this->date) and $this->wasChanged('date')) {
+                $this->params['post_date'] = $this->date;
+            }
+
+            // post_date_gmt
+            if (!empty($this->date_gmt) and $this->wasChanged('date_gmt')) {
+                $this->params['post_date_gmt'] = $this->date_gmt;
+            }
+
+            // post_modified
+            if (!empty($this->modified) and $this->wasChanged('modified')) {
+                $this->params['post_modified'] = $this->modified;
+            }
+
+            // post_modified_gmt
+            if (!empty($this->modified_gmt) and $this->wasChanged('modified_gmt')) {
+                $this->params['post_modified_gmt'] = $this->modified_gmt;
+            }
+
+            // comment_status
+            if (!empty($this->comment_status) and $this->wasChanged('comment_status')) {
+                $this->params['comment_status'] = $this->comment_status;
+            }
+
+            // ping_status
+            if (!empty($this->ping_status) and $this->wasChanged('ping_status')) {
+                $this->params['ping_status'] = $this->ping_status;
+            }
+
+            // meta_input
+            if (!empty($this->meta) and is_array($this->meta) and $this->wasChanged('meta')) {
+                $this->params['meta_input'] = $this->meta;
+            }
+
+            return $this;
         }
 
-        public function get($post_id = null, $output = OBJECT)
+        public function save(): static
         {
-            return get_post((is_null($post_id) ? $this->post_id : $post_id), $output);
+            // Check method argument
+            $args = func_get_args();
+
+            // Check $fire_after_hooks
+            $fire_after_hooks = true;
+            if (isset($args[0]) and is_bool($args[0])) {
+                $fire_after_hooks = $args[0];
+            }
+
+            // setup Params
+            $this->setParams();
+
+            // save
+            if ($this->id == 0) {
+                $this->response = wp_insert_post($this->params, true, $fire_after_hooks);
+            } else {
+                $this->response = wp_update_post($this->params, true, $fire_after_hooks);
+            }
+
+            // reset changed
+            $this->changed = [];
+
+            // return static
+            return $this;
         }
 
-        public function delete($post_id = null, $force = false)
+        public static function new(): static
         {
-            # (WP_Post|false|null) Post data on success, false or null on failure.
-            return wp_delete_post((is_null($post_id) ? $this->post_id : $post_id), $force);
+            return self::instance(0, 'post');
         }
 
-        public function add($arg = [])
+        public static function find($id)
         {
-            # Generate Alias Argument
-            $default = [
-                'title' => '',
-                'date' => current_time('mysql'),
-                'type' => $this->slug,
-                'status' => 'publish'
-            ];
-            $args = wp_parse_args($arg, $default);
-
-            # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
-            return wp_insert_post(Arr::alias($args, $this->alias));
+            return self::instance($id, 'post');
         }
 
-        public function update($arg = [])
+        public function get()
         {
-            # Default
-            $default = [
-                'id' => $this->post_id
-            ];
-            $args = wp_parse_args($arg, $default);
+            // Get Post
+            $post = get_post($this->id);
+            if (is_null($post)) {
+                return null;
+            }
 
-            # (int|WP_Error) The post ID on success. The value 0 or WP_Error on failure.
-            return wp_update_post(Arr::alias($args, $this->alias));
+            // setup property
+            $this->author = $post->post_author;
+            $this->date = $post->post_date;
+            $this->date_gmt = $post->post_date_gmt;
+            $this->modified = $post->post_modified;
+            $this->modified_gmt = $post->post_modified_gmt;
+            $this->content = $post->post_content;
+            $this->content_filtered = $post->post_content_filtered;
+            $this->title = $post->post_title;
+            $this->excerpt = $post->post_excerpt;
+            $this->status = $post->post_status;
+            $this->type = $post->post_type;
+            $this->comment_status = $post->comment_status;
+            $this->ping_status = $post->ping_status;
+            $this->password = $post->post_password;
+            $this->slug = $post->post_name;
+            $this->parent = $post->post_parent;
+            $this->menu_order = $post->menu_order;
+            $this->mime_type = $post->post_mime_type;
+            $this->guid = $post->guid;
+            $this->template = $post->page_template;
+
+            // setup original
+            $this->original = $this->toArray();
         }
 
-        public function permalink($post_id = null, $leave_name = false)
+        public function toArray(): array
         {
-            return get_the_permalink((is_null($post_id) ? $this->post_id : $post_id), $leave_name);
+            return get_object_vars($this);
         }
 
-        public function shortlink($post_id = null, $context = 'post', $allow_slugs = true)
+        public function delete(): bool|array|\WP_Post|null
         {
-            return wp_get_shortlink((is_null($post_id) ? $this->post_id : $post_id), $context, $allow_slugs);
+            return wp_delete_post($this->id, true);
         }
 
-        public function thumbnail($post_id = null)
+        public function trash(): bool|array|\WP_Post|null
         {
-            $thumbnail_id = get_post_thumbnail_id((is_null($post_id) ? $this->post_id : $post_id));
+            return wp_delete_post($this->id, false);
+        }
+
+        public function restore($status = 'draft'): static
+        {
+            $this->status = $status;
+            return $this->save();
+        }
+
+        public function permalink($leave_name = false): bool|string
+        {
+            return get_the_permalink($this->id, $leave_name);
+        }
+
+        public function shortlink($context = 'post', $allow_slugs = true): string
+        {
+            return wp_get_shortlink($this->id, $context, $allow_slugs);
+        }
+
+        public function thumbnail(): Attachment|bool
+        {
+            $thumbnail_id = get_post_thumbnail_id($this->id);
             if (!$thumbnail_id) {
                 return false;
             }
 
+            // TODO
             return new Attachment($thumbnail_id);
         }
 
-        public function has_thumbnail($post_id = null)
+        public function hasThumbnail(): bool
         {
-            return has_post_thumbnail((is_null($post_id) ? $this->post_id : $post_id));
+            return has_post_thumbnail($this->id);
         }
 
-        public function exists($post_id = null)
+        public function editLink($context = 'display'): ?string
         {
-            $post_id = (is_null($post_id) ? $this->post_id : $post_id);
-            if (absint($post_id) < 1) {
-                return false;
-            }
-            return !is_null($this->get($post_id, 'raw'));
+            return get_edit_post_link($this->id, $context);
         }
 
-        public function terms($taxonomy = 'post_tag', $args = ['fields' => 'all'], $post_id = null)
+        public function typeInfo()
         {
-            return wp_get_post_terms((is_null($post_id) ? $this->post_id : $post_id), $taxonomy, $args);
+            global $wp_post_types;
+            return ($wp_post_types[$this->type] ?? null);
         }
 
-        public function collection($meta = [], $taxonomy = [], $post_id = null)
+        public static function exists($id): bool
         {
-            $post_id = (is_null($post_id) ? $this->post_id : $post_id);
-            $post_object = $this->get($post_id, OBJECT);
-            if (is_null($post_object)) {
-                return null;
-            }
-
-            // Check Meta
-            if ($meta == "all") {
-                $post_object->meta = (object)$this->meta->all($post_id);
-            } elseif (is_array($meta) and !empty($meta)) {
-                foreach ($meta as $meta_key) {
-                    $post_object->meta->{$meta_key} = $this->meta->get($meta_key, $post_id);
-                }
-            }
-
-            // Check Taxonomy
-            if (!empty($taxonomy)) {
-                foreach ($taxonomy as $tax) {
-                    if (taxonomy_exists($tax)) {
-                        $post_object->{$tax} = $this->terms($tax, [], $post_id);
-                    }
-                }
-            }
-
-            return $post_object;
+            return is_string(get_post_status($id));
         }
 
-        public function edit_post_link($post_id = null)
+        public static function query()
         {
-            return get_edit_post_link((is_null($post_id) ? $this->post_id : $post_id), 'display');
+            // TODO
         }
 
-        public function query($arg = [])
+        public function tags()
         {
-            # alias
-            $alias = [
-                'id' => 'p',
-                'user' => 'author',
-                'category' => 'cat',
-                'type' => 'post_type',
-                'status' => 'post_status',
-                'per_page' => 'posts_per_page',
-                'page' => 'paged',
-                'order_by' => 'orderby',
-                'meta' => 'meta_query',
-                'date' => 'date_query',
-                'tax' => 'tax_query',
-                'mime_type ' => 'post_mime_type',
-                'return' => 'fields'
-            ];
-            $arg = Arr::alias($arg, $alias);
-
-            # Check Return only ids
-            if (isset($arg['fields'])) {
-                $arg['fields'] = ((is_array($arg['fields']) and count($arg['fields']) == 1) ? $arg['fields'][0] : $arg['fields']);
-                if (is_string($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
-                    $arg['fields'] = 'ids';
-                }
-            }
-
-            # Cache Result
-            if (isset($arg['cache']) and $arg['cache'] === false) {
-                $arg = array_merge(
-                    $arg,
-                    [
-                        'cache_results' => false,
-                        'no_found_rows' => true, #@see https://10up.github.io/Engineering-Best-Practices/php/#performance
-                        'update_post_meta_cache' => false,
-                        'update_post_term_cache' => false,
-                    ]
-                );
-                unset($arg['cache']);
-            }
-
-            # Suppress filters
-            if (isset($arg['filter']) and $arg['filter'] === false) {
-                $arg['suppress_filters'] = true;
-                unset($arg['filter']);
-            }
-
-            # Sanitize Meta Query
-            if (isset($arg['meta_query']) and !isset($arg['meta_query'][0])) {
-                $arg['meta_query'] = [$arg['meta_query']];
-            }
-
-            # Default Params
-            $default = [
-                'post_type' => $this->slug,
-                'post_status' => 'publish',
-                'posts_per_page' => '-1',
-                'order' => 'DESC'
-            ];
-            $args = wp_parse_args($arg, $default);
-
-            # Return { $query->posts }
-            # Get SQL { $query->request }
-            # Check Exists { $query->have_posts() }
-            return new \WP_Query($args);
+            return $this->terms('post_tag');
         }
 
-        public function list($arg = [])
+        public function categories()
         {
-            return $this->query($arg)->posts;
+            return $this->terms('category');
         }
 
-        public function toSql($arg = [])
+        public function terms($taxonomy)
         {
-            return $this->query($arg)->request;
+            // TODO
+            return [];
         }
 
-        public function global()
+        public function comments($args = []): array|int
         {
-            return $GLOBALS['post'];
-        }
-
-        public function comments($args = [], $post_id = null)
-        {
+            // TODO
             $comment = new Comment();
-            return $comment->list(array_merge(array('post_id' => (is_null($post_id) ? $this->post_id : $post_id), $args)));
+            return $comment->list(array_merge(array('post_id' => $this->id, $args)));
         }
 
-        public function get_post_types($args = [], $output = 'objects', $operator = 'and')
-        {
-            return get_post_types($args, $output, $operator);
-        }
     }
 
 }

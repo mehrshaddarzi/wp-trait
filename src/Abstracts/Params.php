@@ -29,5 +29,8 @@ abstract class Params
     /**
      * Prepare Parameter For User in WordPress Method
      */
-    abstract public function setParams();
+    public function setParams(): static
+    {
+        return $this;
+    }
 }
