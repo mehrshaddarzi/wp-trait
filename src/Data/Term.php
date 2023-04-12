@@ -35,7 +35,7 @@ if (!class_exists('WPTrait\Data\Term')) {
         {
             $this->term_id = $term_id;
             $this->slug = $slug;
-            $this->meta = new Meta('term', $this->term_id);
+            # $this->meta = new Meta('term', $this->term_id);
         }
 
         public function get($term_id = null)

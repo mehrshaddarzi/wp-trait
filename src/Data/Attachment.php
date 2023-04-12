@@ -37,7 +37,7 @@ if (!class_exists('WPTrait\Data\Attachment')) {
         public function __construct($attachment_id = null)
         {
             $this->attachment_id = $attachment_id;
-            $this->meta = new Meta('attachment', $this->attachment_id);
+            # $this->meta = new Meta('attachment', $this->attachment_id);
         }
 
         public function url($attachment_id = null)

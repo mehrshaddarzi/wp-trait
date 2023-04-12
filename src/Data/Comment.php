@@ -54,7 +54,7 @@ if (!class_exists('WPTrait\Data\Comment')) {
         public function __construct($id = null)
         {
             $this->id = $id;
-            $this->meta = new Meta('comment', $this->id);
+            # $this->meta = new Meta('comment', $this->id);
         }
 
         public function get($id = null)

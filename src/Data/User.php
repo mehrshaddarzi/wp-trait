@@ -63,7 +63,7 @@ if (!class_exists('WPTrait\Data\User')) {
         public function __construct($user_id = null)
         {
             $this->user_id = (is_null($user_id) ? $this->id() : $user_id);
-            $this->meta = new Meta('user', $this->user_id);
+            # $this->meta = new Meta('user', $this->user_id);
             $this->password = new Password($this->user_id);
         }
 
