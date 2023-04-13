@@ -40,24 +40,29 @@ if (!class_exists('WPTrait\Data\Meta')) {
             return get_metadata($this->type, $this->id, $key, true);
         }
 
-        public function all(): array
+        public function all($raw = false): array
         {
-            return array_map(function ($a) {
-                return $a[0];
+            return array_map(function ($a) use ($raw) {
+                return ($raw === false ? maybe_unserialize($a[0]) : $a[0]);
             }, get_metadata($this->type, $this->id, '', false));
         }
 
-        public function only($keys = [])
+        public function only(): array
         {
-            return Arr::only($this->all(), $keys);
+            return Arr::only($this->all(), func_get_args());
         }
 
-        public function except($keys = [])
+        public function except(): array
         {
-            return Arr::except($this->all(), $keys);
+            return Arr::except($this->all(), func_get_args());
         }
 
-        public function save(mixed $key, mixed $value, mixed $prev_value = ''): mixed
+        public function exists($key): bool
+        {
+            return metadata_exists($this->type, $this->id, $key);
+        }
+
+        public function save(mixed $key, $value = '', mixed $prev_value = ''): mixed
         {
             $func = 'update_' . $this->type . '_meta';
             if (Arr::isAssoc($key)) {
@@ -70,7 +75,7 @@ if (!class_exists('WPTrait\Data\Meta')) {
             return $func($this->id, $key, $value, $prev_value);
         }
 
-        public function create(mixed $key, $value, $unique = false)
+        public function create(mixed $key, $value = '', $unique = false)
         {
             $func = 'add_' . $this->type . '_meta';
             if (Arr::isAssoc($key)) {
@@ -96,13 +101,13 @@ if (!class_exists('WPTrait\Data\Meta')) {
             return $func($this->id, $key, $meta_value);
         }
 
-        public function clean(): bool
+        public function clean(): static
         {
             $all = $this->all();
             foreach ($all as $key => $value) {
                 $this->delete($key);
             }
-            return true;
+            return $this;
         }
 
     }

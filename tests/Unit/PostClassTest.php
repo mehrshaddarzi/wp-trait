@@ -14,7 +14,7 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
 
     public array $post_ids = [];
 
-    public int $fake_post_id = 0;
+    public int $post_id = 0;
 
     public static function setUpBeforeClass(): void
     {
@@ -28,7 +28,7 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $this->fake_post_id = wp_insert_post([
+        $this->post_id = wp_insert_post([
             'post_title' => 'Sample Post',
             'post_content' => 'This is just some sample post content.',
             'post_type' => 'post',
@@ -39,7 +39,7 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
 
     public function tearDown(): void
     {
-        foreach (array_filter(array_merge($this->post_ids, [$this->fake_post_id])) as $post_id) {
+        foreach (array_filter(array_merge($this->post_ids, [$this->post_id])) as $post_id) {
             if (is_int($post_id) and $post_id > 0) {
                 wp_delete_post($post_id, true);
             }
@@ -275,20 +275,20 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
 
     public function test_existsPost()
     {
-        $this->assertTrue(Post::exists($this->fake_post_id));
+        $this->assertTrue(Post::exists($this->post_id));
     }
 
     public function test_getDataWithObject()
     {
-        $post = (new Post($this->fake_post_id))->get();
-        $this->assertEquals($post->id, $this->fake_post_id);
+        $post = (new Post($this->post_id))->get();
+        $this->assertEquals($post->id, $this->post_id);
         $this->assertEquals('Sample Post', $post->title);
     }
 
     public function test_getDataWithFind()
     {
-        $post = Post::find($this->fake_post_id);
-        $this->assertEquals($post->id, $this->fake_post_id);
+        $post = Post::find($this->post_id);
+        $this->assertEquals($post->id, $this->post_id);
         $this->assertEquals('Sample Post', $post->title);
     }
 
@@ -302,65 +302,65 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
 
     public function test_updatePostInDatabase()
     {
-        $post = Post::find($this->fake_post_id)
+        $post = Post::find($this->post_id)
             ->title('new title')
             ->content('new content')
             ->save();
 
-        $this->assertEquals($this->fake_post_id, $post->id);
+        $this->assertEquals($this->post_id, $post->id);
         $this->assertEquals('new title', $post->title);
         $this->assertEquals('new content', $post->content);
     }
 
     public function test_getOriginal()
     {
-        $wp_post = get_post($this->fake_post_id);
+        $wp_post = get_post($this->post_id);
 
-        $post = (new Post($this->fake_post_id))
+        $post = (new Post($this->post_id))
             ->title('secondary title');
         $this->assertNotEquals($wp_post->post_title, $post->getOriginal('title'));
 
-        $obj = Post::find($this->fake_post_id)
+        $obj = Post::find($this->post_id)
             ->content('secondary content');
         $this->assertEquals($wp_post->post_content, $obj->getOriginal('content'));
     }
 
     public function test_trashPost()
     {
-        $post = Post::find($this->fake_post_id)->trash();
+        $post = Post::find($this->post_id)->trash();
         $this->assertEquals('trash', $post->status);
 
-        $wp_post = get_post($this->fake_post_id);
+        $wp_post = get_post($this->post_id);
         $this->assertEquals('trash', $wp_post->post_status);
     }
 
     public function test_restorePost()
     {
-        $post = Post::find($this->fake_post_id)
+        $post = Post::find($this->post_id)
             ->trash()
             ->restore();
         $this->assertNotEquals('trash', $post->status);
 
-        $wp_post = get_post($this->fake_post_id);
+        $wp_post = get_post($this->post_id);
         $this->assertNotEquals('trash', $wp_post->post_status);
     }
 
     public function test_deletePost()
     {
-        $post = Post::find($this->fake_post_id)
+        $post = Post::find($this->post_id)
             ->delete();
         $this->assertTrue($post);
 
-        $wp_post = get_post($this->fake_post_id);
+        $wp_post = get_post($this->post_id);
         $this->assertNull($wp_post);
 
-        $obj = Post::exists($this->fake_post_id);
+        $obj = Post::exists($this->post_id);
         $this->assertEquals(false, $obj);
     }
 
     public function test_permalinkPost()
     {
-        $url = Post::find($this->fake_post_id)
+        $url = Post::find($this->post_id)
             ->permalink();
         $this->assertEquals(esc_url_raw($url), $url);
     }
