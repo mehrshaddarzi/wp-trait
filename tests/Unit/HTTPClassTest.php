@@ -13,6 +13,12 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(class_exists('\WPTrait\HTTP\HTTP'));
     }
 
+    public function test_extendClass()
+    {
+        $http = new HTTP();
+        $this->assertInstanceOf('\WPTrait\Abstracts\Result', $http);
+    }
+
     public function test_isObjectClass()
     {
         $http = new HTTP();

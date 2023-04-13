@@ -33,7 +33,8 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
             'post_content' => 'This is just some sample post content.',
             'post_type' => 'post',
             'meta_input' => self::$meta_input,
-            'post_status' => 'publish'
+            'post_status' => 'publish',
+            'post_author' => 1
         ]);
     }
 
