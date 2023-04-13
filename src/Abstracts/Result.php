@@ -25,4 +25,31 @@ abstract class Result extends Params
 
         return '';
     }
+
+    public function getErrors(): array
+    {
+        if ($this->hasError()) {
+            return $this->response->get_error_messages();
+        }
+
+        return [];
+    }
+
+    public function getErrorCode(): string
+    {
+        if ($this->hasError()) {
+            return $this->response->get_error_code();
+        }
+
+        return '';
+    }
+
+    public function getErrorCodes(): array
+    {
+        if ($this->hasError()) {
+            return $this->response->get_error_codes();
+        }
+
+        return [];
+    }
 }

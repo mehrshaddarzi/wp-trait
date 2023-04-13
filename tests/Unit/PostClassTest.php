@@ -51,6 +51,12 @@ class PostClassTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(class_exists('\WPTrait\Data\Post'));
     }
 
+    public function test_extendClass()
+    {
+        $post = new Post();
+        $this->assertInstanceOf('\WPTrait\Abstracts\Data', $post);
+    }
+
     public function test_isObjectClass()
     {
         $post = new Post;
