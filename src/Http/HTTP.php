@@ -171,9 +171,14 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             // Setup Params
             $this->setParams();
 
+            // Setup http_api_curl action method
+            $http_api_call = function ($handle) {
+                call_user_func($this->curl, $handle);
+            };
+
             // Add http_api_curl action
             if (is_callable($this->curl)) {
-                add_action('http_api_curl', [$this, 'http_api_curl']);
+                add_action('http_api_curl', $http_api_call);
             }
 
             // Send request
@@ -181,16 +186,11 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
 
             // Remove http_api_curl action
             if (is_callable($this->curl)) {
-                remove_action('http_api_curl', [$this, 'http_api_curl']);
+                remove_action('http_api_curl', $http_api_call);
             }
 
             // Return
             return $this;
-        }
-
-        public function http_api_curl($handle)
-        {
-            call_user_func($this->curl, $handle);
         }
 
         public function setParams(): static
@@ -253,6 +253,12 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return null;
         }
 
+        public function hasHeader($name): bool
+        {
+            $headers = $this->getHeaders();
+            return isset($headers[$name]);
+        }
+
         public function getBody()
         {
             if (isset($this->response['body'])) {
@@ -281,7 +287,7 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return '';
         }
 
-        public function getCookies()
+        public function getCookies(): array
         {
             if (isset($this->response['cookies'])) {
                 return $this->response['cookies'];
@@ -290,14 +296,22 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return [];
         }
 
-        public function getCookie($name)
+        public function getCookie($name): null|\WP_Http_Cookie
         {
             $cookies = $this->getCookies();
-            if (isset($cookies[$name])) {
-                return $cookies[$name];
+            foreach ($cookies as $cookie) {
+                if ($cookie->name === $name) {
+                    /* @var \WP_Http_Cookie */
+                    return $cookie;
+                }
             }
 
             return null;
+        }
+
+        public function hasCookie($name): bool
+        {
+            return (!is_null($this->getCookie($name)));
         }
 
         private function request($url, $method): bool|static
@@ -307,37 +321,37 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return $this;
         }
 
-        public function get($url)
+        public function get($url): bool|static
         {
             return $this->request($url, 'get');
         }
 
-        public function delete($url)
+        public function delete($url): bool|static
         {
             return $this->request($url, 'delete');
         }
 
-        public function head($url)
+        public function head($url): bool|static
         {
             return $this->request($url, 'head');
         }
 
-        public function options($url)
+        public function options($url): bool|static
         {
             return $this->request($url, 'options');
         }
 
-        public function patch($url)
+        public function patch($url): bool|static
         {
             return $this->request($url, 'patch');
         }
 
-        public function post($url)
+        public function post($url): bool|static
         {
             return $this->request($url, 'post');
         }
 
-        public function put($url)
+        public function put($url): bool|static
         {
             return $this->request($url, 'put');
         }

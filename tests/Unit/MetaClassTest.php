@@ -43,6 +43,37 @@ class MetaClassTest extends \PHPUnit\Framework\TestCase
         wp_delete_post($this->post_id, true);
     }
 
+    public function test_existClass()
+    {
+        $this->assertTrue(class_exists('\WPTrait\Data\Meta'));
+    }
+
+    public function test_isObjectClass()
+    {
+        $post = new Meta();
+        $this->assertIsObject($post);
+    }
+
+    public function test_existPropertyObjectClass()
+    {
+        $properties = [
+            'type',
+            'id'
+        ];
+
+        $post = new Meta;
+        foreach ($properties as $property) {
+            $this->assertTrue(property_exists($post, $property), 'The ' . $property . ' is not exist in Meta Class');
+        }
+    }
+
+    public function test_setupProperty()
+    {
+        $meta = new Meta(100, 'user');
+        $this->assertEquals(100, $meta->id);
+        $this->assertEquals('user', $meta->type);
+    }
+
     public function test_getAllMeta()
     {
         $meta = (new Meta($this->post_id, 'post'))->all();
@@ -68,7 +99,7 @@ class MetaClassTest extends \PHPUnit\Framework\TestCase
 
     public function test_createMeta()
     {
-        $meta = (new Meta($this->post_id, 'post'));
+        $meta = new Meta($this->post_id, 'post');
         $meta->create('_name', 'mehrshad');
         $meta->create('_array', ['name' => 'mehrshad', 'family' => 'darzi']);
 

@@ -71,7 +71,7 @@ if (!class_exists('WPTrait\HTTP\Download')) {
             return $this;
         }
 
-        public function getFilename(): \WP_Error|string
+        public function tmp(): string
         {
             if (!$this->hasError()) {
                 return $this->response;
