@@ -6,6 +6,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
+use WPTrait\Collection\Error;
+    
 if (!class_exists('WPTrait\HTTP\Request')) {
 
     class Request
@@ -19,19 +21,21 @@ if (!class_exists('WPTrait\HTTP\Request')) {
             return (object)$_array;
         }
 
-        public function input($name, $filter = null)
+        public function input($name, $filters = null)
         {
             $inputs = $this->all();
-            return (isset($inputs->{$name}) ? $this->filter($inputs->{$name}, $filter) : null);
+            return (isset($inputs->{$name}) ? $this->filter($inputs->{$name}, $filters) : null);
         }
 
-        private function filter($value, $filter = [])
+        private function filter($value, $filters = [])
         {
-            foreach ((array)$filter as $func) {
-                $value = $func($value);
+            $error = new Error();
+            foreach ((array)$filters as $filter) {
+                if(false == $value || $error->has($value)) break;
+                $value = call_user_func($func, $value);
             }
 
-            return $value;
+            return $value  ?: $error->new('invalid');
         }
 
         public function query($name, $filter = null)
