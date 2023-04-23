@@ -31,8 +31,8 @@ if (!class_exists('WPTrait\HTTP\Request')) {
         {
             $error = new Error();
             foreach ((array)$filters as $filter) {
-                if(false == $value || $error->has($value)) break;
                 $value = call_user_func($func, $value);
+                 if(false == $value || $error->has($value)) break;
             }
 
             return $value  ?: $error->new('invalid');
