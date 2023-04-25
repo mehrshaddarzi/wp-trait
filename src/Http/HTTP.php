@@ -85,6 +85,13 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
         protected bool $ssl = true;
 
         /**
+         * Reject unsafe urls
+         *
+         * @var bool
+         */
+        protected bool $reject_unsafe_urls = true;
+
+        /**
          * HTTP API Curl
          *
          * @var mixed
@@ -117,6 +124,12 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
         public function version($version): static
         {
             $this->version = $version;
+            return $this;
+        }
+
+        public function unsafe($unsafe = true): static
+        {
+            $this->reject_unsafe_urls = !($unsafe === true);
             return $this;
         }
 
@@ -176,9 +189,20 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
                 call_user_func($this->curl, $handle);
             };
 
+            // Setup allow unsafe url filter
+            $filter_unsafe_url = function ($parsed_args, $url) {
+                $parsed_args['reject_unsafe_urls'] = false;
+                return $parsed_args;
+            };
+
             // Add http_api_curl action
             if (is_callable($this->curl)) {
                 add_action('http_api_curl', $http_api_call);
+            }
+
+            // Add http_request_args filter
+            if (!$this->reject_unsafe_urls) {
+                add_filter('http_request_args', $filter_unsafe_url, 10, 2);
             }
 
             // Send request
@@ -187,6 +211,11 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             // Remove http_api_curl action
             if (is_callable($this->curl)) {
                 remove_action('http_api_curl', $http_api_call);
+            }
+
+            // Remove http_request_args filter
+            if (!$this->reject_unsafe_urls) {
+                remove_filter('http_request_args', $filter_unsafe_url);
             }
 
             // Return
@@ -356,9 +385,9 @@ if (!class_exists('WPTrait\HTTP\HTTP')) {
             return $this->request($url, 'put');
         }
 
-        public function download($url, $timeout = 300, $signature_verification = false): Download
+        public function download($url, $timeout = 300, $signature_verification = false, $reject_unsafe_urls = true): Download
         {
-            $download = new Download($url, $timeout, $signature_verification);
+            $download = new Download($url, $timeout, $signature_verification, $reject_unsafe_urls);
             return $download->execute();
         }
     }

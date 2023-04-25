@@ -39,6 +39,7 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
             'body',
             'ssl',
             'curl',
+            'reject_unsafe_urls',
 
             # Extended
             'response',
@@ -52,7 +53,7 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass($http);
         $property = $reflection->getProperties();
-        $this->assertCount(13, $property);
+        $this->assertCount(14, $property);
     }
 
     private function setupGETRequest(): HTTP
@@ -76,6 +77,7 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
                 'name' => 'Mehrshad',
                 'family' => 'Darzi'
             ])
+            ->unsafe()
             ->curl(function ($handle) {
                 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
             });
@@ -94,6 +96,7 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $reflection->getProperty('ssl')->getValue($http));
         $this->assertEquals(10, $reflection->getProperty('redirection')->getValue($http));
         $this->assertEquals('1.0', $reflection->getProperty('version')->getValue($http));
+        $this->assertEquals(false, $reflection->getProperty('reject_unsafe_urls')->getValue($http));
         $this->assertEquals('Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:28.0) Gecko/20100101 Firefox/28.0', $reflection->getProperty('useragent')->getValue($http));
         $this->assertEquals([
             'header_1' => 'header_value_1',
@@ -177,6 +180,7 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
             ->curl(function ($handle) {
                 curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
             })
+            ->unsafe()
             ->send();
 
         // Excepted Response
@@ -202,7 +206,8 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('admin', $http->getCookie('username')->value);
         $this->assertEquals(true, $http->hasCookie('username'));
         $this->assertEquals(false, $http->hasCookie('user_login'));
-        $this->assertFalse(has_action('http_api_curl'));
+        $this->assertTrue(has_action('http_api_curl'));
+        $this->assertFalse(has_filter('http_request_args'));
     }
 
     public function test_responsePostRequest()
@@ -290,7 +295,7 @@ class HTTPClassTest extends \PHPUnit\Framework\TestCase
         $copy = ABSPATH . '/new-license.txt';
         $http = new HTTP();
 
-        $download = $http->download($file, 100);
+        $download = $http->download($file, 100, true, false);
         $this->assertFileExists($download->tmp());
         $this->assertIsString($download->tmp());
 
