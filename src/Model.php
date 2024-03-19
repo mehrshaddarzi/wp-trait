@@ -209,7 +209,7 @@ if (!class_exists('WPTrait\Model')) {
                 $hook = substr($hooks, 0, -1);
                 if (is_array($this->{$hooks})) {
                     foreach ((array)$this->{$hooks} as $name => $args) {
-                        if (is_array($args) and !is_numeric($args[1])) {
+                        if (is_array($args) && (!isset($args[1]) || !is_numeric($args[1]))) {
                             foreach ($args as $method) {
                                 $this->runVariableHooks($hook, $name, $method);
                             }
