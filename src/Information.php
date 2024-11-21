@@ -160,7 +160,7 @@ if (!class_exists('WPTrait\Information')) {
             }
 
             // Setup Plugin Data
-            $this->data = (object)get_plugin_data($this->mainFile);
+            $this->data = (object)get_plugin_data($this->mainFile, true, false);
 
             // Set Url
             $this->url = plugins_url('', $this->mainFile);
