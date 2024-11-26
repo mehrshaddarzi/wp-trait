@@ -38,7 +38,7 @@ if (!class_exists('WPTrait\Collection\Error')) {
         public function new($code = '', $message = '', $data = '')
         {
             #see: https://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
-            return new \WP_Error($code = '', $message = '', $data = '');
+            return new \WP_Error($code, $message, $data);
         }
     }
 
