@@ -73,7 +73,7 @@ if (!class_exists('WPTrait\Model')) {
          */
         protected \wpdb $db;
 
-        public $term, $user, $option,
+        public $post, $term, $user, $option,
             $comment, $nonce, $transient, $cache, $event, $error, $rest, $log, $route,
             $email, $password;
 
