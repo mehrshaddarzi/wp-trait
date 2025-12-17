@@ -3,6 +3,7 @@
 namespace WPTrait\Data;
 
 use WPTrait\Abstracts\Data;
+use WPTrait\Utils\Arr;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -536,9 +537,79 @@ if (!class_exists('WPTrait\Data\Post')) {
             return is_string(get_post_status($id));
         }
 
-        public static function query()
+        public static function query(array $arg = []): \WP_Query
         {
-            // TODO
+            # alias
+            $alias = [
+                'id' => 'p',
+                'user' => 'author',
+                'category' => 'cat',
+                'type' => 'post_type',
+                'status' => 'post_status',
+                'per_page' => 'posts_per_page',
+                'page' => 'paged',
+                'order_by' => 'orderby',
+                'meta' => 'meta_query',
+                'date' => 'date_query',
+                'tax' => 'tax_query',
+                'mime_type ' => 'post_mime_type',
+                'return' => 'fields'
+            ];
+            $arg = Arr::alias($arg, $alias);
+
+            # Check Return only ids
+            if (isset($arg['fields'])) {
+                $arg['fields'] = ((is_array($arg['fields']) and count($arg['fields']) == 1) ? $arg['fields'][0] : $arg['fields']);
+                if (is_string($arg['fields']) and in_array($arg['fields'], ['id', 'ids', 'ID'])) {
+                    $arg['fields'] = 'ids';
+                }
+            }
+
+            # Cache Result
+            if (isset($arg['cache']) and $arg['cache'] === false) {
+                $arg = array_merge(
+                    $arg,
+                    [
+                        'cache_results' => false,
+                        'no_found_rows' => true, #@see https://10up.github.io/Engineering-Best-Practices/php/#performance
+                        'update_post_meta_cache' => false,
+                        'update_post_term_cache' => false,
+                    ]
+                );
+                unset($arg['cache']);
+            }
+
+            # Suppress filters
+            if (isset($arg['filter']) and $arg['filter'] === false) {
+                $arg['suppress_filters'] = true;
+                unset($arg['filter']);
+            }
+
+            # Sanitize Meta Query
+            if (isset($arg['meta_query']) and !isset($arg['meta_query'][0])) {
+                $arg['meta_query'] = [$arg['meta_query']];
+            }
+
+            # Default Params
+            $default = [
+                // 'post_type' => $this->type,
+                'post_status' => 'publish',
+                'posts_per_page' => '-1',
+                'order' => 'DESC'
+            ];
+
+            $args = wp_parse_args($arg, $default);
+
+            # Return { $query->posts }
+            # Get SQL { $query->request }
+            # Check Exists { $query->have_posts() }
+            return new \WP_Query($args);
+        }
+
+        public function list($args = []): array
+        {
+            $query = self::query($args);
+            return ($query->have_posts() ? $query->posts : []);
         }
 
         public function tags()
@@ -564,5 +635,4 @@ if (!class_exists('WPTrait\Data\Post')) {
             return $comment->list(array_merge(array('post_id' => $this->id, $args)));
         }
     }
-
 }

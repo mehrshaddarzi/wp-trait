@@ -47,14 +47,14 @@ if (!class_exists('WPTrait\Data\Meta')) {
             }, get_metadata($this->type, $this->id, '', false));
         }
 
-        public function only(): array
+        public function only($keys = []): array
         {
-            return Arr::only($this->all(), func_get_args());
+            return Arr::only($this->all(), $keys);
         }
 
-        public function except(): array
+        public function except($keys = []): array
         {
-            return Arr::except($this->all(), func_get_args());
+            return Arr::except($this->all(), $keys);
         }
 
         public function exists($key): bool
@@ -109,6 +109,5 @@ if (!class_exists('WPTrait\Data\Meta')) {
             }
             return $this;
         }
-
     }
 }
